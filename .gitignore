@@ -1,5 +1,7 @@
 # created by virtualenv automatically
-*
+bin/
+lib/
+*.cfg
 
 # OSX DS Store
 .DS_Store
