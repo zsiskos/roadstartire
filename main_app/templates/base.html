@@ -15,24 +15,31 @@
   <meta property="og:site_name" content="Road Star Tire">
   <meta name="twitter:image:alt" content="Alt text for image"> <!--  ADD ALT TEXT TO CONTENT -->
 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;750;800;900&display=swap" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://kit.fontawesome.com/7344249496.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-  <title>RoadStarTire</title>
+  <title>Road Star Tire</title>
 </head>
 <body>
-  <nav class='navbar navbar-dark bg-dark'>
-    <ul class="nav-links">
-      <a href={% url 'home' %}></i>Home</a>
-      <a href={% url 'services' %}></i>Services</a>
-      <a href={% url 'tires' %}></i>Tires</a>
-      <a href={% url 'about' %}></i>About</a>
-      <a href={% url 'login' %}></i>Log in</a> <!--- SEPARATE PAGE FOR NOW, WILL COMBINE WITH SIGN UP -->
-      <a href={% url 'signup' %}></i>Sign Up</a>
-      <a href={% url 'cart_detail' %}>
+  <nav class='navbar navbar-expand-md bg-dark d-flex justify-content-between'>
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href={% url 'home' %}>
+      <img class="nav-brand-image" src="../static/images/road-star-logo.svg" alt="Road Star Tires logo">
+      Road Star Tire
+    </a>
+
+    <!-- Navbar links -->
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" id="nav-tires" href={% url 'tires' %}></i>Tires</a>
+      <a class="nav-item nav-link" id="nav-services" href={% url 'services' %}></i>Services</a>
+      <a class="nav-item nav-link" id="nav-about" href={% url 'about' %}></i>About</a>
+      <a class="nav-item nav-link" id="nav-login" href={% url 'login' %}></i>Log in</a> <!--- SEPARATE PAGE FOR NOW, WILL COMBINE WITH SIGN UP -->
+      <a class="nav-item nav-link" id="nav-signup" href={% url 'signup' %}></i>Sign Up</a>
+      <a class="nav-item nav-link" id="nav-cart-detail" href={% url 'cart_detail' %}>
         <i class="fas fa-shopping-cart"></i>
       </a>
-    </ul>
+    <div>
   </nav>
   <main>
     {% block content %}
