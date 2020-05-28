@@ -23,8 +23,17 @@ def signup(req):
     # return render(req, 'registration/signup.html', context) # redirect to login page
     return render(req, 'signup.html') # redirect to login page
 
+def login(req):
+  return render(req, 'login.html')
+
 def account(req):
   return render(req, 'account.html')
+
+def about(req):
+  return render(req, 'about.html')
+
+def services(req):
+  return render(req, 'services.html')
 
 def tires(req):
   return render(req, 'tires.html')

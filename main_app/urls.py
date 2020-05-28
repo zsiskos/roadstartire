@@ -3,8 +3,12 @@ from . import views
 
 urlpatterns = [
   path('signup/', views.signup, name='signup'), # Signup page route Sign Up
-  # path('login/', views.login, name='login'), # Login page route Log in vs. Sign in
+  path('login/', views.login, name='login'), # Login page route Log in vs. Sign in, creating separate template for this for now until we combine it with signup page
+  
   path('', views.home, name='home'), # Home page route
+  path('services/', views.services, name='services'), #Services page route
+  path('about/', views.about, name='about'), #About and Locations page route
+
   path('account/', views.account, name='account'), #Temporary route page until we set up the model
   # path('account/<int:user_id>/', views.account, name='account'), # User account page page route
 
