@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-  # path('signup/', views.signup, name='signup'), # Signup page route Sign Up
+  path('signup/', views.signup, name='signup'), # Signup page route Sign Up
   # path('login/', views.login, name='login'), # Login page route Log in vs. Sign in
   path('', views.home, name='home'), # Home page route
   # path('tires/', views.home, name='tires'), # Tire search page route - Use of collapse/accordian to display tire details?
