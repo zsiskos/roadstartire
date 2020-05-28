@@ -22,3 +22,6 @@ def signup(req):
     # context = {'form': form, 'error_message': error_message}
     # return render(req, 'registration/signup.html', context) # redirect to login page
     return render(req, 'signup.html') # redirect to login page
+
+def cartDetail(req):
+  return render(req, 'cart.html')

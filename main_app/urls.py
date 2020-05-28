@@ -8,8 +8,9 @@ urlpatterns = [
   # path('tires/', views.home, name='tires'), # Tire search page route - Use of collapse/accordian to display tire details?
   # path('account/<int:user_id>/', views.account, name='account'), # User account page page route
 
+  path('cart/', views.cartDetail, name='cart_detail'), # Temporary path until we set up the cart model
   # path('cart/<int:cart_id>/', views.cartDetail, name='cart_detail'), # Cart detail page route for current cart
-  # # path('cart/<int:cart_id>/update', views.cartUpdate, name='cart_update'), # Cart update page route fort current cart (eg. for changing quantities) --> Probably not needed
+  # path('cart/<int:cart_id>/update', views.cartUpdate, name='cart_update'), # Cart update page route fort current cart (eg. for changing quantities) --> Probably not needed
 
   # path('orders/'), # Orders page route - List of all user's carts that have been submitted/fulfilled (ie. Cart history)
   # path('orders/<int:cart_id>/'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
