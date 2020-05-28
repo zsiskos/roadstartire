@@ -1,3 +1,8 @@
+# created by virtualenv automatically
+bin/
+lib/
+*.cfg
+
 # OSX DS Store
 .DS_Store
 
@@ -84,7 +89,6 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
-.cfg
 
 # Spyder project settings
 .spyderproject
