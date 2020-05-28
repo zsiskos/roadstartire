@@ -24,11 +24,10 @@
   <nav class='navbar navbar-dark bg-dark'>
     <ul class="nav-links">
       <a href={% url 'home' %}></i>Home</a>
-      <a href="#"></i>Services</a>
-      <a href="#"></i>Tires</a>
-      <a href="#"></i>Locations</a>
-      <a href="#"></i>About</a>
-      <a href="#"></i>Log in</a>
+      <a href={% url 'services' %}></i>Services</a>
+      <a href={% url 'tires' %}></i>Tires</a>
+      <a href={% url 'about' %}></i>About</a>
+      <a href={% url 'login' %}></i>Log in</a> <!--- SEPARATE PAGE FOR NOW, WILL COMBINE WITH SIGN UP -->
       <a href={% url 'signup' %}></i>Sign Up</a>
       <a href={% url 'cart_detail' %}>
         <i class="fas fa-shopping-cart"></i>
