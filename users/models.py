@@ -17,17 +17,17 @@ https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#extending-the-exi
 """
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'), unique=True)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(default=timezone.now)
-    
-    # A string describing the name of the field on the user model that is used as the unique identifier
-    USERNAME_FIELD = 'email'
-    # A list of the field names that will be prompted for when creating a user via the createsuperuser management command
-    REQUIRED_FIELDS = []
+  email = models.EmailField(_('email'), unique=True)
+  is_staff = models.BooleanField(default=False)
+  is_active = models.BooleanField(default=True)
+  date_joined = models.DateTimeField(default=timezone.now)
+  
+  # A string describing the name of the field on the user model that is used as the unique identifier
+  USERNAME_FIELD = 'email'
+  # A list of the field names that will be prompted for when creating a user via the createsuperuser management command
+  REQUIRED_FIELDS = []
 
-    objects = CustomUserManager()
+  objects = CustomUserManager()
 
-    def __str__(self):
-      return self.email
+  def __str__(self):
+    return self.email
