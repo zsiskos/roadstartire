@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 from .managers import CustomUserManager
@@ -17,10 +16,47 @@ https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#extending-the-exi
 """
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-  email = models.EmailField(_('email'), unique=True)
-  is_staff = models.BooleanField(default=False)
-  is_active = models.BooleanField(default=True)
+  COUNTRY_CHOICES = [
+    ('CAN', 'Canada'),
+    ('USA', 'United States')
+  ]
+
+  PROVINCE_CHOICES = [
+    ('AB', 'Alberta'),
+    ('BC', 'British Columbia'),
+    ('MB', 'Manitoba'),
+    ('NB', 'New Brunswick'),
+    ('NL', 'Newfoundland and Labrador'),
+    ('NS','Nova Scotia'),
+    ('NT', 'Northwest Territories'),
+    ('NU', 'Nunavut'),
+    ('ON', 'Ontario'), # Default
+    ('PE','Prince Edward Island'),
+    ('QC', 'Quebec'),
+    ('SK', 'Saskatchewan'),
+    ('YT', 'Yukon'),
+  ]
+
+  email = models.EmailField(unique=True)
+  first_name = models.CharField(max_length=30)
+  last_name = models.CharField(max_length=30)
+  is_active = models.BooleanField(default=True, help_text='Designates whether this user account should be considered active.<br/><strong>NOTE:</strong> Recommended that you set this flag to False instead of deleting accounts; that way, if any applications store foreign keys to users, the foreign keys won’t break.')
+  is_staff = models.BooleanField(default=False, help_text='Designates whether this user can access the admin site.')
   date_joined = models.DateTimeField(default=timezone.now)
+  company_name = models.CharField(max_length=50, blank=True, verbose_name='Company')
+  business_phone = models.CharField(max_length=30, blank=True, verbose_name='Phone')
+  country_iso = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default=COUNTRY_CHOICES[0][0], verbose_name='Country')
+  province_iso = models.CharField(max_length=2, choices=PROVINCE_CHOICES, default=PROVINCE_CHOICES[8][0], verbose_name='Province')
+  address = models.CharField(max_length=30, blank=True)
+  postal_code = models.CharField(max_length=30, blank=True)
+  hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
+  discount_ratio = models.DecimalField(max_digits=4, decimal_places=2, default=0, verbose_name='Discount', help_text='Enter a number from 0 to 1')
+
+  class Meta:
+    # Change model name in admin interface
+    verbose_name = 'User'
+    verbose_name_plural = 'Users'
+
   
   # A string describing the name of the field on the user model that is used as the unique identifier
   USERNAME_FIELD = 'email'
