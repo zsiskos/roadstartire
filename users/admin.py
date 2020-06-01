@@ -49,7 +49,7 @@ class CustomUserAdmin(UserAdmin):
         'company_name', 
         'business_phone', 
         ('country_iso', 'province_iso'),
-        ('address', 'postal_code',),
+        ('city', 'address', 'postal_code',),
         'hst_number',
         'discount_ratio',
       )
@@ -83,7 +83,7 @@ class CustomUserAdmin(UserAdmin):
         'company_name', 
         'business_phone', 
         ('country_iso', 'province_iso'),
-        ('address', 'postal_code',),
+        ('city', 'address', 'postal_code',),
         'hst_number',
         'discount_ratio',
       )
@@ -104,8 +104,10 @@ class CustomUserAdmin(UserAdmin):
     'first_name',
     'last_name',
     'company_name',
+    'province'
+    'city'
   )
-  ordering = ('email',)
+  ordering = ('date_joined',)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
