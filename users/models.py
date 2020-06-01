@@ -61,7 +61,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   # A string describing the name of the field on the user model that is used as the unique identifier
   USERNAME_FIELD = 'email'
   # A list of the field names that will be prompted for when creating a user via the createsuperuser management command
-  REQUIRED_FIELDS = []
+  REQUIRED_FIELDS = ['first_name', 'last_name',]
 
   objects = CustomUserManager()
 
