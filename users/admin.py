@@ -1,9 +1,16 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
+from main_app.models import Cart
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
+
+class CartInline(admin.StackedInline):
+  model = Cart
+  can_delete = True
+  extra = 1 # Number of extra forms the formset will display in addition to the initial forms
+  can_delete = True
 
 class CustomUserAdmin(UserAdmin):
   add_form = CustomUserCreationForm
@@ -108,6 +115,8 @@ class CustomUserAdmin(UserAdmin):
     'city',
   )
   ordering = ('date_joined',)
+
+  inlines = (CartInline,)
 
 # ────────────────────────────────────────────────────────────────────────────────
 

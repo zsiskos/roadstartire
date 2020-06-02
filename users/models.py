@@ -52,7 +52,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   address = models.CharField(max_length=30, blank=True)
   postal_code = models.CharField(max_length=30, blank=True)
   hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
-  discount_ratio = models.DecimalField(max_digits=4, decimal_places=2, default=0, verbose_name='Discount', validators=[MinValueValidator(0), MaxValueValidator(1)], help_text='Must be a number from 0.00 to 1.00 (up to 2 decimal places)')
+  discount_ratio = models.DecimalField(max_digits=4, decimal_places=2, default=0, verbose_name='Discount', validators=[MinValueValidator(0), MaxValueValidator(1),], help_text='Must be a number from 0.00 to 1.00 (up to 2 decimal places)')
 
   class Meta:
     # Change model name in admin interface
