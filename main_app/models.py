@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings # Don't refer to the user model directly, it is recommended to refer to the AUTH_USER_MODEL setting
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.template.defaultfilters import slugify
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -23,14 +26,14 @@ class Cart(models.Model):
   """
   
   discount_ratio_applied_help_text = """
-    Must be a number from 0.00 to 1.00 (up to 2 decimal places).<br/>
-    Takes the user's discount ratio when the order is submitted.
+    • Leave this field blank to use the User's current discount ratio<br/>
+    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)
   """
 
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
   date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Date Created (UTC)')
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
-  discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
+  discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, blank=True, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
 
   def get_readable_status(self):
     if self.status == 0:
@@ -47,6 +50,16 @@ class Cart(models.Model):
     
   def get_total(self):
     pass
+  
+  # When saving, use the User's current discount ratio if one is not explicitly entered
+  def save(self, *args, **kwargs):
+    if not self.discount_ratio_applied:
+      self.discount_ratio_applied = self.user.discount_ratio
+    super(Cart, self).save(*args, **kwargs)
+
+# @receiver(pre_save, sender=Cart)
+# def get_user_discount_ratio(sender, instance, *args, **kwargs):
+#     instance.discount_ratio_applied = instance.user.discount_ratio
 
 # ────────────────────────────────────────────────────────────────────────────────
 
