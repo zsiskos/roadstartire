@@ -38,10 +38,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ('YT', 'Yukon'),
   ]
 
+  is_active_help_text = """
+    Designates whether this user account should be considered active.<br/>
+    <strong>NOTE:</strong> Recommended that you set this flag to False instead of deleting accounts; 
+    that way, if any applications store foreign keys to users, the foreign keys won’t break.'
+  """
+
   email = models.EmailField(unique=True)
   first_name = models.CharField(max_length=30)
   last_name = models.CharField(max_length=30)
-  is_active = models.BooleanField(default=True, help_text='Designates whether this user account should be considered active.<br/><strong>NOTE:</strong> Recommended that you set this flag to False instead of deleting accounts; that way, if any applications store foreign keys to users, the foreign keys won’t break.')
+  is_active = models.BooleanField(default=True, help_text=is_active_help_text)
   is_staff = models.BooleanField(default=False, help_text='Designates whether this user can access the admin site.')
   date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Date Joined (UTC)')
   company_name = models.CharField(max_length=50, blank=True, verbose_name='Company')
@@ -52,14 +58,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   address = models.CharField(max_length=30, blank=True)
   postal_code = models.CharField(max_length=30, blank=True)
   hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
-  discount_ratio = models.DecimalField(max_digits=4, decimal_places=2, default=0, verbose_name='Discount', validators=[MinValueValidator(0), MaxValueValidator(1),], help_text='Must be a number from 0.00 to 1.00 (up to 2 decimal places)')
+  discount_ratio = models.DecimalField(
+    max_digits=4, 
+    decimal_places=2, 
+    default=0, 
+    verbose_name='Discount', 
+    validators=[MinValueValidator(0), MaxValueValidator(1),], 
+    help_text='Must be a number from 0.00 to 1.00 (up to 2 decimal places)'
+  )
 
   class Meta:
     # Change model name in admin interface
     verbose_name = 'User'
     verbose_name_plural = 'Users'
 
-  
   # A string describing the name of the field on the user model that is used as the unique identifier
   USERNAME_FIELD = 'email'
   # A list of the field names that will be prompted for when creating a user via the createsuperuser management command
