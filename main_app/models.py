@@ -30,7 +30,7 @@ class Cart(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
   date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Date Created (UTC)')
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
-  discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(1),],)
+  discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
 
   def get_readable_status(self):
     if self.status == 0:
