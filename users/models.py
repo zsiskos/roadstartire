@@ -51,7 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   address = models.CharField(max_length=30, blank=True)
   postal_code = models.CharField(max_length=30, blank=True)
   hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
-  discount_ratio = models.DecimalField(max_digits=4, decimal_places=2, default=0, verbose_name='Discount', help_text='Enter a number from 0 to 1')
+  discount_ratio = models.DecimalField(max_digits=4, decimal_places=2, default=0, verbose_name='Discount', help_text='Must be a number from 0.00 to 1.00')
 
   class Meta:
     # Change model name in admin interface
