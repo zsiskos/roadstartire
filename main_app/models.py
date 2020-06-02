@@ -60,7 +60,7 @@ class Tire(models.Model):
   season = models.CharField(max_length=30, blank=True)
   pattern = models.CharField(max_length=30, blank=True)
   loads = models.CharField(max_length=30, blank=True)
-  price = models.DecimalField(max_digits=7, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(1),], verbose_name='Price ($)')
+  price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   image = models.CharField(max_length=200, blank=True, verbose_name='Tire photo URL')
   current_quantity = models.PositiveIntegerField(default=0)
   total_quantity = models.PositiveIntegerField(default=0)
