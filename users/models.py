@@ -47,10 +47,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   email = models.EmailField(unique=True)
   first_name = models.CharField(max_length=30)
   last_name = models.CharField(max_length=30)
-  is_active = models.BooleanField(
-    default=True, 
-    help_text=is_active_help_text
-  )
+  is_active = models.BooleanField(default=True, help_text=is_active_help_text)
   is_staff = models.BooleanField(default=False, help_text='Designates whether this user can access the admin site.')
   date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Date Joined (UTC)')
   company_name = models.CharField(max_length=50, blank=True, verbose_name='Company')
