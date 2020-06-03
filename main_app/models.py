@@ -88,10 +88,17 @@ class CartDetail(models.Model):
   cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
   tire = models.ForeignKey(Tire, on_delete=models.CASCADE)
   quantity = models.PositiveIntegerField(default=1)
-
+  price_each = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Price per item ($)')
+  
   @property
   def get_sub_total(self):
     return self.quantity * Tire.price
   
   def __str__(self):
     return f'Cart {self.cart} contains {self.quantity} \'{self.tire}\' tires'
+
+  # When saving, use the Tire's price
+  def save(self, *args, **kwargs):
+    if not self.price_each:
+      self.price_each = self.tire.price
+    super(CartDetail, self).save(*args, **kwargs)

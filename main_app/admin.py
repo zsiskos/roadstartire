@@ -8,6 +8,7 @@ class CartDetailAdmin(admin.ModelAdmin):
   list_display = (
     'cart',
     'tire',
+    'price_each',
     'quantity',
     'get_sub_total',
   )
@@ -20,7 +21,7 @@ class CartDetailAdmin(admin.ModelAdmin):
     
   get_sub_total.short_description = "Subtotal ($)"
 
-  readonly_fields = ('get_sub_total',)
+  readonly_fields = ('price_each', 'get_sub_total')
 
 # ────────────────────────────────────────────────────────────────────────────────
 
