@@ -30,16 +30,7 @@ class CartDetailAdmin(admin.ModelAdmin):
   
   list_editable = ('quantity',)
 
-  fieldsets = (
-    (None, {
-      'fields': (
-        'cart',
-        'tire',
-        # 'price_each', # Should not be able to edit price directly
-        'quantity',
-      )
-    }),
-  )
+  readonly_fields = ('price_each',)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
