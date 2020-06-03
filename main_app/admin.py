@@ -7,6 +7,8 @@ from .models import Cart, Tire, CartDetail
 # list_filter - Filters in the right sidebar of the list page
 # ────────────────────────────────────────────────────────────────────────────────
 
+admin.site.empty_value_display = '–'
+
 class CartDetailAdmin(admin.ModelAdmin):
   list_display = (
     'id',

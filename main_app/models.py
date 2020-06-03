@@ -68,7 +68,7 @@ class Cart(models.Model):
     for cartDetail in cart.cartdetail_set.all():
       total += cartDetail.quantity * cartDetail.tire.price
     return total
-  get_total.short_description = 'Total ($$$)'
+  get_total.short_description = 'Total ($)'
 
   def get_owner(self):
     return self.user.full_name
