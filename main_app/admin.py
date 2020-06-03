@@ -10,18 +10,18 @@ class CartDetailAdmin(admin.ModelAdmin):
     'tire',
     'price_each',
     'quantity',
-    'get_sub_total',
+    'get_subtotal',
   )
 
   # Field that can be editted directly within the list page
   list_editable = ('quantity',)
 
-  def get_sub_total(self, obj):
+  def get_subtotal(self, obj):
     return obj.quantity * obj.tire.price
     
-  get_sub_total.short_description = "Subtotal ($)"
+  get_subtotal.short_description = "Subtotal ($)"
 
-  readonly_fields = ('price_each', 'get_sub_total')
+  readonly_fields = ('price_each', 'get_subtotal')
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -29,6 +29,13 @@ class CartDetailInline(admin.TabularInline):
   model = CartDetail
   can_delete = True
   extra = 1 # Number of extra forms the formset will display in addition to the initial forms
+
+  def get_sub_total(self, obj):
+    return obj.quantity * obj.tire.price
+
+  get_sub_total.short_description = "Subtotal ($)"
+
+  readonly_fields = ('price_each', 'get_sub_total')
   
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -39,6 +46,7 @@ class CartAdmin(admin.ModelAdmin):
     'date_ordered',
     'status',
     'discount_ratio_applied',
+    'get_total',
   )
 
   list_editable = ('status',)
@@ -52,6 +60,17 @@ class CartAdmin(admin.ModelAdmin):
   search_fields = (
     'user',
   )
+
+  def get_total(self, obj):
+    cart = Cart.objects.get(id=obj.id)
+    total = 0
+    for cartDetail in cart.cartdetail_set.all():
+      total += cartDetail.quantity * cartDetail.tire.price
+    return total
+
+  readonly_fields = ('get_total',)
+
+  get_total.short_description = "Total ($)"
 
   inlines = (CartDetailInline,)
 
