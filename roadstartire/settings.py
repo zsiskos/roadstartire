@@ -69,10 +69,6 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
-
 WSGI_APPLICATION = 'roadstartire.wsgi.application'
 
 
@@ -154,8 +150,13 @@ def get_app_list(self, request):
         app['models'].sort(key=lambda x: object_list.index(x['object_name']))
         yield app
 
-
 # Cover the django.contrib.admin.AdminSite.get_app_list
 from django.contrib import admin
 
 admin.AdminSite.get_app_list = get_app_list
+
+
+# Add this to check root static folder first
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
