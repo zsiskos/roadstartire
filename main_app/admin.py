@@ -8,6 +8,7 @@ from .models import Cart, Tire, CartDetail
 # list_filter - Filters in the right sidebar of the change list page
 
 # https://docs.djangoproject.com/en/3.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display
+# https://docs.djangoproject.com/en/3.0/intro/tutorial07/
 # ────────────────────────────────────────────────────────────────────────────────
 
 admin.site.empty_value_display = '–'
@@ -29,6 +30,17 @@ class CartDetailAdmin(admin.ModelAdmin):
   
   list_editable = ('quantity',)
 
+  fieldsets = (
+    (None, {
+      'fields': (
+        'cart',
+        'tire',
+        # 'price_each', # Should not be able to edit price directly
+        'quantity',
+      )
+    }),
+  )
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class CartDetailInline(admin.TabularInline):
@@ -40,7 +52,7 @@ class CartDetailInline(admin.TabularInline):
     'price_each', 
     'get_subtotal',
   )
-  
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class CartAdmin(admin.ModelAdmin):
