@@ -9,6 +9,7 @@ from .models import Cart, Tire, CartDetail
 
 class CartDetailAdmin(admin.ModelAdmin):
   list_display = (
+    'id',
     'cart',
     'tire',
     'price_each',
@@ -46,6 +47,7 @@ class CartDetailInline(admin.TabularInline):
 
 class CartAdmin(admin.ModelAdmin):
   list_display = (
+    'id',
     'user',
     'get_owner',
     'date_ordered',
@@ -62,7 +64,10 @@ class CartAdmin(admin.ModelAdmin):
     'status',
   )
 
-  search_fields = ('user',)
+  search_fields = (
+    'id',
+    'user',
+  )
 
   def get_owner(self, obj):
     return obj.user.full_name
