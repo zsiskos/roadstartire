@@ -6,11 +6,16 @@ from main_app.models import Cart
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 
-class CartInline(admin.StackedInline):
+class CartInline(admin.TabularInline):
   model = Cart
   can_delete = True
   extra = 1 # Number of extra forms the formset will display in addition to the initial forms
   can_delete = True
+
+  readonly_fields = (
+    'get_item_count', 
+    'get_total',
+  )
 
 class CustomUserAdmin(UserAdmin):
   add_form = CustomUserCreationForm
