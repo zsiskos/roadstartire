@@ -46,7 +46,7 @@ class Cart(models.Model):
       return 'Fulfilled'
 
   def __str__(self):
-    return f'{self.user.first_name} {self.user.last_name} - Cart #{self.id} - {self.get_readable_status()}'
+    return f'Cart #{self.id} - {self.get_readable_status()}'
     
   # @property
   # def get_total(self):

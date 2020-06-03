@@ -21,7 +21,7 @@ class CartDetailAdmin(admin.ModelAdmin):
   def get_subtotal(self, obj):
     return obj.quantity * obj.tire.price
     
-  get_subtotal.short_description = "Subtotal ($)"
+  get_subtotal.short_description = 'Subtotal ($)'
 
   readonly_fields = ('price_each', 'get_subtotal')
 
@@ -47,6 +47,7 @@ class CartDetailInline(admin.TabularInline):
 class CartAdmin(admin.ModelAdmin):
   list_display = (
     'user',
+    'get_owner',
     'date_ordered',
     'status',
     'discount_ratio_applied',
@@ -62,6 +63,11 @@ class CartAdmin(admin.ModelAdmin):
   )
 
   search_fields = ('user',)
+
+  def get_owner(self, obj):
+    return obj.user.full_name
+  
+  get_owner.short_description = 'Full name'
 
   def get_total(self, obj):
     cart = Cart.objects.get(id=obj.id)
