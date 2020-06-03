@@ -19,6 +19,7 @@ class CustomUserAdmin(UserAdmin):
 
   # Fields displayed in the list page
   list_display = (
+    'id',
     'email', 
     'first_name', 
     'last_name', 
@@ -28,6 +29,11 @@ class CustomUserAdmin(UserAdmin):
     'is_active',
     'is_staff',
     'is_superuser', 
+  )
+
+  list_display_links = (
+    'id', 
+    'email',
   )
 
   # Field that can be editted directly within the list page

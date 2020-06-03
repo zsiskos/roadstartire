@@ -16,6 +16,11 @@ class CartDetailAdmin(admin.ModelAdmin):
     'quantity',
     'get_subtotal',
   )
+
+  list_display_links = (
+    'id',
+    'cart',
+  )
   
   list_editable = ('quantity',)
 
@@ -55,6 +60,11 @@ class CartAdmin(admin.ModelAdmin):
     'discount_ratio_applied',
     'get_item_count',
     'get_total',
+  )
+
+  list_display_links = (
+    'id',
+    'user',
   )
 
   list_editable = ('status',)
