@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% load static %}{% comment %} Load static to get the logo {% endcomment %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+  <img class="nav-brand-image" src="{% static "images/road-star-logo.svg" %}" height="30">{% comment %} Add Logo image {% endcomment %}
+  <a href="{% url 'admin:index' %}">
+    {{ site_header|default:_('Django administration') }}
+  </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
