@@ -30,7 +30,21 @@ class CartDetailAdmin(admin.ModelAdmin):
   
   list_editable = ('quantity',)
 
-  readonly_fields = ('price_each',)
+  fieldsets = (
+    (None, {
+      'fields': (
+        'cart',
+        'tire',
+        'price_each', # Should not be able to edit price directly
+        'quantity',
+      )
+    }),
+  )
+
+  readonly_fields = ('cart', 'price_each',)
+
+  def has_add_permission(self, request):
+    return False
 
 # ────────────────────────────────────────────────────────────────────────────────
 
