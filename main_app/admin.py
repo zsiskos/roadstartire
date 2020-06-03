@@ -101,8 +101,8 @@ class TireAdmin(admin.ModelAdmin):
     'price',
     'season',
     'current_quantity',
-    'total_quantity',
     'sold',
+    'get_total_quantity',
   )
 
   list_filter = (

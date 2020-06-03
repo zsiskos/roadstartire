@@ -97,11 +97,14 @@ class Tire(models.Model):
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   image = models.CharField(max_length=200, blank=True, verbose_name='Tire photo URL')
   current_quantity = models.PositiveIntegerField(default=0)
-  total_quantity = models.PositiveIntegerField(default=0)
   sold = models.PositiveIntegerField(default=0)
 
   def __str__(self):
     return self.name
+
+  def get_total_quantity(self):
+    return self.current_quantity + self.sold
+  get_total_quantity.short_description = 'Total'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
