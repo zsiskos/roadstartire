@@ -103,3 +103,6 @@ class CartDetail(models.Model):
     if not self.price_each:
       self.price_each = self.tire.price
     super(CartDetail, self).save(*args, **kwargs)
+
+  class Meta:
+    verbose_name = 'Cart Item'
