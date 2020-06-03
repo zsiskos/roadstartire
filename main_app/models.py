@@ -91,10 +91,6 @@ class CartDetail(models.Model):
   quantity = models.PositiveIntegerField(default=1)
   price_each = models.DecimalField(max_digits=7, decimal_places=2, blank=True, verbose_name='Price per item ($)')
   
-  @property
-  def get_subtotal(self):
-    return self.quantity * Tire.price
-  
   def __str__(self):
     return f'Cart {self.cart} contains {self.quantity} \'{self.tire}\' tires'
 
@@ -103,6 +99,10 @@ class CartDetail(models.Model):
     if not self.price_each:
       self.price_each = self.tire.price
     super(CartDetail, self).save(*args, **kwargs)
+
+  def get_subtotal(self):
+    return self.quantity * self.tire.price
+  get_subtotal.short_description = 'Subtotal ($)'
 
   class Meta:
     verbose_name = 'Cart Item'

@@ -24,13 +24,6 @@ class CartDetailAdmin(admin.ModelAdmin):
   
   list_editable = ('quantity',)
 
-  def get_subtotal(self, obj):
-    return obj.quantity * obj.tire.price
-    
-  get_subtotal.short_description = 'Subtotal ($)'
-
-  readonly_fields = ('price_each', 'get_subtotal')
-
 # ────────────────────────────────────────────────────────────────────────────────
 
 class CartDetailInline(admin.TabularInline):
@@ -38,14 +31,9 @@ class CartDetailInline(admin.TabularInline):
   can_delete = True
   extra = 1 # Number of extra forms the formset will display in addition to the initial forms
 
-  def get_sub_total(self, obj):
-    return obj.quantity * obj.tire.price
-
-  get_sub_total.short_description = "Subtotal ($)"
-
   readonly_fields = (
     'price_each', 
-    'get_sub_total',
+    'get_subtotal',
   )
   
 # ────────────────────────────────────────────────────────────────────────────────
