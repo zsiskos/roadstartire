@@ -35,7 +35,10 @@ class CartDetailInline(admin.TabularInline):
 
   get_sub_total.short_description = "Subtotal ($)"
 
-  readonly_fields = ('price_each', 'get_sub_total')
+  readonly_fields = (
+    'price_each', 
+    'get_sub_total',
+  )
   
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -46,6 +49,7 @@ class CartAdmin(admin.ModelAdmin):
     'date_ordered',
     'status',
     'discount_ratio_applied',
+    'get_item_count',
     'get_total',
   )
 
@@ -57,9 +61,7 @@ class CartAdmin(admin.ModelAdmin):
     'status',
   )
 
-  search_fields = (
-    'user',
-  )
+  search_fields = ('user',)
 
   def get_total(self, obj):
     cart = Cart.objects.get(id=obj.id)
@@ -67,11 +69,17 @@ class CartAdmin(admin.ModelAdmin):
     for cartDetail in cart.cartdetail_set.all():
       total += cartDetail.quantity * cartDetail.tire.price
     return total
+    
+  def get_item_count(self, obj):
+    cart = Cart.objects.get(id=obj.id)
+    count = 0
+    for cartDetail in cart.cartdetail_set.all():
+      count += cartDetail.quantity
+    return count
 
-  readonly_fields = ('get_total',)
-
-  get_total.short_description = "Total ($)"
-
+  get_total.short_description = 'Total ($)'
+  get_item_count.short_description = 'Number of items'
+  readonly_fields = ('get_total', 'get_item_count',)
   inlines = (CartDetailInline,)
 
 # ────────────────────────────────────────────────────────────────────────────────
