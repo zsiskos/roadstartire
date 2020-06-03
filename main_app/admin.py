@@ -67,20 +67,6 @@ class CartAdmin(admin.ModelAdmin):
     'user',
   )
 
-  def get_owner(self, obj):
-    return obj.user.full_name
-  
-  get_owner.short_description = 'Full name'
-    
-  def get_item_count(self, obj):
-    cart = Cart.objects.get(id=obj.id)
-    count = 0
-    for cartDetail in cart.cartdetail_set.all():
-      count += cartDetail.quantity
-    return count
-
-  get_item_count.short_description = 'Number of items'
-
   readonly_fields = ('get_item_count', 'get_total',)
 
   inlines = (CartDetailInline,)

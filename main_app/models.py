@@ -70,6 +70,18 @@ class Cart(models.Model):
     return total
   get_total.short_description = 'Total ($$$)'
 
+  def get_owner(self):
+    return self.user.full_name
+  get_owner.short_description = 'Full name'
+    
+  def get_item_count(self):
+    cart = Cart.objects.get(id=self.id)
+    count = 0
+    for cartDetail in cart.cartdetail_set.all():
+      count += cartDetail.quantity
+    return count
+  get_item_count.short_description = 'Number of items'
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Tire(models.Model):
