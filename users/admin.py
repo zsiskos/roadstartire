@@ -130,4 +130,4 @@ admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
 
 admin.site.site_header = 'Road Star Tire Admin'
-admin.site.site_tite = 'Road Star Tire Admin'
+admin.site.site_title = 'Road Star Tire Admin'

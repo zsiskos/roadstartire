@@ -2,9 +2,12 @@ from django.contrib import admin
 from .models import Cart, Tire, CartDetail
 
 # ────────────────────────────────────────────────────────────────────────────────
-# list_display - Fields displayed in the list page
-# list_editable - Fields that can be editted directly within the list page
-# list_filter - Filters in the right sidebar of the list page
+# list_display - Controls which fields are displayed on the change list page
+# list_display_links - Controls if and which fields in list_display should be linked to the “change” page for an object
+# list_editable - List of field names on the model which will allow editing on the change list page
+# list_filter - Filters in the right sidebar of the change list page
+
+# https://docs.djangoproject.com/en/3.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display
 # ────────────────────────────────────────────────────────────────────────────────
 
 admin.site.empty_value_display = '–'
