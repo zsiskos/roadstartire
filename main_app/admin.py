@@ -71,15 +71,6 @@ class CartAdmin(admin.ModelAdmin):
     return obj.user.full_name
   
   get_owner.short_description = 'Full name'
-
-  def get_total(self, obj):
-    cart = Cart.objects.get(id=obj.id)
-    total = 0
-    for cartDetail in cart.cartdetail_set.all():
-      total += cartDetail.quantity * cartDetail.tire.price
-    return total
-
-  get_total.short_description = 'Total ($)'
     
   def get_item_count(self, obj):
     cart = Cart.objects.get(id=obj.id)

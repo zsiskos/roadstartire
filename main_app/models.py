@@ -62,6 +62,14 @@ class Cart(models.Model):
 # def get_user_discount_ratio(sender, instance, *args, **kwargs):
 #     instance.discount_ratio_applied = instance.user.discount_ratio
 
+  def get_total(self):
+    cart = Cart.objects.get(id=self.id)
+    total = 0
+    for cartDetail in cart.cartdetail_set.all():
+      total += cartDetail.quantity * cartDetail.tire.price
+    return total
+  get_total.short_description = 'Total ($$$)'
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Tire(models.Model):
