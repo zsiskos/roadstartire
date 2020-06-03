@@ -48,8 +48,9 @@ class Cart(models.Model):
   def __str__(self):
     return f'{self.user.first_name} {self.user.last_name} - Cart #{self.id} - {self.get_readable_status()}'
     
-  def get_total(self):
-    pass
+  # @property
+  # def get_total(self):
+  #   return self.cartDetail_set.all().count()
   
   # When saving, use the User's current discount ratio if one is not explicitly entered
   def save(self, *args, **kwargs):
@@ -88,10 +89,10 @@ class CartDetail(models.Model):
   cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
   tire = models.ForeignKey(Tire, on_delete=models.CASCADE)
   quantity = models.PositiveIntegerField(default=1)
-  price_each = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Price per item ($)')
+  price_each = models.DecimalField(max_digits=7, decimal_places=2, blank=True, verbose_name='Price per item ($)')
   
   @property
-  def get_sub_total(self):
+  def get_subtotal(self):
     return self.quantity * Tire.price
   
   def __str__(self):
