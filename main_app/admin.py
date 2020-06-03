@@ -102,7 +102,7 @@ class CartAdmin(admin.ModelAdmin):
 
   get_item_count.short_description = 'Number of items'
 
-  readonly_fields = ('get_total', 'get_item_count',)
+  readonly_fields = ('get_item_count', 'get_total',)
 
   inlines = (CartDetailInline,)
 
