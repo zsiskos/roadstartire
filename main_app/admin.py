@@ -2,9 +2,12 @@ from django.contrib import admin
 from .models import Cart, Tire, CartDetail
 
 # ────────────────────────────────────────────────────────────────────────────────
+# list_display - Fields displayed in the list page
+# list_editable - Fields that can be editted directly within the list page
+# list_filter - Filters in the right sidebar of the list page
+# ────────────────────────────────────────────────────────────────────────────────
 
 class CartDetailAdmin(admin.ModelAdmin):
-  # Fields displayed in the list page
   list_display = (
     'cart',
     'tire',
@@ -12,8 +15,7 @@ class CartDetailAdmin(admin.ModelAdmin):
     'quantity',
     'get_subtotal',
   )
-
-  # Field that can be editted directly within the list page
+  
   list_editable = ('quantity',)
 
   def get_subtotal(self, obj):
@@ -43,7 +45,6 @@ class CartDetailInline(admin.TabularInline):
 # ────────────────────────────────────────────────────────────────────────────────
 
 class CartAdmin(admin.ModelAdmin):
-  # Fields displayed in the list page
   list_display = (
     'user',
     'date_ordered',
@@ -55,7 +56,6 @@ class CartAdmin(admin.ModelAdmin):
 
   list_editable = ('status',)
 
-  # Filters in the right sidebar of the list page
   list_filter = (
     'date_ordered',
     'status',
@@ -69,6 +69,8 @@ class CartAdmin(admin.ModelAdmin):
     for cartDetail in cart.cartdetail_set.all():
       total += cartDetail.quantity * cartDetail.tire.price
     return total
+
+  get_total.short_description = 'Total ($)'
     
   def get_item_count(self, obj):
     cart = Cart.objects.get(id=obj.id)
@@ -77,15 +79,15 @@ class CartAdmin(admin.ModelAdmin):
       count += cartDetail.quantity
     return count
 
-  get_total.short_description = 'Total ($)'
   get_item_count.short_description = 'Number of items'
+
   readonly_fields = ('get_total', 'get_item_count',)
+
   inlines = (CartDetailInline,)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
 class TireAdmin(admin.ModelAdmin):
-  # Fields displayed in the list page
   list_display = (
     'name',
     'brand',
@@ -100,7 +102,6 @@ class TireAdmin(admin.ModelAdmin):
     'sold',
   )
 
-  # Filters in the right sidebar of the list page
   list_filter = (
     'brand',
     'year',
