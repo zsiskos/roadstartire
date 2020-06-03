@@ -134,5 +134,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
 
-admin.site.site_header = 'Road Star Tire Admin'
-admin.site.site_title = 'Road Star Tire Admin'
+admin.site.site_header = 'Road Star Tire'
+admin.site.site_title = 'Road Star Tire'
+admin.site.index_title = 'Site Admin'
