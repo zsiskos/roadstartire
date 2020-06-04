@@ -93,12 +93,14 @@ class Tire(models.Model):
   name = models.CharField(max_length=30)
   brand = models.CharField(max_length=30)
   year = models.CharField(max_length=30)
+
   width = models.CharField(max_length=30, blank=True)
   aspect_ratio = models.CharField(max_length=30, blank=True)
   rim_size = models.CharField(max_length=30, blank=True)
   season = models.CharField(max_length=30, blank=True)
   pattern = models.CharField(max_length=30, blank=True)
   load = models.CharField(max_length=30, blank=True)
+  
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   image = models.CharField(max_length=200, blank=True, verbose_name='Tire photo URL')
   current_quantity = models.PositiveIntegerField(default=0)
