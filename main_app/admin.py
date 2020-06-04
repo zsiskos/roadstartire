@@ -69,8 +69,8 @@ class CartAdmin(admin.ModelAdmin):
     'get_owner',
     'date_ordered',
     'status',
-    'discount_ratio_applied',
     'get_item_count',
+    'discount_ratio_applied',
     'get_subtotal',
     'get_total',
   )
@@ -97,8 +97,8 @@ class CartAdmin(admin.ModelAdmin):
       'fields': (
         'user',
         'status',
-        'discount_ratio_applied',
         'get_item_count', 
+        'discount_ratio_applied',
         'get_subtotal',
         'get_total',
       )
