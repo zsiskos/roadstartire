@@ -56,7 +56,7 @@ class CartDetailInline(admin.TabularInline):
   extra = 1 # Number of extra forms the formset will display in addition to the initial forms
 
   readonly_fields = (
-    'price_each', 
+    'price_each',
     'get_subtotal',
   )
 
@@ -127,6 +127,7 @@ class TireAdmin(admin.ModelAdmin):
     'pattern',
     'load',
     'price',
+    'sale_price',
     'current_quantity',
     'sold',
     'get_total_quantity',
@@ -160,6 +161,7 @@ class TireAdmin(admin.ModelAdmin):
         'load',
         ),
         'price',
+        'sale_price',
       )
     }),
     ('Inventory', {

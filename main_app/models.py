@@ -102,6 +102,7 @@ class Tire(models.Model):
   load = models.CharField(max_length=30, blank=True)
   
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
+  sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Sale Price ($)')
   image = models.CharField(max_length=200, blank=True, verbose_name='Tire photo URL')
   current_quantity = models.PositiveIntegerField(default=0)
   sold = models.PositiveIntegerField(default=0)
@@ -129,6 +130,9 @@ class CartDetail(models.Model):
     if not self.price_each:
       self.price_each = self.tire.price
     super(CartDetail, self).save(*args, **kwargs)
+    # update price_each if current price has changed
+    # ex: customer returns to cart a week later, item is on sale
+    # potentially use cascade when admin updates price - one solution. 
 
   def get_subtotal(self):
     return self.quantity * self.tire.price
