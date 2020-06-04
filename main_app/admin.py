@@ -41,10 +41,12 @@ class CartDetailAdmin(admin.ModelAdmin):
     }),
   )
 
-  readonly_fields = ('cart', 'price_each',)
-
-  def has_add_permission(self, request):
-    return False
+  # Dynamic readonly
+  def get_readonly_fields(self, request, obj=None):
+    if obj:
+      return ('cart', 'price_each') # Creating an object
+    else:
+      return ('price_each',) # Existing object
 
 # ────────────────────────────────────────────────────────────────────────────────
 
