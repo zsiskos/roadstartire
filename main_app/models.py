@@ -1,9 +1,6 @@
 from django.db import models
 from django.conf import settings # Don't refer to the user model directly, it is recommended to refer to the AUTH_USER_MODEL setting
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from django.template.defaultfilters import slugify
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -62,12 +59,20 @@ class Cart(models.Model):
 # def get_user_discount_ratio(sender, instance, *args, **kwargs):
 #     instance.discount_ratio_applied = instance.user.discount_ratio
 
-  def get_total(self):
+  def get_subtotal(self):
     cart = Cart.objects.get(id=self.id)
     total = 0
     for cartDetail in cart.cartdetail_set.all():
       total += cartDetail.quantity * cartDetail.tire.price
     return total
+  get_subtotal.short_description = 'Subtotal ($)'
+  
+  def get_total(self):
+    cart = Cart.objects.get(id=self.id)
+    total = 0
+    for cartDetail in cart.cartdetail_set.all():
+      total += cartDetail.quantity * cartDetail.tire.price
+    return round(total * (1 - self.discount_ratio_applied), 2)
   get_total.short_description = 'Total ($)'
 
   def get_owner(self):

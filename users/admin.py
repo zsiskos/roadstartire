@@ -14,6 +14,7 @@ class CartInline(admin.TabularInline):
 
   readonly_fields = (
     'get_item_count', 
+    'get_subtotal',
     'get_total',
   )
 

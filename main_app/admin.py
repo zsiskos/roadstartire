@@ -71,6 +71,7 @@ class CartAdmin(admin.ModelAdmin):
     'status',
     'discount_ratio_applied',
     'get_item_count',
+    'get_subtotal',
     'get_total',
   )
 
@@ -91,7 +92,24 @@ class CartAdmin(admin.ModelAdmin):
     'user',
   )
 
-  readonly_fields = ('get_item_count', 'get_total',)
+  fieldsets = (
+    (None, {
+      'fields': (
+        'user',
+        'status',
+        'discount_ratio_applied',
+        'get_item_count', 
+        'get_subtotal',
+        'get_total',
+      )
+    }),
+  )
+
+  readonly_fields = (
+    'get_item_count', 
+    'get_subtotal',
+     'get_total',
+  )
 
   inlines = (CartDetailInline,)
 
