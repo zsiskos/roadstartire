@@ -123,8 +123,10 @@ class TireAdmin(admin.ModelAdmin):
     'width',
     'aspect_ratio',
     'rim_size',
-    'price',
     'season',
+    'pattern',
+    'load',
+    'price',
     'current_quantity',
     'sold',
     'get_total_quantity',
@@ -141,6 +143,35 @@ class TireAdmin(admin.ModelAdmin):
     'brand',
     'year',
   )
+
+  fieldsets = (
+    (None, {
+      'fields': (
+        'name',
+        'brand',
+        'year',
+        'image',
+        (
+        'width',
+        'aspect_ratio',
+        'rim_size',
+        'season',
+        'pattern',
+        'load',
+        ),
+        'price',
+      )
+    }),
+    ('Inventory', {
+      'fields': (
+        'current_quantity',
+        'sold',
+        'get_total_quantity',
+      )
+    }),
+  )
+
+  readonly_fields = ('get_total_quantity',)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
