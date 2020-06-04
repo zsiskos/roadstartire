@@ -44,9 +44,9 @@ class CartDetailAdmin(admin.ModelAdmin):
   # Dynamic readonly
   def get_readonly_fields(self, request, obj=None):
     if obj:
-      return ('cart', 'price_each') # Creating an object
+      return ('cart', 'tire', 'price_each') # Existing object
     else:
-      return ('price_each',) # Existing object
+      return ('price_each',) # Creating an object
 
 # ────────────────────────────────────────────────────────────────────────────────
 
