@@ -92,9 +92,6 @@ class CustomUserAdmin(UserAdmin):
         ('first_name', 'last_name',),
         'email',
         ('password1', 'password2',),
-        'is_active',
-        'is_staff',
-        'is_superuser',
       )
     }),
     ('Business Details', {
