@@ -46,6 +46,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   is_staff_help_text = """
     Designates whether this user can access the admin site.
   """
+  discount_ratio_help_text = """
+    Designates whether this user can access the admin site.
+  """
 
   email = models.EmailField(unique=True)
   first_name = models.CharField(max_length=30)
@@ -67,7 +70,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     default=0, 
     verbose_name='Discount', 
     validators=[MinValueValidator(0), MaxValueValidator(1),], 
-    help_text='Must be a number from 0.00 to 1.00 (up to 2 decimal places)'
+    help_text=discount_ratio_help_text
   )
 
   class Meta:
@@ -78,7 +81,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   # A string describing the name of the field on the user model that is used as the unique identifier
   USERNAME_FIELD = 'email'
   # A list of the field names that will be prompted for when creating a user via the createsuperuser management command
-  REQUIRED_FIELDS = ['first_name', 'last_name',]
+  REQUIRED_FIELDS = ('first_name', 'last_name',)
 
   objects = CustomUserManager()
 
