@@ -1,9 +1,6 @@
 from django.db import models
 from django.conf import settings # Don't refer to the user model directly, it is recommended to refer to the AUTH_USER_MODEL setting
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from django.template.defaultfilters import slugify
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -62,26 +59,59 @@ class Cart(models.Model):
 # def get_user_discount_ratio(sender, instance, *args, **kwargs):
 #     instance.discount_ratio_applied = instance.user.discount_ratio
 
+  def get_subtotal(self):
+    cart = Cart.objects.get(id=self.id)
+    total = 0
+    for cartDetail in cart.cartdetail_set.all():
+      total += cartDetail.quantity * cartDetail.tire.price
+    return total
+  get_subtotal.short_description = 'Subtotal ($)'
+  
+  def get_total(self):
+    cart = Cart.objects.get(id=self.id)
+    total = 0
+    for cartDetail in cart.cartdetail_set.all():
+      total += cartDetail.quantity * cartDetail.tire.price
+    return round(total * (1 - self.discount_ratio_applied), 2)
+  get_total.short_description = 'Total ($)'
+
+  def get_owner(self):
+    return self.user.full_name
+  get_owner.short_description = 'Full name'
+    
+  def get_item_count(self):
+    cart = Cart.objects.get(id=self.id)
+    count = 0
+    for cartDetail in cart.cartdetail_set.all():
+      count += cartDetail.quantity
+    return count
+  get_item_count.short_description = 'Number of items'
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Tire(models.Model):
   name = models.CharField(max_length=30)
   brand = models.CharField(max_length=30)
   year = models.CharField(max_length=30)
+
   width = models.CharField(max_length=30, blank=True)
   aspect_ratio = models.CharField(max_length=30, blank=True)
   rim_size = models.CharField(max_length=30, blank=True)
   season = models.CharField(max_length=30, blank=True)
   pattern = models.CharField(max_length=30, blank=True)
-  loads = models.CharField(max_length=30, blank=True)
+  load = models.CharField(max_length=30, blank=True)
+  
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   image = models.CharField(max_length=200, blank=True, verbose_name='Tire photo URL')
   current_quantity = models.PositiveIntegerField(default=0)
-  total_quantity = models.PositiveIntegerField(default=0)
   sold = models.PositiveIntegerField(default=0)
 
   def __str__(self):
     return self.name
+
+  def get_total_quantity(self):
+    return self.current_quantity + self.sold
+  get_total_quantity.short_description = 'Total'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -91,10 +121,6 @@ class CartDetail(models.Model):
   quantity = models.PositiveIntegerField(default=1)
   price_each = models.DecimalField(max_digits=7, decimal_places=2, blank=True, verbose_name='Price per item ($)')
   
-  @property
-  def get_subtotal(self):
-    return self.quantity * Tire.price
-  
   def __str__(self):
     return f'Cart {self.cart} contains {self.quantity} \'{self.tire}\' tires'
 
@@ -103,3 +129,10 @@ class CartDetail(models.Model):
     if not self.price_each:
       self.price_each = self.tire.price
     super(CartDetail, self).save(*args, **kwargs)
+
+  def get_subtotal(self):
+    return self.quantity * self.tire.price
+  get_subtotal.short_description = 'Subtotal ($)'
+
+  class Meta:
+    verbose_name = 'Cart Item'

@@ -31,7 +31,7 @@
 
     <!-- Navbar links -->
     <div class="navbar-nav">
-      <a class="nav-item nav-link" id="nav-admin" href='/admin'></i>Admin</a> <!-- Do not include in production -->
+      <a class="nav-item nav-link" id="nav-admin" href='{% url 'admin:login' %}'></i>Admin</a> <!-- Do not include in production -->
       <a class="nav-item nav-link" id="nav-tires" href={% url 'tires' %}></i>Tires</a>
       <a class="nav-item nav-link" id="nav-services" href={% url 'services' %}></i>Services</a>
       <a class="nav-item nav-link" id="nav-about" href={% url 'about' %}></i>About</a>

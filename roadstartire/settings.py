@@ -56,7 +56,7 @@ ROOT_URLCONF = 'roadstartire.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,3 +125,39 @@ STATIC_URL = '/static/'
 # Need this so that Django knows to use the new User class
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+# Custom code to sort the Admin Index page
+
+# Ordering list
+# ADMIN_ORDERING = [
+#     ('users', [
+#         'CustomUser',
+#     ]),
+#     ('main_app', [
+#         'Tire',
+#         'Cart',
+#         'CartDetail',
+#     ]),
+
+# ]
+# # Sort function
+# def get_app_list(self, request):
+#     app_dict = self._build_app_dict(request)
+#     for app_name, object_list in ADMIN_ORDERING:
+#         app = app_dict[app_name]
+#         app['models'].sort(key=lambda x: object_list.index(x['object_name']))
+#         yield app
+
+# # Cover the django.contrib.admin.AdminSite.get_app_list
+# from django.contrib import admin
+
+# admin.AdminSite.get_app_list = get_app_list
+
+# # ────────────────────────────────────────────────────────────────────────────────
+
+# Add this to check root static folder first
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]

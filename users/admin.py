@@ -6,11 +6,17 @@ from main_app.models import Cart
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 
-class CartInline(admin.StackedInline):
+class CartInline(admin.TabularInline):
   model = Cart
   can_delete = True
   extra = 1 # Number of extra forms the formset will display in addition to the initial forms
   can_delete = True
+
+  readonly_fields = (
+    'get_item_count', 
+    'get_subtotal',
+    'get_total',
+  )
 
 class CustomUserAdmin(UserAdmin):
   add_form = CustomUserCreationForm
@@ -19,6 +25,7 @@ class CustomUserAdmin(UserAdmin):
 
   # Fields displayed in the list page
   list_display = (
+    'id',
     'email', 
     'first_name', 
     'last_name', 
@@ -28,6 +35,11 @@ class CustomUserAdmin(UserAdmin):
     'is_active',
     'is_staff',
     'is_superuser', 
+  )
+
+  list_display_links = (
+    'id', 
+    'email',
   )
 
   # Field that can be editted directly within the list page
@@ -80,9 +92,6 @@ class CustomUserAdmin(UserAdmin):
         ('first_name', 'last_name',),
         'email',
         ('password1', 'password2',),
-        'is_active',
-        'is_staff',
-        'is_superuser',
       )
     }),
     ('Business Details', {
@@ -123,5 +132,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
 
-admin.site.site_header = 'Road Star Tire Admin'
-admin.site.site_tite = 'Road Star Tire Admin'
+admin.site.site_header = 'Road Star Tire'
+admin.site.site_title = 'Road Star Tire'
+admin.site.index_title = 'Site Admin'

@@ -2,28 +2,51 @@ from django.contrib import admin
 from .models import Cart, Tire, CartDetail
 
 # ────────────────────────────────────────────────────────────────────────────────
-# list_display - Fields displayed in the list page
-# list_editable - Fields that can be editted directly within the list page
-# list_filter - Filters in the right sidebar of the list page
+# list_display - Controls which fields are displayed on the change list page
+# list_display_links - Controls if and which fields in list_display should be linked to the “change” page for an object
+# list_editable - List of field names on the model which will allow editing on the change list page
+# list_filter - Filters in the right sidebar of the change list page
+
+# https://docs.djangoproject.com/en/3.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display
+# https://docs.djangoproject.com/en/3.0/intro/tutorial07/
 # ────────────────────────────────────────────────────────────────────────────────
+
+admin.site.empty_value_display = '–'
 
 class CartDetailAdmin(admin.ModelAdmin):
   list_display = (
+    'id',
     'cart',
     'tire',
     'price_each',
     'quantity',
     'get_subtotal',
   )
+
+  list_display_links = (
+    'id',
+    'cart',
+  )
   
   list_editable = ('quantity',)
 
-  def get_subtotal(self, obj):
-    return obj.quantity * obj.tire.price
-    
-  get_subtotal.short_description = 'Subtotal ($)'
+  fieldsets = (
+    (None, {
+      'fields': (
+        'cart',
+        'tire',
+        'price_each', # Should not be able to edit price directly
+        'quantity',
+      )
+    }),
+  )
 
-  readonly_fields = ('price_each', 'get_subtotal')
+  # Dynamic readonly
+  def get_readonly_fields(self, request, obj=None):
+    if obj:
+      return ('cart', 'tire', 'price_each') # Existing object
+    else:
+      return ('price_each',) # Creating an object
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -32,27 +55,29 @@ class CartDetailInline(admin.TabularInline):
   can_delete = True
   extra = 1 # Number of extra forms the formset will display in addition to the initial forms
 
-  def get_sub_total(self, obj):
-    return obj.quantity * obj.tire.price
-
-  get_sub_total.short_description = "Subtotal ($)"
-
   readonly_fields = (
     'price_each', 
-    'get_sub_total',
+    'get_subtotal',
   )
-  
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class CartAdmin(admin.ModelAdmin):
   list_display = (
+    'id',
     'user',
     'get_owner',
     'date_ordered',
     'status',
-    'discount_ratio_applied',
     'get_item_count',
+    'discount_ratio_applied',
+    'get_subtotal',
     'get_total',
+  )
+
+  list_display_links = (
+    'id',
+    'user',
   )
 
   list_editable = ('status',)
@@ -62,32 +87,29 @@ class CartAdmin(admin.ModelAdmin):
     'status',
   )
 
-  search_fields = ('user',)
+  search_fields = (
+    'id',
+    'user',
+  )
 
-  def get_owner(self, obj):
-    return obj.user.full_name
-  
-  get_owner.short_description = 'Full name'
+  fieldsets = (
+    (None, {
+      'fields': (
+        'user',
+        'status',
+        'get_item_count', 
+        'discount_ratio_applied',
+        'get_subtotal',
+        'get_total',
+      )
+    }),
+  )
 
-  def get_total(self, obj):
-    cart = Cart.objects.get(id=obj.id)
-    total = 0
-    for cartDetail in cart.cartdetail_set.all():
-      total += cartDetail.quantity * cartDetail.tire.price
-    return total
-
-  get_total.short_description = 'Total ($)'
-    
-  def get_item_count(self, obj):
-    cart = Cart.objects.get(id=obj.id)
-    count = 0
-    for cartDetail in cart.cartdetail_set.all():
-      count += cartDetail.quantity
-    return count
-
-  get_item_count.short_description = 'Number of items'
-
-  readonly_fields = ('get_total', 'get_item_count',)
+  readonly_fields = (
+    'get_item_count', 
+    'get_subtotal',
+     'get_total',
+  )
 
   inlines = (CartDetailInline,)
 
@@ -101,11 +123,13 @@ class TireAdmin(admin.ModelAdmin):
     'width',
     'aspect_ratio',
     'rim_size',
-    'price',
     'season',
+    'pattern',
+    'load',
+    'price',
     'current_quantity',
-    'total_quantity',
     'sold',
+    'get_total_quantity',
   )
 
   list_filter = (
@@ -119,6 +143,35 @@ class TireAdmin(admin.ModelAdmin):
     'brand',
     'year',
   )
+
+  fieldsets = (
+    (None, {
+      'fields': (
+        'name',
+        'brand',
+        'year',
+        'image',
+        (
+        'width',
+        'aspect_ratio',
+        'rim_size',
+        'season',
+        'pattern',
+        'load',
+        ),
+        'price',
+      )
+    }),
+    ('Inventory', {
+      'fields': (
+        'current_quantity',
+        'sold',
+        'get_total_quantity',
+      )
+    }),
+  )
+
+  readonly_fields = ('get_total_quantity',)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
