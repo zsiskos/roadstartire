@@ -4,7 +4,7 @@
 {% block content %}
 <div>
   <h1>Account Information</h1>
-  <div>
+  <div style="border: 1px dashed lightgray; margin: 1rem">
     <p>Company Name: {{ user.company_name }}</p>
     <p>HST #: {{ user.hst_number }}</p>
     <p>Discount: {{ user.discount_ratio }}</p>
@@ -21,16 +21,18 @@
   </div>
 </div>
 
-<div>
-  <div>
-    <p>Order #: {{  }}</p>
-    <p>Date Placed:</p>
-    <p>Total Cost:</p>
-    <p>Current Status:</p>
+<div style="border: 1px dashed lightgray; margin: 1rem">
+  {% for cart in carts %}
+  <div style="border: 1px dashed lightgray; margin: 1rem">
+    <p>Order #: {{ cart.id }}</p>
+    <p>Date Ordered: {{ cart.date_ordered }}</p>
+    <p>Total Cost: </p>
+    <p>Current Status: </p>
     <button>View Invoice</button>
     <button>Cancel Order</button>
   </div>
 </div>
+{% endfor %}
 {% endblock %}
 
 
