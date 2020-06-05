@@ -10,7 +10,6 @@
     <p>Discount: {{ user.discount_ratio }}</p>
     <p>First Name: {{ user.first_name }}</p>
     <p>Last Name: {{ user.last_name }}</p>
-    <p>Date Joined: {{ user.date_joined }}</p>
     <p>eMail: {{ user.email }}</p>
     <p>Bus. Phone: {{ user.business_phone }}</p>
     <p>Address: {{ user.address }}</p>
@@ -18,6 +17,21 @@
     <p>Province: {{ user.province_iso }}</p>
     <p>Postal Code: {{ user.postal_code }}</p>
     <p>Country: {{ user.country_iso }}</p>
+    <p>Date Joined: {{ user.date_joined }}</p>
+  </div>
+</div>
+
+<div>
+  <div>
+    <p>Order #: </p>
+    <p>Date Placed:</p>
+    <p>Total Cost:</p>
+    <p>Current Status:</p>
+    <button>View Invoice</button>
+    <button>Cancel Order</button>
   </div>
 </div>
 {% endblock %}
+
+
+
