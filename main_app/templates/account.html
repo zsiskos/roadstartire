@@ -3,7 +3,7 @@
 
 {% block content %}
 <div>
-  <h1>Account Information</h1>
+  <h2>Account Information</h2>
   <div style="border: 1px dashed lightgray; margin: 1rem">
     <p>Company Name: {{ user.company_name }}</p>
     <p>HST #: {{ user.hst_number }}</p>
@@ -22,6 +22,7 @@
 </div>
 
 <div style="border: 1px dashed lightgray; margin: 1rem">
+  <h2>Previous Orders</h2>
   {% for cart in carts %}
   <div style="border: 1px dashed lightgray; margin: 1rem">
     <p>Order #: {{ cart.id }}</p>
@@ -31,8 +32,8 @@
     <button>View Invoice</button>
     <button>Cancel Order</button>
   </div>
+  {% endfor %}
 </div>
-{% endfor %}
 {% endblock %}
 
 
