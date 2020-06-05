@@ -27,7 +27,8 @@ def login(req):
   return render(req, 'login.html')
 
 def account(req):
-  return render(req, 'account.html')
+  user = {'user': req.user}
+  return render(req, 'account.html', user)
 
 def about(req):
   return render(req, 'about.html')

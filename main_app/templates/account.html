@@ -5,19 +5,19 @@
 <div>
   <h1>Account Information</h1>
   <div>
-    <p>Company Name:</p>
-    <p>HST #:</p>
-    <p>Discount:</p>
-    <p>First Name:</p>
-    <p>Last Name:</p>
-    <p>Date Joined:</p>
-    <p>eMail:</p>
-    <p>Bus. Phone:</p>
-    <p>Address:</p>
-    <p>City:</p>
-    <p>Provinve:</p>
-    <p>Postal Code:</p>
-    <p>Country:</p>
+    <p>Company Name: {{ user.company_name }}</p>
+    <p>HST #: {{ user.hst_number }}</p>
+    <p>Discount: {{ user.discount_ratio }}</p>
+    <p>First Name: {{ user.first_name }}</p>
+    <p>Last Name: {{ user.last_name }}</p>
+    <p>Date Joined: {{ user.date_joined }}</p>
+    <p>eMail: {{ user.email }}</p>
+    <p>Bus. Phone: {{ user.business_phone }}</p>
+    <p>Address: {{ user.address }}</p>
+    <p>City: {{ user.city }}</p>
+    <p>Province: {{ user.province_iso }}</p>
+    <p>Postal Code: {{ user.postal_code }}</p>
+    <p>Country: {{ user.country_iso }}</p>
   </div>
 </div>
 {% endblock %}
