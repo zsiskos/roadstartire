@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .models import Tire, Cart, CartDetail
 
 # Create your views here.
 
@@ -27,7 +28,10 @@ def login(req):
   return render(req, 'login.html')
 
 def account(req):
-  return render(req, 'account.html')
+  user = req.user
+  carts = Cart.objects.filter(user_id=req.user.id)
+  print(carts)
+  return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 def about(req):
   return render(req, 'about.html')
