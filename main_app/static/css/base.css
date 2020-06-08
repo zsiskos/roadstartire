@@ -1,5 +1,5 @@
 :root {
-  --navbar-bg-color: whitesmoke
+  --navbar-bg-color: whitesmoke;
   --main-bg-color: whitesmoke;
 }
 
@@ -33,11 +33,11 @@ body {
 }
 
 .navbar-brand {
-  color: rgb(18, 24, 77);
+  color: rgb(211, 121, 37);
 }
 
 .nav-link {
-  color: rgb(209, 129, 53);
+  color: rgb(18, 24, 77);
   font-size: 14px;
   font-weight: 500;
   border-radius: 4px;
@@ -45,12 +45,12 @@ body {
 }
 
 .nav-link:hover {
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(238, 238, 238);
   transition: all 0.3s ease;
 }
 
 .navbar a:hover {
-  color: rgb(18, 24, 77);
+  color: rgb(211, 121, 37);
   transition: all 0.3s ease;
 }
 
