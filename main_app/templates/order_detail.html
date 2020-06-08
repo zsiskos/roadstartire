@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Order #: {{ order.id }}</h1>
+<div style="border: 1px dashed lightgray; margin: 1rem">
+  <h3>Date ordered: {{ order.date_ordered }}</h3>
+  <table style="border-collapse: collapse; width: 100%">
+    <tr>
+      <th>Items</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+    {% for item in order_detail %}
+    <tr>
+      <td>{{ item.tire }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>${{ item.price_each }}</td>
+      <td>$ {{ item.subtotal }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Sub-total:</td>
+      <td>$$$</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Tax:</td>
+      <td>$$$</td>
+    </tr>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>Total:</td>
+        <td>$$$</td>
+      </tr>
+    </tfoot>
+  </table>
+  <button>Cancel Order</button>
+</div>
+{% endblock %}

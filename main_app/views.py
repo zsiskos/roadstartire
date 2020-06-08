@@ -45,8 +45,11 @@ def tires(req):
 def cartDetail(req):
   return render(req, 'cart.html')
 
-def invoiceDetail(req, cart_id):
-  return render(req, 'invoice_detail.html')
+def orderDetail(req, cart_id):
+  order = Cart.objects.get(id=cart_id)
+  order_detail = CartDetail.objects.filter(cart_id=cart_id)
+  print(order_detail)
+  return render(req, 'order_detail.html', { 'order': order, 'order_detail': order_detail })
 
 
 class TireList(ListView):
