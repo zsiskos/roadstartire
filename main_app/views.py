@@ -31,7 +31,6 @@ def login(req):
 def account(req):
   user = req.user
   carts = Cart.objects.filter(user_id=req.user.id)
-  print(carts)
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 def about(req):
@@ -46,8 +45,11 @@ def tires(req):
 def cartDetail(req):
   return render(req, 'cart.html')
 
-def orders(req):
-  return render(req, 'orders.html')
+def orderDetail(req, cart_id):
+  order = Cart.objects.get(id=cart_id)
+  order_detail = CartDetail.objects.filter(cart_id=cart_id)
+  print(order_detail)
+  return render(req, 'order_detail.html', { 'order': order, 'order_detail': order_detail })
 
 
 class TireList(ListView):

@@ -19,8 +19,8 @@ urlpatterns = [
   # path('cart/<int:cart_id>/', views.cartDetail, name='cart_detail'), # Cart detail page route for current cart
   # path('cart/<int:cart_id>/update', views.cartUpdate, name='cart_update'), # Cart update page route fort current cart (eg. for changing quantities) --> Probably not needed
 
-  path('orders/', views.orders, name='orders'), # Orders page route - List of all user's carts that have been submitted/fulfilled (ie. Cart history)
-  # path('orders/<int:cart_id>/'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
+  # path('orders/', views.orders, name='orders'), # Orders page route - List of all user's carts that have been submitted/fulfilled (ie. Cart history)
+  path('orders/<int:cart_id>/', views.orderDetail, name='order_detail'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
   # path('orders/<int:cart_id>/cancel', views.cartCanceled, name='cart_cancel'), # Cart page route - Current cart
 ]
 

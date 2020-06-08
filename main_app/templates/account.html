@@ -18,6 +18,8 @@
     <p>Postal Code: {{ user.postal_code }}</p>
     <p>Country: {{ user.country_iso }}</p>
     <p>Date Joined: {{ user.date_joined }}</p>
+    <button>Edit</button>
+    <button>Submit</button>
   </div>
 </div>
 
@@ -28,9 +30,8 @@
     <p>Order #: {{ cart.id }}</p>
     <p>Date Ordered: {{ cart.date_ordered }}</p>
     <p>Total Cost: </p>
-    <p>Current Status: </p>
-    <button>View Invoice</button>
-    <button>Cancel Order</button>
+    <p>Current Status: {{ cart.status }} </p>
+    <button><a href="{% url 'order_detail' cart.id %}">View Order</a></button>
   </div>
   {% endfor %}
 </div>
