@@ -30,7 +30,6 @@ def login(req):
 def account(req):
   user = req.user
   carts = Cart.objects.filter(user_id=req.user.id)
-  print(carts)
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 def about(req):
