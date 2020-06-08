@@ -31,7 +31,7 @@
     <p>Date Ordered: {{ cart.date_ordered }}</p>
     <p>Total Cost: </p>
     <p>Current Status: </p>
-    <button>View Invoice</button>
+    <button><a href="{% url 'invoice_detail' cart.id %}">View Invoice</a></button>
     <button>Cancel Order</button>
   </div>
   {% endfor %}
