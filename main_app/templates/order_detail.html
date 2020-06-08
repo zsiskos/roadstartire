@@ -17,14 +17,14 @@
       <td>{{ item.tire }}</td>
       <td>{{ item.quantity }}</td>
       <td>${{ item.price_each }}</td>
-      <td>$ {{ item.subtotal }}</td>
+      <td>$ {{ item.get_subtotal }}</td>
     </tr>
     {% endfor %}
     <tr>
       <td></td>
       <td></td>
-      <td>Sub-total:</td>
-      <td>$$$</td>
+      <td>Sub-total: </td>
+      <td>{{ order.get_subtotal }}</td>
     </tr>
     <tr>
       <td></td>
@@ -37,7 +37,7 @@
         <td></td>
         <td></td>
         <td>Total:</td>
-        <td>$$$</td>
+        <td>{{ order.get_total }}</td>
       </tr>
     </tfoot>
   </table>
