@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.views.generic import ListView
 from .models import Tire, Cart, CartDetail
 
 # Create your views here.
@@ -47,3 +48,7 @@ def cartDetail(req):
 
 def orders(req):
   return render(req, 'orders.html')
+
+
+class TireList(ListView):
+  model = Tire

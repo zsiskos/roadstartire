@@ -12,7 +12,8 @@ urlpatterns = [
   path('account/', views.account, name='account'), #Temporary route page until we set up the model
   # path('account/<int:user_id>/', views.account, name='account'), # User account page page route
 
-  path('tires/', views.tires, name='tires'), # Tire search page route - Use of collapse/accordian to display tire details?
+  # path('tires/', views.tires, name='tires'), # Tire search page route - Use of collapse/accordian to display tire details?
+  path('tires/', views.TireList.as_view(), name='tire_list'),
 
   path('cart/', views.cartDetail, name='cart_detail'), # Temporary path until we set up the cart model
   # path('cart/<int:cart_id>/', views.cartDetail, name='cart_detail'), # Cart detail page route for current cart

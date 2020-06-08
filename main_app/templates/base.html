@@ -32,7 +32,7 @@
     <!-- Navbar links -->
     <div class="navbar-nav">
       <a class="nav-item nav-link" id="nav-admin" href='{% url 'admin:login' %}'></i>Admin</a> <!-- Do not include in production -->
-      <a class="nav-item nav-link" id="nav-tires" href={% url 'tires' %}></i>Tires</a>
+      <a class="nav-item nav-link" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a>
       <a class="nav-item nav-link" id="nav-services" href={% url 'services' %}></i>Services</a>
       <a class="nav-item nav-link" id="nav-about" href={% url 'about' %}></i>About</a>
       <a class="nav-item nav-link" id="nav-login" href={% url 'login' %}></i>Log in</a> <!-- SEPARATE PAGE FOR NOW, WILL COMBINE WITH SIGN UP -->
