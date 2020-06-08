@@ -22,13 +22,13 @@
   <title>Road Star Tire</title>
 </head>
 <body>
-  <nav class='navbar navbar-expand-md bg-dark d-flex justify-content-between'>
+  <nav class='navbar navbar-expand-md d-flex justify-content-between'>
     <!-- Navbar brand -->
     <a class="navbar-brand" href={% url 'home' %}>
-      <img class="nav-brand-image" src="../static/images/road-star-logo.svg" alt="Road Star Tires logo">
-      Road Star Tire
+      <img class="nav-brand-image" src="../static/images/road-star-logo.png" alt="Road Star Tires logo">
+      ROAD STAR TIRE 
+      WHOLESALE
     </a>
-
     <!-- Navbar links -->
     <div class="navbar-nav">
       <a class="nav-item nav-link" id="nav-admin" href='{% url 'admin:login' %}'></i>Admin</a> <!-- Do not include in production -->
@@ -45,6 +45,6 @@
   <main>
     {% block content %}
     {% endblock %}
-  </main>
+  </main>  
 </body>
 </html>
