@@ -5,6 +5,7 @@
 <h1>Order #: {{ order.id }}</h1>
 <div style="border: 1px dashed lightgray; margin: 1rem">
   <h3>Date ordered: {{ order.date_ordered }}</h3>
+  <h3>Current Status: {{ order.get_readable_status }} </h3>
   <table style="border-collapse: collapse; width: 100%">
     <tr>
       <th>Items</th>
@@ -41,6 +42,6 @@
       </tr>
     </tfoot>
   </table>
-  <a href="#"><button>Cancel Order</button></a>
+  <a href="{% url 'order_cancel' order.id %}"><button>Cancel Order</button></a>
 </div>
 {% endblock %}
