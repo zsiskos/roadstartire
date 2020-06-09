@@ -30,7 +30,7 @@ def login(req):
 
 def account(req):
   user = req.user
-  carts = Cart.objects.filter(user_id=req.user.id)
+  carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 def about(req):
