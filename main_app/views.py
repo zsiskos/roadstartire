@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.views.generic import ListView
 from .models import Tire, Cart, CartDetail
@@ -30,7 +30,7 @@ def login(req):
 
 def account(req):
   user = req.user
-  carts = Cart.objects.filter(user_id=req.user.id)
+  carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 def about(req):
@@ -48,8 +48,13 @@ def cartDetail(req):
 def orderDetail(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order_detail = CartDetail.objects.filter(cart_id=cart_id)
-  print(order_detail)
   return render(req, 'order_detail.html', { 'order': order, 'order_detail': order_detail })
+
+def orderCancel(req, cart_id):
+  order = Cart.objects.get(id=cart_id)
+  order.status = 2
+  order.save()
+  return redirect('order_detail', cart_id)
 
 
 class TireList(ListView):

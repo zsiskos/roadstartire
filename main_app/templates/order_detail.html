@@ -5,6 +5,7 @@
 <h1>Order #: {{ order.id }}</h1>
 <div style="border: 1px dashed lightgray; margin: 1rem">
   <h3>Date ordered: {{ order.date_ordered }}</h3>
+  <h3>Current Status: {{ order.get_readable_status }} </h3>
   <table style="border-collapse: collapse; width: 100%">
     <tr>
       <th>Items</th>
@@ -17,14 +18,14 @@
       <td>{{ item.tire }}</td>
       <td>{{ item.quantity }}</td>
       <td>${{ item.price_each }}</td>
-      <td>$ {{ item.subtotal }}</td>
+      <td>$ {{ item.get_subtotal }}</td>
     </tr>
     {% endfor %}
     <tr>
       <td></td>
       <td></td>
-      <td>Sub-total:</td>
-      <td>$$$</td>
+      <td>Sub-total: </td>
+      <td>${{ order.get_subtotal }}</td>
     </tr>
     <tr>
       <td></td>
@@ -37,10 +38,12 @@
         <td></td>
         <td></td>
         <td>Total:</td>
-        <td>$$$</td>
+        <td>${{ order.get_total }}</td>
       </tr>
     </tfoot>
   </table>
-  <button>Cancel Order</button>
+  {% if order.status == 0 or order.status == 1 %}
+  <a href="{% url 'order_cancel' order.id %}"><button>Cancel Order</button></a>
+  {% endif %}
 </div>
 {% endblock %}

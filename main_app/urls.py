@@ -21,7 +21,7 @@ urlpatterns = [
 
   # path('orders/', views.orders, name='orders'), # Orders page route - List of all user's carts that have been submitted/fulfilled (ie. Cart history)
   path('orders/<int:cart_id>/', views.orderDetail, name='order_detail'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
-  # path('orders/<int:cart_id>/cancel', views.cartCanceled, name='cart_cancel'), # Cart page route - Current cart
+  path('orders/<int:cart_id>/cancel', views.orderCancel, name='order_cancel'), # Cart page route - Current cart
 ]
 
 # Possible cart statuses: 

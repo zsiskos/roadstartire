@@ -30,8 +30,8 @@
     <p>Order #: {{ cart.id }}</p>
     <p>Date Ordered: {{ cart.date_ordered }}</p>
     <p>Total Cost: </p>
-    <p>Current Status: {{ cart.status }} </p>
-    <button><a href="{% url 'order_detail' cart.id %}">View Order</a></button>
+    <p>Current Status: {{ cart.get_readable_status }} </p>
+    <a href="{% url 'order_detail' cart.id %}"><button>View Order</button></a>
   </div>
   {% endfor %}
 </div>
