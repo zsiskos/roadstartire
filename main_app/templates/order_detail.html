@@ -42,6 +42,8 @@
       </tr>
     </tfoot>
   </table>
+  {% if order.status == 0 or order.status == 1 %}
   <a href="{% url 'order_cancel' order.id %}"><button>Cancel Order</button></a>
+  {% endif %}
 </div>
 {% endblock %}
