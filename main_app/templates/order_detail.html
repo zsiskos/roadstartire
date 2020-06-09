@@ -24,7 +24,7 @@
       <td></td>
       <td></td>
       <td>Sub-total: </td>
-      <td>{{ order.get_subtotal }}</td>
+      <td>${{ order.get_subtotal }}</td>
     </tr>
     <tr>
       <td></td>
@@ -37,10 +37,10 @@
         <td></td>
         <td></td>
         <td>Total:</td>
-        <td>{{ order.get_total }}</td>
+        <td>${{ order.get_total }}</td>
       </tr>
     </tfoot>
   </table>
-  <button>Cancel Order</button>
+  <a href="#"><button>Cancel Order</button></a>
 </div>
 {% endblock %}
