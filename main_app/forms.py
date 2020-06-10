@@ -3,25 +3,6 @@ from users.models import CustomUser
 from django.core.exceptions import ValidationError
 
 class CustomUserEditForm(forms.ModelForm):
-  COUNTRY_CHOICES = [
-    ('CAN', 'Canada'),
-    ('USA', 'United States')
-  ]
-  PROVINCE_CHOICES = [
-    ('AB', 'Alberta'),
-    ('BC', 'British Columbia'),
-    ('MB', 'Manitoba'),
-    ('NB', 'New Brunswick'),
-    ('NL', 'Newfoundland and Labrador'),
-    ('NS','Nova Scotia'),
-    ('NT', 'Northwest Territories'),
-    ('NU', 'Nunavut'),
-    ('ON', 'Ontario'), # Default
-    ('PE','Prince Edward Island'),
-    ('QC', 'Quebec'),
-    ('SK', 'Saskatchewan'),
-    ('YT', 'Yukon'),
-  ]
   class Meta:
     model = CustomUser
     fields = ['company_name', 'hst_number', 'first_name', 'last_name', 'email', 'business_phone', 'address', 'city', 'postal_code', 'province_iso', 'country_iso']
@@ -95,23 +76,11 @@ class CustomUserCreationForm(forms.Form):
   postal_code = forms.CharField()
   country_iso = forms.ChoiceField(choices=COUNTRY_CHOICES, label='Country')
 
-  # #cleans all of the inputs and returns then for saving in a later method
-  # def clean_everything(self):
-  #   first_name = self.cleaned_data['first_name'].title()
-  #   last_name = self.cleaned_data['last_name'].title()
-  #   company_name = self.cleaned_data['company_name'].title()
-  #   hst_number = self.cleaned_data['hst_number'].upper()
-  #   business_phone = self.cleaned_data['business_phone']
-  #   address = self.cleaned_data['address'].title()
-  #   city = self.cleaned_data['city'].title()
-  #   postal_code = self.cleaned_data['postal_code'].upper()
-  #   return first_name, last_name, company_name, hst_number, business_phone, address, city, postal_code
-
   #cleans email and checks if it exists
   def clean_email(self):
     email = self.cleaned_data['email'].lower()
     e = CustomUser.objects.filter(email=email)
-    if e.count():
+    if e:
       raise ValidationError("An account with this email already exists")
     return email
 
@@ -124,7 +93,7 @@ class CustomUserCreationForm(forms.Form):
       raise ValidationError("Passwords don't match")
     return password2
 
-  #saves everything to the CustomUser model
+  #cleaned and transforms data, then saves everything to the CustomUser model
   def save(self, commit=True):
     user = CustomUser.objects.create_user( #use create_user instead of create to trigger validation
       first_name=self.cleaned_data['first_name'].title(),
@@ -141,7 +110,6 @@ class CustomUserCreationForm(forms.Form):
       country_iso=self.cleaned_data['country_iso']
     )
     return user
-
 
   #USER MODEL FOR REFERENCE
   # email = models.EmailField(unique=True)
