@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.views.generic import ListView
 from .models import Tire, Cart, CartDetail
+from users.models import CustomUser
+
+from .forms import CustomUserEditForm
 
 # Create your views here.
 
@@ -33,6 +36,42 @@ def account(req):
   carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
+def custom_user_edit(request):
+  user = request.user
+  form = CustomUserEditForm(instance=user) #initiates form with user info
+  if request.method == 'POST': # will only show validation errors on POST, not GET
+    form = CustomUserEditForm(request.POST, instance=user) #'instance=user' edits 
+    if form.is_valid():
+      user_update = form.save(commit=False) # uses all form data to create a user
+      user_update.is_active = False # turns user to inactive and kicks them out
+      #user_update.is_staff = True
+      #user_update.is_superuser = True # ONLY KEEPING FOR TESTING PURPOSES
+      form.save() # saves all the info
+      return redirect('account')
+  context = {
+    "form": form
+  }
+  return render(request, 'custom_user_edit_form.html', context)
+
+# THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
+# def custom_user_edit(request):
+#   form = CustomUserEditForm() #initiates form 
+#   if request.method == 'POST': # will only show validation errors on POST, not GET
+#     form = CustomUserEditForm(request.POST)
+#     if form.is_valid():
+#       user = CustomUser(**form.cleaned_data) # uses all form data to create a user
+#       user.id = request.user.id # makes sure info is tied to current user
+#       user.date_joined = request.user.date_joined
+#       user.discount_ratio = request.user.discount_ratio
+#       user.is_active = True # turns user to inactive
+#       user.is_staff = False
+#       user.is_superuser = True # ONLY KEEPING FOR TESTING PURPOSES
+#       user.save() # saves all the info
+#   context = {
+#     "form": form
+#   }
+#   return render(request, 'custom_user_edit_form.html', context)
+
 def about(req):
   return render(req, 'about.html')
 
@@ -55,7 +94,6 @@ def orderCancel(req, cart_id):
   order.status = 2
   order.save()
   return redirect('order_detail', cart_id)
-
 
 class TireList(ListView):
   model = Tire

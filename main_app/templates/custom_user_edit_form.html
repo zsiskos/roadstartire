@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div>
+  <h2>Account Information: Edit</h2>
+  <div style="border: 1px dashed lightgray; margin: 1rem">
+    <form action='.' method='POST'> {% csrf_token %}
+      {{ form.as_p }}
+
+      <p>PLEASE NOTE: Editing account information will put the account as inactive as a RoadStar staff member must validate the account. This means you will be unable to place an order until then. If it is urgent, please call us at INSERT PHONE HERE.</p>
+      <input type='submit' value='save' />
+    </form>
+  </div>
+</div>
+
+{% endblock %}
