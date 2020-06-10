@@ -7,7 +7,6 @@
   <div style="border: 1px dashed lightgray; margin: 1rem">
     <p>Company Name: {{ user.company_name }}</p>
     <p>HST #: {{ user.hst_number }}</p>
-    <p>Discount: {{ user.discount_ratio }}</p>
     <p>First Name: {{ user.first_name }}</p>
     <p>Last Name: {{ user.last_name }}</p>
     <p>eMail: {{ user.email }}</p>
@@ -18,8 +17,7 @@
     <p>Postal Code: {{ user.postal_code }}</p>
     <p>Country: {{ user.country_iso }}</p>
     <p>Date Joined: {{ user.date_joined }}</p>
-    <button>Edit</button>
-    <button>Submit</button>
+    <a href="{% url 'custom_user_edit' %}"><button>Edit</button></a>
   </div>
 </div>
 
