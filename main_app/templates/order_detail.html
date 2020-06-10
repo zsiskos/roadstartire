@@ -6,6 +6,12 @@
 <div style="border: 1px dashed lightgray; margin: 1rem">
   <h3>Date ordered: {{ order.date_ordered }}</h3>
   <h3>Current Status: {{ order.get_readable_status }} </h3>
+  <h4>Shipped to:</h4>
+  <p>Company Name: {{ user.company_name }}</p>
+  <p>Address: {{ user.address }}</p>
+  <p>City: {{ user.city }}</p>
+  <p>Province: {{ user.province_iso }}</p>
+  <p>Postal Code: {{ user.postal_code }}</p>
   <table style="border-collapse: collapse; width: 100%">
     <tr>
       <th>Items</th>
