@@ -10,7 +10,7 @@ urlpatterns = [
   path('about/', views.about, name='about'), #About and Locations page route
 
   path('account/', views.account, name='account'), #Temporary route page until we set up the model
-  # path('account/<int:user_id>/', views.account, name='account'), # User account page page route
+  path('account/edit/', views.custom_user_edit, name='custom_user_edit'), # User account page page route
 
   # path('tires/', views.tires, name='tires'), # Tire search page route - Use of collapse/accordian to display tire details?
   path('tires/', views.TireList.as_view(), name='tire_list'),
