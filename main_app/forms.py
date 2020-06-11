@@ -41,7 +41,7 @@ class CustomUserEditForm(forms.ModelForm):
 #   postal_code = forms.CharField()
 #   country_iso = forms.ChoiceField(choices=COUNTRY_CHOICES, label='Country')
 
-class CustomUserCreationForm(forms.Form):
+class CustomUserCreationForm2(forms.Form):
   COUNTRY_CHOICES = [
     ('CAN', 'Canada'),
     ('USA', 'United States')

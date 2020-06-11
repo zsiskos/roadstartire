@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
   path('signup/', views.signup, name='signup'), # Signup page route Sign Up
+  path('signup2/', views.signup2, name='signup2'), # Signup page to test built in functionality
   path('login/', views.signin, name='login'), # Login page route Log in vs. Sign in, creating separate template for this for now until we combine it with signup page
   path('logout/', views.logout, name='logout'), 
   

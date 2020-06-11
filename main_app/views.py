@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, UserCreationForm #this is here for testing against CustomUserCreationForm
+from users.forms import CustomUserCreationForm
 from django.views.generic import ListView
 from .models import Tire, Cart, CartDetail
 from users.models import CustomUser
-from .forms import CustomUserEditForm, CustomUserCreationForm
+from .forms import CustomUserEditForm, CustomUserCreationForm2
 from django.contrib.auth import login
 
 # Create your views here.
@@ -14,15 +15,28 @@ def home(req):
 
 def signup(req):
     if req.method == 'POST':
-      form = CustomUserCreationForm(req.POST)
+      form = CustomUserCreationForm2(req.POST)
       if form.is_valid():
         user = form.save() # Add the user to the database
         login(req, user) #logs in on signup
         #messages.success(req, 'Account created')
         return redirect('home')
     else:
-        form = CustomUserCreationForm()
+      form = CustomUserCreationForm2()
     return render(req, 'signup.html', {'form': form}) # redirect to signup page
+
+# goes with usercreationform test
+def signup2(req):
+  if req.method == 'POST':
+    form = CustomUserCreationForm(req.POST)
+    if form.is_valid():
+      user = form.save()
+      login(req, user)
+      return redirect('home')  
+  else:
+    form = CustomUserCreationForm()
+  return render(req, 'signup2.html', {'form': form})
+
 
 def signin(req):
   if req.user.is_authenticated:
