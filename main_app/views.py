@@ -30,11 +30,11 @@ def account(req):
   carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
-def custom_user_edit(request):
-  user = request.user
+def custom_user_edit(req):
+  user = req.user
   form = CustomUserEditForm(instance=user) #initiates form with user info
-  if request.method == 'POST': # will only show validation errors on POST, not GET
-    form = CustomUserEditForm(request.POST, instance=user) #'instance=user' edits 
+  if req.method == 'POST': # will only show validation errors on POST, not GET
+    form = CustomUserEditForm(req.POST, instance=user) #'instance=user' edits 
     if form.is_valid():
       user_update = form.save(commit=False) # uses all form data to create a user
       user_update.is_active = False # turns user to inactive and kicks them out
@@ -45,7 +45,7 @@ def custom_user_edit(request):
   context = {
     "form": form
   }
-  return render(request, 'custom_user_edit_form.html', context)
+  return render(req, 'custom_user_edit_form.html', context)
 
 # THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
 # def custom_user_edit(request):
