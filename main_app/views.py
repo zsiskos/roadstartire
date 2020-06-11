@@ -1,42 +1,27 @@
 from django.shortcuts import render, redirect
-from django.contrib import auth
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, UserCreationForm #this is here for testing against CustomUserCreationForm
-from users.forms import CustomUserCreationForm
+from django.contrib import auth, messages
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from django.views.generic import ListView
 from .models import Tire, Cart, CartDetail
 from users.models import CustomUser
-from .forms import CustomUserEditForm, CustomUserCreationForm2
 from django.contrib.auth import login
-
-# Create your views here.
 
 def home(req):
   return render(req, 'home.html')
 
 def signup(req):
     if req.method == 'POST':
-      form = CustomUserCreationForm2(req.POST)
+      form = CustomUserCreationForm(req.POST)
       if form.is_valid():
         user = form.save() # Add the user to the database
         login(req, user) #logs in on signup
-        #messages.success(req, 'Account created')
-        return redirect('home')
+        print(form)
+        print(form.cleaned_data)
+        return redirect('account')
     else:
-      form = CustomUserCreationForm2()
+      form = CustomUserCreationForm()
     return render(req, 'signup.html', {'form': form}) # redirect to signup page
-
-# goes with usercreationform test
-def signup2(req):
-  if req.method == 'POST':
-    form = CustomUserCreationForm(req.POST)
-    if form.is_valid():
-      user = form.save()
-      login(req, user)
-      return redirect('home')  
-  else:
-    form = CustomUserCreationForm()
-  return render(req, 'signup2.html', {'form': form})
-
 
 def signin(req):
   if req.user.is_authenticated:
@@ -51,10 +36,11 @@ def signin(req):
       auth.login(req, user)
       return redirect('tire_list')
 
-    # else: 
-    #   messages.error(request, 'Wrong email/password')
-
-  return render(req, 'login.html')
+    else: 
+      messages.error(req, 'Wrong email/password')
+  
+  form = CustomUserCreationForm()
+  return render(req, 'signup.html', {'form': form})
 
 def logout(req):
   auth.logout(req)
@@ -67,14 +53,12 @@ def account(req):
 
 def custom_user_edit(req):
   user = req.user
-  form = CustomUserEditForm(instance=user) #initiates form with user info
+  form = CustomUserChangeForm(instance=user) #initiates form with user info
   if req.method == 'POST': # will only show validation errors on POST, not GET
-    form = CustomUserEditForm(req.POST, instance=user) #'instance=user' edits 
+    form = CustomUserChangeForm(req.POST, instance=user) #'instance=user' ensures you are overwriting current user and NOT creating a new one with same info
     if form.is_valid():
-      user_update = form.save(commit=False) # uses all form data to create a user
+      user_update = form.save(commit=False)
       user_update.is_active = False # turns user to inactive and kicks them out
-      #user_update.is_staff = True
-      #user_update.is_superuser = True # ONLY KEEPING FOR TESTING PURPOSES
       form.save() # saves all the info
       return redirect('account')
   context = {

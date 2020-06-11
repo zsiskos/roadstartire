@@ -3,7 +3,6 @@ from . import views
 
 urlpatterns = [
   path('signup/', views.signup, name='signup'), # Signup page route Sign Up
-  path('signup2/', views.signup2, name='signup2'), # Signup page to test built in functionality
   path('login/', views.signin, name='login'), # Login page route Log in vs. Sign in, creating separate template for this for now until we combine it with signup page
   path('logout/', views.logout, name='logout'), 
   
@@ -21,7 +20,6 @@ urlpatterns = [
   # path('cart/<int:cart_id>/', views.cartDetail, name='cart_detail'), # Cart detail page route for current cart
   # path('cart/<int:cart_id>/update', views.cartUpdate, name='cart_update'), # Cart update page route fort current cart (eg. for changing quantities) --> Probably not needed
 
-  # path('orders/', views.orders, name='orders'), # Orders page route - List of all user's carts that have been submitted/fulfilled (ie. Cart history)
   path('orders/<int:cart_id>/', views.orderDetail, name='order_detail'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
   path('orders/<int:cart_id>/cancel', views.orderCancel, name='order_cancel'), # Cart page route - Current cart
 ]
