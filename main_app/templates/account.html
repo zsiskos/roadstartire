@@ -18,6 +18,7 @@
     <p>Country: {{ user.country_iso }}</p>
     <p>Date Joined: {{ user.date_joined }}</p>
     <a href="{% url 'custom_user_edit' %}"><button>Edit</button></a>
+    <a href="{% url 'logout' %}"><button>Log Out</button></a>
   </div>
 </div>
 
