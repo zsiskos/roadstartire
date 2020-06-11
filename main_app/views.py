@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
+from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.views.generic import ListView
 from .models import Tire, Cart, CartDetail
 from users.models import CustomUser
-
 from .forms import CustomUserEditForm, CustomUserCreationForm
+from django.contrib.auth import login
 
 # Create your views here.
 
@@ -15,14 +16,30 @@ def signup(req):
     if req.method == 'POST':
       form = CustomUserCreationForm(req.POST)
       if form.is_valid():
-        form.save() # Add the user to the database
+        user = form.save() # Add the user to the database
+        login(req, user) #logs in on signup
         #messages.success(req, 'Account created')
         return redirect('home')
     else:
         form = CustomUserCreationForm()
     return render(req, 'signup.html', {'form': form}) # redirect to signup page
 
-def login(req):
+def signin(req):
+  if req.user.is_authenticated:
+    return redirect('tire_list')
+
+  if req.method == 'POST':
+    username = req.POST.get('username')
+    password = req.POST.get('password')
+    user = auth.authenticate(username=username, password=password)
+
+    if user is not None:
+      auth.login(req, user)
+      return redirect('tire_list')
+
+    # else: 
+    #   messages.error(request, 'Wrong email/password')
+
   return render(req, 'login.html')
 
 def account(req):
