@@ -3,7 +3,8 @@ from . import views
 
 urlpatterns = [
   path('signup/', views.signup, name='signup'), # Signup page route Sign Up
-  path('login/', views.login, name='login'), # Login page route Log in vs. Sign in, creating separate template for this for now until we combine it with signup page
+  path('login/', views.signin, name='login'), # Login page route Log in vs. Sign in, creating separate template for this for now until we combine it with signup page
+  path('logout/', views.logout, name='logout'), 
   
   path('', views.home, name='home'), # Home page route
   path('services/', views.services, name='services'), #Services page route

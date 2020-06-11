@@ -42,6 +42,10 @@ def signin(req):
 
   return render(req, 'login.html')
 
+def logout(req):
+  auth.logout(req)
+  return render(req, 'home.html')
+
 def account(req):
   user = req.user
   carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
