@@ -154,10 +154,3 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # from django.contrib import admin
 
 # admin.AdminSite.get_app_list = get_app_list
-
-# # ────────────────────────────────────────────────────────────────────────────────
-
-# Add this to check root static folder first
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]

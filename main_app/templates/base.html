@@ -18,15 +18,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;750;800;900&display=swap" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://kit.fontawesome.com/7344249496.js" crossorigin="anonymous"></script>
+  <script src="{% static 'js/main.js' %}"></script>
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
   <title>Road Star Tire</title>
 </head>
 <body>
-  <nav class='navbar navbar-expand-md d-flex justify-content-between'>
+  <nav class='navbar navbar-expand-md fixed-top d-flex justify-content-between'>
     <!-- Navbar brand -->
     <a class="navbar-brand" href={% url 'home' %}>
-      <img class="nav-brand-image" src="{% static 'images/road-star-logo.svg' %}" alt="Road Star Tires logo">
-      Road Star Tire
+      <img class="nav-brand-image" src="{% static 'images/road-star-logo.png' %}" alt="Road Star Tires logo">
+      ROAD STAR TIRE WHOLESALE
     </a>
     <!-- Navbar links -->
     <div class="navbar-nav">
