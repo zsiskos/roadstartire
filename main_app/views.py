@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
+from django.contrib import auth, messages
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from django.views.generic import ListView
 from .models import Tire, Cart, CartDetail
 from users.models import CustomUser
-
-from .forms import CustomUserEditForm, CustomUserCreationForm
-
-# Create your views here.
+from django.contrib.auth import login
 
 def home(req):
   return render(req, 'home.html')
@@ -15,37 +14,57 @@ def signup(req):
     if req.method == 'POST':
       form = CustomUserCreationForm(req.POST)
       if form.is_valid():
-        form.save() # Add the user to the database
-        #messages.success(req, 'Account created')
-        return redirect('home')
+        user = form.save() # Add the user to the database
+        login(req, user) #logs in on signup
+        print(form)
+        print(form.cleaned_data)
+        return redirect('account')
     else:
-        form = CustomUserCreationForm()
+      form = CustomUserCreationForm()
     return render(req, 'signup.html', {'form': form}) # redirect to signup page
 
-def login(req):
-  return render(req, 'login.html')
+def signin(req):
+  if req.user.is_authenticated:
+    return redirect('tire_list')
+
+  if req.method == 'POST':
+    username = req.POST.get('username').lower()
+    password = req.POST.get('password')
+    user = auth.authenticate(username=username, password=password)
+
+    if user is not None:
+      auth.login(req, user)
+      return redirect('tire_list')
+
+    else: 
+      messages.error(req, 'Wrong email/password')
+  
+  form = CustomUserCreationForm()
+  return render(req, 'signup.html', {'form': form})
+
+def logout(req):
+  auth.logout(req)
+  return render(req, 'home.html')
 
 def account(req):
   user = req.user
   carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
-def custom_user_edit(request):
-  user = request.user
-  form = CustomUserEditForm(instance=user) #initiates form with user info
-  if request.method == 'POST': # will only show validation errors on POST, not GET
-    form = CustomUserEditForm(request.POST, instance=user) #'instance=user' edits 
+def custom_user_edit(req):
+  user = req.user
+  form = CustomUserChangeForm(instance=user) #initiates form with user info
+  if req.method == 'POST': # will only show validation errors on POST, not GET
+    form = CustomUserChangeForm(req.POST, instance=user) #'instance=user' ensures you are overwriting current user and NOT creating a new one with same info
     if form.is_valid():
-      user_update = form.save(commit=False) # uses all form data to create a user
+      user_update = form.save(commit=False)
       user_update.is_active = False # turns user to inactive and kicks them out
-      #user_update.is_staff = True
-      #user_update.is_superuser = True # ONLY KEEPING FOR TESTING PURPOSES
       form.save() # saves all the info
       return redirect('account')
   context = {
     "form": form
   }
-  return render(request, 'custom_user_edit_form.html', context)
+  return render(req, 'custom_user_edit_form.html', context)
 
 # THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
 # def custom_user_edit(request):
