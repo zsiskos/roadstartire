@@ -20,17 +20,18 @@ def signup(req):
         user = form.save() # Add the user to the database
         login(req, user) #logs in on signup
         email = user.email
-        
+        #Info needed to send user email
         send_mail(
-          'Thank you for registering',
-          'You registered with {user.company_name}. Please wait to be verified before shopping. If urgent, please contact us during business hours at 111-111-1111',
+          "Thank you for registering",
+          f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111",
           'settings.EMAIL_HOST_USER',
           [email],
           fail_silently=False
         )
+        #Info needed to send admin email
         mail_admins(
-          'new signup: {user.company_name}',
-          'this user needs to be verified.',
+          f"New signup: {user.company_name}",
+          f"This user - {user.company_name}, {user.email}, {user.phone} - needs to be verified. Please log in to your admin account (http://localhost:8000/admin/login/) and verify this new user.",
           fail_silently=False
         )
 
@@ -76,9 +77,9 @@ def custom_user_edit(req):
       user_update = form.save(commit=False)
       user_update.is_active = False # turns user to inactive and kicks them out
       form.save() # saves all the info
-      company_name = user.company_name
+      # INFO NEEDED FOR EMAIL
       subject = f"{user.company_name} edited their account"
-      message = f"This company - {user.company_name} - edited their account and will need to be re-verified. Please log in to your admin account (http://localhost:8000/admin/login/) and re-verify their account."
+      message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (http://localhost:8000/admin/login/) and re-verify their account."
       mail_admins(subject, message, fail_silently=False)
       return redirect('account')
   context = {
