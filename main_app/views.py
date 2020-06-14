@@ -76,6 +76,10 @@ def custom_user_edit(req):
       user_update = form.save(commit=False)
       user_update.is_active = False # turns user to inactive and kicks them out
       form.save() # saves all the info
+      company_name = user.company_name
+      subject = f"{user.company_name} edited their account"
+      message = f"This company - {user.company_name} - edited their account and will need to be re-verified. Please log in to your admin account (http://localhost:8000/admin/login/) and re-verify their account."
+      mail_admins(subject, message, fail_silently=False)
       return redirect('account')
   context = {
     "form": form
