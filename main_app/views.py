@@ -22,7 +22,7 @@ def signup(req):
         email = user.email
         #Info needed to send user email
         send_mail(
-          "Thank you for registering",
+          "Thank you for registering with Road Star Tires Wholesale.",
           f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111",
           'settings.EMAIL_HOST_USER',
           [email],
