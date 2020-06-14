@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect
+from django.conf import settings
 from django.contrib import auth, messages
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from users.forms import CustomUserCreationForm, CustomUserChangeForm
-from django.views.generic import ListView
-from .models import Tire, Cart, CartDetail
-from users.models import CustomUser
 from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.core.mail import send_mail, mail_admins
+from django.shortcuts import render, redirect
+from django.views.generic import ListView
+from users.forms import CustomUserCreationForm, CustomUserChangeForm
+from users.models import CustomUser
+from .models import Tire, Cart, CartDetail
+
 
 def home(req):
   return render(req, 'home.html')
@@ -16,8 +19,21 @@ def signup(req):
       if form.is_valid():
         user = form.save() # Add the user to the database
         login(req, user) #logs in on signup
-        print(form)
-        print(form.cleaned_data)
+        email = user.email
+        
+        send_mail(
+          'Thank you for registering',
+          'You registered with {user.company_name}. Please wait to be verified before shopping. If urgent, please contact us during business hours at 111-111-1111',
+          'settings.EMAIL_HOST_USER',
+          [email],
+          fail_silently=False
+        )
+        mail_admins(
+          'new signup: {user.company_name}',
+          'this user needs to be verified.',
+          fail_silently=False
+        )
+
         return redirect('account')
     else:
       form = CustomUserCreationForm()
