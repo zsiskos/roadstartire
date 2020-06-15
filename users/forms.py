@@ -18,13 +18,7 @@ class CustomUserCreationForm(UserCreationForm):
       'city', 
       'postal_code', 
       'province_iso', 
-      'country_iso')
-
-  email = forms.EmailField(required=True)
-  def clean_email(self):
-    data = self.cleaned_data['email']
-    return data.lower()
-
+      'country_iso',)
 
 class CustomUserChangeForm(UserChangeForm):
   class Meta:
