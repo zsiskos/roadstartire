@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.postgres.fields import CIEmailField
 
 from .managers import CustomUserManager
 
@@ -50,7 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Designates whether this user can access the admin site.
   """
 
-  email = models.EmailField(unique=True)
+  email = CIEmailField(unique=True)
   first_name = models.CharField(max_length=30)
   last_name = models.CharField(max_length=30)
   is_active = models.BooleanField(default=True, help_text=is_active_help_text)

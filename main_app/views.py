@@ -45,7 +45,7 @@ def signin(req):
     return redirect('tire_list')
 
   if req.method == 'POST':
-    username = req.POST.get('username').lower()
+    username = req.POST.get('username')
     password = req.POST.get('password')
     user = auth.authenticate(username=username, password=password)
 
