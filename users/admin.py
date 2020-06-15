@@ -120,7 +120,7 @@ class CustomUserAdmin(UserAdmin):
     'first_name',
     'last_name',
     'company_name',
-    'province',
+    'province_iso',
     'city',
   )
   ordering = ('date_joined',)
