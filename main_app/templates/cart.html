@@ -26,8 +26,12 @@
       <p style='margin: 0;'>Pattern: {{tire.pattern}}</p>
       <p style='margin: 0;'>Load: {{tire.load}}</p>
       <p style='margin: 0;'>Availability: 
-        {%  %}
-        based on current_quantity</p>
+        {% if tire.current_quantity < 50 %}
+          "Low stock"
+          {% else %}
+          "In stock"
+        {% endif %}
+      </p>
       <hr>
     </td>
     <td>{{ item.quantity }}</td>

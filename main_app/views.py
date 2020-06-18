@@ -122,8 +122,6 @@ def cartDetail(req):
   for item in cart_detail:
     tire_info.append(Tire.objects.get(id=item.tire.id))
   cart_all = zip(cart_detail, tire_info)
-  print(tire_info)
-  print(cart_all)
   return render(req, 'cart.html', {'cart': cart, 'cart_detail': cart_detail, 'tire_info': tire_info, 'cart_all': cart_all})
 
 def orderDetail(req, cart_id):
