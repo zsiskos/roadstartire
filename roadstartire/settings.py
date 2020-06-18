@@ -101,6 +101,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#required to send email
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# EMAIL_HOST = 'NEED THEIR HOST'
+# EMAIL_HOST_USER = 'NEED AN EMAIL'
+# EMAIL_HOST_PASSWORD = 'NEED A PASSWORD'
+# EMAIL_PORT = 587
+ADMINS = [('Zoë', 'zsiskos@gmail.com')]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
