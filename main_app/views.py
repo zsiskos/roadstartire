@@ -116,7 +116,15 @@ def tires(req):
   return render(req, 'tires.html')
 
 def cartDetail(req):
-  return render(req, 'cart.html')
+  cart = Cart.objects.get(user_id=req.user.id, status=0)
+  cart_detail = CartDetail.objects.filter(cart_id=cart.id)
+  tire_info = []
+  for item in cart_detail:
+    tire_info.append(Tire.objects.get(id=item.tire.id))
+  cart_all = zip(cart_detail, tire_info)
+  print(tire_info)
+  print(cart_all)
+  return render(req, 'cart.html', {'cart': cart, 'cart_detail': cart_detail, 'tire_info': tire_info, 'cart_all': cart_all})
 
 def orderDetail(req, cart_id):
   order = Cart.objects.get(id=cart_id)
