@@ -17,6 +17,7 @@ urlpatterns = [
   path('tires/', views.TireList.as_view(), name='tire_list'),
 
   path('cart/', views.cartDetail, name='cart_detail'), # Temporary path until we set up the cart model
+  path('cart/remove/<int:item_id>', views.removeTire, name='remove_tire'),
   # path('cart/<int:cart_id>/', views.cartDetail, name='cart_detail'), # Cart detail page route for current cart
   # path('cart/<int:cart_id>/update', views.cartUpdate, name='cart_update'), # Cart update page route fort current cart (eg. for changing quantities) --> Probably not needed
 

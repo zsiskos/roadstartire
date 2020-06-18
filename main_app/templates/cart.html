@@ -35,10 +35,10 @@
       <hr>
     </td>
     <td>
-        <button id="upBtn">+</button>
-        <input type="text" id="input" value={{item.quantity}}>
-        <button id="downBtn">-</button>
-      <p><a href='#'>Remove</a></p>
+      <a href=''><button id="upBtn">+</button></a>
+      <input type="text" id="input" value={{item.quantity}}>
+      <a href=''><button id="downBtn">-</button></a>
+      <p><a href="{% url 'remove_tire' item.id %}">Remove</a></p>
     </td>
     <td>${{ item.price_each }}</td>
     <td>$ {{ item.get_subtotal }}</td>
