@@ -34,7 +34,12 @@
       </p>
       <hr>
     </td>
-    <td>{{ item.quantity }}</td>
+    <td>
+        <button id="upBtn">+</button>
+        <input type="text" id="input" value={{item.quantity}}>
+        <button id="downBtn">-</button>
+      <p><a href='#'>Remove</a></p>
+    </td>
     <td>${{ item.price_each }}</td>
     <td>$ {{ item.get_subtotal }}</td>
   </tr>
