@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>{{ tire_detail.name }}</h2>
+<p>By {{ tire_detail.brand }}</p>
+<h3>Price: ${{ tire_detail.price }}</h3>
+<div style="border: 1px dashed lightgray; margin: 1rem">
+  <p>Year: {{ tire_detail.year }}</p>
+  <p>Width: {{ tire_detail.width }}</p>
+  <p>Aspect Ratio: {{ tire_detail.aspect_ratio }}</p>
+  <p>Rim Size: {{ tire_detail.rim_size }}</p>
+  <p>Type: {{ tire_detail.type }}</p>
+  <p>Pattern: {{ tire_detail.pattern }}</p>
+  <p>Speed: {{ tire_detail.speed }}</p>
+  <p>Current stock: {{ tire_detail.current_quantity }}</p>
+  <a href="#"><button>🛒 Add to Cart</button></a>
+</div>
+{% endblock %}

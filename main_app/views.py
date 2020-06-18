@@ -108,5 +108,14 @@ def orderCancel(req, cart_id):
   order.save()
   return redirect('order_detail', cart_id)
 
-class TireList(ListView):
-  model = Tire
+# class TireList(ListView):
+#   model = Tire
+
+def tireList(req):
+  tire_list = Tire.objects.all()
+  print('hello')
+  return render(req, 'tire_list.html', { 'tire_list': tire_list })
+
+def tireDetail(req, tire_id):
+  tire_detail = Tire.objects.get(pk=tire_id)
+  return render (req, 'tire_detail.html', {'tire_detail': tire_detail})
