@@ -128,6 +128,10 @@ def removeTire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
   return redirect('cart_detail')
 
+def updateTire(req, item_id):
+  item = CartDetail.objects.get(id=item_id)
+  return redirect('cart_detail')
+
 def orderDetail(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order_detail = CartDetail.objects.filter(cart_id=cart_id)

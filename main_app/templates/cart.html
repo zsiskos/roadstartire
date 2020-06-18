@@ -35,9 +35,10 @@
       <hr>
     </td>
     <td>
-      <a href=''><button id="upBtn">+</button></a>
-      <input type="text" id="input" value={{item.quantity}}>
-      <a href=''><button id="downBtn">-</button></a>
+      <form >
+        <input type="number" step="1" id="input" value={{item.quantity}}>
+        <p><input type="submit" value="update"></p>
+      </form>
       <p><a href="{% url 'remove_tire' item.id %}">Remove</a></p>
     </td>
     <td>${{ item.price_each }}</td>
