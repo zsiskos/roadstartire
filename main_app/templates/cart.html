@@ -3,4 +3,67 @@
 
 {% block content %}
 <h1>Cart</h1>
+<div style="border: 1px dashed lightgray; margin: 1rem">
+<table style="border-collapse: collapse; width: 100%">
+  <tr>
+    <th>Items</th>
+    <th></th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Total</th>
+  </tr>
+  {% for item, tire in cart_all %}
+  <tr>
+    <td>
+      <img src='{{tire.image}}' alt='tire image'/>
+      <hr>
+    </td>
+    <td style='margin: 0;'>
+      <h5>{{tire.brand}}, {{tire.year}}</h5>
+      <h4>{{ item.tire }} </h4>
+      <p style='margin: 0;'>Size: {{tire.width}} / {{tire.aspect_ratio}} / {{tire.rim_size}}</p>
+      <p style='margin: 0;'>Category: {{tire.season}}</p>
+      <p style='margin: 0;'>Pattern: {{tire.pattern}}</p>
+      <p style='margin: 0;'>Load: {{tire.load}}</p>
+      <p style='margin: 0;'>Availability: 
+        {% if tire.current_quantity < 50 %}
+          Low stock
+          {% else %}
+          In stock
+        {% endif %}
+      </p>
+      <hr>
+    </td>
+    <td>
+      <form >
+        <input type="number" step="1" id="input" value={{item.quantity}}>
+        <p><input type="submit" value="update"></p>
+      </form>
+      <p><a href="{% url 'remove_tire' item.id %}">Remove</a></p>
+    </td>
+    <td>${{ item.price_each }}</td>
+    <td>$ {{ item.get_subtotal }}</td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <td></td>
+    <td></td>
+    <td>Sub-total: </td>
+    <td>${{ cart.get_subtotal }}</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>Tax:</td>
+    <td>$$$</td>
+  </tr>
+  <tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Total:</td>
+      <td>${{ cart.get_total }}</td>
+    </tr>
+  </tfoot>
+</table>
 {% endblock %}
