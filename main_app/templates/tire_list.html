@@ -18,7 +18,7 @@
       <tbody>
           {% for tire in tire_list %}
               <tr>
-                <td><a href="{% url 'tire_detail' tire.id %}">{{ tire.name }}</td>
+                <td><a href="{% url 'tire_detail' tire.pk %}">{{ tire.name }}</td>
                 <td>{{ tire.brand }}</td>
                 <td>{{ tire.price }}</td>
               </tr>

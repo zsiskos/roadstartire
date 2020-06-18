@@ -138,3 +138,9 @@ class CartDetail(models.Model):
 
   class Meta:
     verbose_name = 'Cart Item'
+
+  # When saving for the first time, use the Tire's price
+  def save(self, *args, **kwargs):
+    if not self.price_each:
+      self.price_each = self.tire.price
+    super(CartDetail, self).save(*args, **kwargs)

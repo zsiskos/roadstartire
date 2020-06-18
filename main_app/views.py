@@ -6,6 +6,7 @@ from django.views.generic import ListView
 from .models import Tire, Cart, CartDetail
 from users.models import CustomUser
 from django.contrib.auth import login
+from main_app.forms import CartDetailCreationForm
 
 def home(req):
   return render(req, 'home.html')
@@ -113,9 +114,31 @@ def orderCancel(req, cart_id):
 
 def tireList(req):
   tire_list = Tire.objects.all()
-  print('hello')
   return render(req, 'tire_list.html', { 'tire_list': tire_list })
 
+# def tireDetail(req, tire_id):
+#   tire_detail = Tire.objects.get(pk=tire_id)
+#   return render (req, 'tire_detail.html', {'tire_detail': tire_detail})
+
 def tireDetail(req, tire_id):
-  tire_detail = Tire.objects.get(pk=tire_id)
-  return render (req, 'tire_detail.html', {'tire_detail': tire_detail})
+  tire = Tire.objects.get(pk=tire_id)
+  cart = Cart.objects.get(user=req.user, status=0)
+  if req.method == 'POST':
+    form = CartDetailCreationForm(
+      req.POST, 
+      initial = {
+        'cart': cart,
+        'tire': tire,
+      }
+    )
+    if form.is_valid():
+      cartDetail = form.save(commit=False)
+      cartDetail.cart = cart
+      cartDetail.tire = tire
+      form.save()
+      return redirect('cart_detail')
+  else:
+    form = CartDetailCreationForm()
+  print(cart)
+  return render(req, 'tire_detail.html', {'tire': tire, 'form': form})
+
