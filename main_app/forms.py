@@ -1,11 +1,19 @@
 from django import forms
 from users.models import CustomUser
+from main_app.models import CartDetail
 from django.core.exceptions import ValidationError
 
 class CustomUserEditForm(forms.ModelForm):
   class Meta:
     model = CustomUser
     fields = ['company_name', 'hst_number', 'first_name', 'last_name', 'email', 'business_phone', 'address', 'city', 'postal_code', 'province_iso', 'country_iso']
+
+class CartDetailCreationForm(forms.ModelForm):
+  class Meta:
+    model = CartDetail
+    fields = [
+      'quantity',
+    ]
 
 # THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
 # class CustomUserCreationForm2(forms.Form):

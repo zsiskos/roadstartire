@@ -114,6 +114,13 @@ class Tire(models.Model):
     return self.current_quantity + self.sold
   get_total_quantity.short_description = 'Total'
 
+  # When a Tire instance is saved, update the price_each on Cart_Detail objects that reference that tire
+  def save(self, *args, **kwargs):
+    cartDetails = self.cartdetail_set.filter(cart__status=0)
+    for cd in cartDetails:
+      cd.price_each = self.price
+      cd.save()
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class CartDetail(models.Model):
@@ -125,18 +132,15 @@ class CartDetail(models.Model):
   def __str__(self):
     return f'Cart {self.cart} contains {self.quantity} \'{self.tire}\' tires'
 
-  # When saving, use the Tire's price
-  def save(self, *args, **kwargs):
-    if not self.price_each:
-      self.price_each = self.tire.price
-    super(CartDetail, self).save(*args, **kwargs)
-    # update price_each if current price has changed
-    # ex: customer returns to cart a week later, item is on sale
-    # potentially use cascade when admin updates price - one solution. 
-
   def get_subtotal(self):
     return self.quantity * self.tire.price
   get_subtotal.short_description = 'Subtotal ($)'
 
   class Meta:
     verbose_name = 'Cart Item'
+
+  # When saving for the first time, use the Tire's price
+  def save(self, *args, **kwargs):
+    if not self.price_each:
+      self.price_each = self.tire.price
+    super(CartDetail, self).save(*args, **kwargs)

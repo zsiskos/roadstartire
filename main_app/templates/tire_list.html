@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Tires</h2>
+
+{% if tire_list|length == 0 %}
+  <h3>No results</h3>
+{% else %}
+  <table class="pure-table pure-table-striped">
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Brand</th>   
+              <th>Price</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for tire in tire_list %}
+              <tr>
+                <td><a href="{% url 'tire_detail' tire.pk %}">{{ tire.name }}</td>
+                <td>{{ tire.brand }}</td>
+                <td>{{ tire.price }}</td>
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+{% endif %}
+{% endblock %}
