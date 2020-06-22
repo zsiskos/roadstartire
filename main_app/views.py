@@ -117,7 +117,7 @@ def tires(req):
   return render(req, 'tires.html')
 
 def cartDetail(req):
-  cart = Cart.objects.get(user_id=req.user.id, status=0)
+  cart = Cart.objects.filter(user_id=req.user.id, status=0).order_by('date_ordered').last()
   cart_detail = CartDetail.objects.filter(cart_id=cart.id)
   tire_info = []
   for item in cart_detail:
@@ -151,29 +151,36 @@ def tireList(req):
   tire_list = Tire.objects.all()
   return render(req, 'tire_list.html', { 'tire_list': tire_list })
 
-# def tireDetail(req, tire_id):
-#   tire_detail = Tire.objects.get(pk=tire_id)
-#   return render (req, 'tire_detail.html', {'tire_detail': tire_detail})
-
 def tireDetail(req, tire_id):
+  """
+  Grab a reference to the current cart, and if it doesn't exist, then create one.
+  If the tire exists in the cart already, then just add the inputted quantity to the current quantity.
+  If it doesn't exist in the cart, create a new instance.
+  """
   tire = Tire.objects.get(pk=tire_id)
-  cart = Cart.objects.get(user=req.user, status=0)
+  if (Cart.objects.filter(user=req.user, status=0)).exists():
+    # If for some reason there is more than one current cart, use the most recent one
+    cart = Cart.objects.filter(user=req.user, status=0).order_by('date_ordered').last()
+  else:
+    cart = Cart.objects.create(user=req.user, status=0) # Create a current cart if it does not exist
+  
   if req.method == 'POST':
+    instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+    if not created:
+      quantityToCarry = instance.quantity # Existing cart, therefore cach the quantity to carry over
+    else:
+      quantityToCarry = 0 # New cart, no value to carry over
+    form = CartDetailCreationForm(req.POST, instance=instance)
+    if form.is_valid():
+      instance.quantity += quantityToCarry
+      instance.save()
+      return redirect('cart_detail')
+  else:
     form = CartDetailCreationForm(
-      req.POST, 
       initial = {
         'cart': cart,
         'tire': tire,
       }
     )
-    if form.is_valid():
-      cartDetail = form.save(commit=False)
-      cartDetail.cart = cart
-      cartDetail.tire = tire
-      form.save()
-      return redirect('cart_detail')
-  else:
-    form = CartDetailCreationForm()
-  print(cart)
   return render(req, 'tire_detail.html', {'tire': tire, 'form': form})
 
