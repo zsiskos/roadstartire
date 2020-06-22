@@ -2,21 +2,12 @@
 {% load static %}
 
 {% block content %}
-<h2>{{ tire.name }}</h2>
-<p>By {{ tire.brand }}</p>
-<h3>Price: ${{ tire.price }}</h3>
-<div style="border: 1px dashed lightgray; margin: 1rem">
-  <p>Year: {{ tire.year }}</p>
-  <p>Width: {{ tire.width }}</p>
-  <p>Aspect Ratio: {{ tire.aspect_ratio }}</p>
-  <p>Rim Size: {{ tire.rim_size }}</p>
-  <p>Type: {{ tire.type }}</p>
-  <p>Pattern: {{ tire.pattern }}</p>
-  <p>Speed: {{ tire.speed }}</p>
-  <p>Current stock: {{ tire.current_quantity }}</p>
-</div>
-
 <div style="border: 1px dashed lightgray; margin: 1rem;">
+  <h2>{{ tire.name }}</h2>
+  <p>By {{ tire.brand }}</p>
+</div>
+<div style="border: 1px dashed lightgray; margin: 1rem;">
+  <h3>Price: ${{ tire.price }}</h3>
   <form method="post" action="{% url 'tire_detail' tire.pk %}">
     {% csrf_token %}
     <table>
@@ -27,5 +18,15 @@
       </tr>
     </table>
   </form>
+</div>
+<div style="border: 1px dashed lightgray; margin: 1rem">
+  <p>Year: {{ tire.year }}</p>
+  <p>Width: {{ tire.width }}</p>
+  <p>Aspect Ratio: {{ tire.aspect_ratio }}</p>
+  <p>Rim Size: {{ tire.rim_size }}</p>
+  <p>Type: {{ tire.type }}</p>
+  <p>Pattern: {{ tire.pattern }}</p>
+  <p>Speed: {{ tire.speed }}</p>
+  <p>Current stock: {{ tire.current_quantity }}</p>
 </div>
 {% endblock %}
