@@ -120,6 +120,7 @@ class Tire(models.Model):
     for cd in cartDetails:
       cd.price_each = self.price
       cd.save()
+    super(Tire, self).save(*args, **kwargs)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -144,3 +145,4 @@ class CartDetail(models.Model):
     if not self.price_each:
       self.price_each = self.tire.price
     super(CartDetail, self).save(*args, **kwargs)
+
