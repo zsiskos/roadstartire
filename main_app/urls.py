@@ -14,7 +14,6 @@ urlpatterns = [
   path('account/edit/', views.custom_user_edit, name='custom_user_edit'), # User account page page route
 
   path('tires/', views.tireList, name='tire_list'), # Tire search page route - Use of collapse/accordian to display tire details?
-  # path('tires/', views.TireList.as_view(), name='tire_list'),
   path('tires/<int:tire_id>', views.tireDetail, name='tire_detail'),
 
   path('cart/', views.cartDetail, name='cart_detail'), # Temporary path until we set up the cart model
