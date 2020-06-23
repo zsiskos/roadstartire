@@ -8,7 +8,9 @@ from django.views.generic import ListView
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
 from django.contrib.auth import login
+from django.db.models import Q
 from main_app.forms import CartDetailCreationForm
+import re
 from .models import Tire, Cart, CartDetail
 
 def home(req):
@@ -144,12 +146,29 @@ def orderCancel(req, cart_id):
   order.save()
   return redirect('order_detail', cart_id)
 
-# class TireList(ListView):
-#   model = Tire
-
 def tireList(req):
-  tire_list = Tire.objects.all()
-  return render(req, 'tire_list.html', { 'tire_list': tire_list })
+  # tire_list = Tire.objects.all()
+  # return render(req, 'tire_list.html', { 'tire_list': tire_list })
+  errors = []
+  if 'width' in req.GET:
+    field1 = req.GET['width']
+    field2 = req.GET['brand']
+    field3 = req.GET['season']
+    if not ((field1 or field2) or field3):
+      errors.append('Enter a search term.')
+    else:
+      results = Tire.objects.filter(
+        width__icontains=field1
+      ).filter(
+        brand__icontains=field2
+      ).filter(
+        season__icontains=field3
+      )
+      # query = "Field 1: %s, Field 2: %s, Field 3: %s" % (field1, field2, field3)
+      return render(req, 'tire_list.html', {'tire_list': results})
+  return render(req, 'tire_list.html', {'errors': errors})
+
+
 
 # def tireDetail(req, tire_id):
 #   tire_detail = Tire.objects.get(pk=tire_id)
