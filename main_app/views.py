@@ -120,12 +120,15 @@ def tires(req):
 
 def cartDetail(req):
   cart = Cart.objects.filter(user_id=req.user.id, status=0).order_by('date_ordered').last()
+  if cart is None:
+    return render(req, 'cart.html')
   cart_detail = CartDetail.objects.filter(cart_id=cart.id)
+    
   tire_info = []
   for item in cart_detail:
     tire_info.append(Tire.objects.get(id=item.tire.id))
   cart_all = zip(cart_detail, tire_info)
-  return render(req, 'cart.html', {'cart': cart, 'cart_detail': cart_detail, 'tire_info': tire_info, 'cart_all': cart_all})
+  return render(req, 'cart.html', {'cart_all': cart_all})
 
 def removeTire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
