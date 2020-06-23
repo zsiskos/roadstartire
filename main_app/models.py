@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings # Don't refer to the user model directly, it is recommended to refer to the AUTH_USER_MODEL setting
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db.models import Q
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -87,6 +88,11 @@ class Cart(models.Model):
     return count
   get_item_count.short_description = 'Number of items'
 
+  # class Meta:
+  #   constraints = [
+  #     models.UniqueConstraint(fields=['user'], condition=Q(status=0), name='unique_current_cart')
+  #   ]
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Tire(models.Model):
@@ -139,6 +145,9 @@ class CartDetail(models.Model):
 
   class Meta:
     verbose_name = 'Cart Item'
+    constraints = [
+      models.UniqueConstraint(fields=['cart', 'tire'], name='unique_tire_per_cart')
+    ]
 
   # When saving for the first time, use the Tire's price
   def save(self, *args, **kwargs):
