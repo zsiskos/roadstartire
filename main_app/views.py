@@ -171,11 +171,9 @@ def tireList(req):
 
 
 def tireDetail(req, tire_id):
-  """
-  Grab a reference to the current cart, and if it doesn't exist, then create one.
-  If the tire exists in the cart already, then just add the inputted quantity to the current quantity.
-  If it doesn't exist in the cart, create a new instance.
-  """
+  # Grab a reference to the current cart, and if it doesn't exist, then create one
+  # If the tire exists in the cart already, then just add the inputted quantity to the current quantity
+  # If it doesn't exist in the cart, create a new instance
   tire = Tire.objects.get(pk=tire_id)
   if (Cart.objects.filter(user=req.user, status=0)).exists():
     # If for some reason there is more than one current cart, use the most recent one
@@ -184,15 +182,19 @@ def tireDetail(req, tire_id):
     cart = Cart.objects.create(user=req.user, status=0) # Create a current cart if it does not exist
   
   if req.method == 'POST':
+    # Get the instance if it exists or create one if if doesn't
+    # Returns a tuple of (object, created), where created is a boolean specifying whether an object was created
     instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
     if not created:
-      quantityToCarry = instance.quantity # Existing cart, therefore cach the quantity to carry over
+      quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
     else:
-      quantityToCarry = 0 # New cart, no value to carry over
+      quantityToCarry = 0 # Created cart, no value to carry over
+
     form = CartDetailCreationForm(req.POST, instance=instance)
     if form.is_valid():
       instance.quantity += quantityToCarry
       instance.save()
+
       return redirect('cart_detail')
   else:
     form = CartDetailCreationForm(

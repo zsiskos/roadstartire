@@ -3,7 +3,7 @@
 
 {% block content %}
 <h1>Cart</h1>
-<div style="border: 1px dashed lightgray; margin: 1rem">
+<div style="border: 1px dashed lightgray; margin: 1rem;">
 <table style="border-collapse: collapse; width: 100%">
   <tr>
     <th>Items</th>
@@ -13,14 +13,13 @@
     <th>Total</th>
   </tr>
   {% for item, tire in cart_all %}
-  <tr>
+  <tr style="border: 1px dashed lightgray; margin: 1rem;">
     <td>
-      <img src='{{tire.image}}' alt='tire image'/>
-      <hr>
+      <img src='{{tire.image}}' alt='tire image' style="border: 1px dashed lightgray; margin: 1rem; height: 100px;"/>
     </td>
     <td style='margin: 0;'>
-      <h5>{{tire.brand}}, {{tire.year}}</h5>
-      <h4>{{ item.tire }} </h4>
+      <h5>{{ tire.brand }}, {{ tire.year }}</h5>
+      <h4>{{ item.tire.name }} </h4>
       <p style='margin: 0;'>Size: {{tire.width}} / {{tire.aspect_ratio}} / {{tire.rim_size}}</p>
       <p style='margin: 0;'>Category: {{tire.season}}</p>
       <p style='margin: 0;'>Pattern: {{tire.pattern}}</p>
@@ -32,17 +31,16 @@
           In stock
         {% endif %}
       </p>
-      <hr>
     </td>
     <td>
       <form >
-        <input type="number" step="1" id="input" value={{item.quantity}}>
-        <p><input type="submit" value="update"></p>
+        <input type="number" step="1" id="input" value={{ item.quantity }}>
+        <p><input type="submit" value="Update"></p>
       </form>
       <p><a href="{% url 'remove_tire' item.id %}">Remove</a></p>
     </td>
     <td>${{ item.price_each }}</td>
-    <td>$ {{ item.get_subtotal }}</td>
+    <td>${{ item.get_subtotal }}</td>
   </tr>
   {% endfor %}
   <tr>
