@@ -12,6 +12,7 @@ from django.db.models import Q
 from main_app.forms import CartDetailCreationForm
 import re
 from .models import Tire, Cart, CartDetail
+from django.forms import formset_factory, modelformset_factory
 
 def home(req):
   return render(req, 'home.html')
@@ -122,13 +123,22 @@ def cartDetail(req):
   cart = Cart.objects.filter(user_id=req.user.id, status=0).order_by('date_ordered').last()
   if cart is None:
     return render(req, 'cart.html')
-  cart_detail = CartDetail.objects.filter(cart_id=cart.id)
-    
-  tire_info = []
-  for item in cart_detail:
-    tire_info.append(Tire.objects.get(id=item.tire.id))
-  cart_all = zip(cart_detail, tire_info)
-  return render(req, 'cart.html', {'cart_all': cart_all})
+  cart_details = CartDetail.objects.filter(cart_id=cart.id)
+  TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0)
+
+  if req.method == 'POST':
+    print(req.POST)
+    formset = TireFormSet(req.POST, queryset=CartDetail.objects.filter(cart=cart))
+    if formset.is_valid():
+      print('valid')
+      formset.save()
+    else:
+      print('invalid')
+  
+  formset = TireFormSet(queryset=CartDetail.objects.filter(cart=cart))
+  zipped_data = zip(cart_details, formset)
+  # return render(req, 'cart.html', {'zipped_data': zipped_data})
+  return render(req, 'cart.html', {'zipped_data': zipped_data, 'formset': formset})
 
 def removeTire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
@@ -136,6 +146,11 @@ def removeTire(req, item_id):
 
 def updateTire(req, item_id):
   item = CartDetail.objects.get(id=item_id)
+ 
+  form = CartDetailCreationForm(req.POST, instance=item)
+  if form.is_valid():
+    item.quantity = 10
+    item.save()
   return redirect('cart_detail')
 
 def orderDetail(req, cart_id):
@@ -198,7 +213,7 @@ def tireDetail(req, tire_id):
       instance.quantity += quantityToCarry
       instance.save()
 
-      return redirect('cart_detail')
+    return redirect('cart_detail')
   else:
     form = CartDetailCreationForm(
       initial = {

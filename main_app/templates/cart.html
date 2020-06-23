@@ -12,20 +12,20 @@
     <th>Price</th>
     <th>Total</th>
   </tr>
-  {% for item, tire in cart_all %}
+  {% for cart_detail, form in zipped_data %}
   <tr style="border: 1px dashed lightgray; margin: 1rem;">
     <td>
-      <img src='{{tire.image}}' alt='tire image' style="border: 1px dashed lightgray; margin: 1rem; height: 100px;"/>
+      <img src='{{cart_details.tire.image}}' alt='tire image' style="border: 1px dashed lightgray; margin: 1rem; height: 100px;"/>
     </td>
     <td style='margin: 0;'>
-      <h5>{{ tire.brand }}, {{ tire.year }}</h5>
-      <h4>{{ item.tire.name }} </h4>
-      <p style='margin: 0;'>Size: {{tire.width}} / {{tire.aspect_ratio}} / {{tire.rim_size}}</p>
-      <p style='margin: 0;'>Category: {{tire.season}}</p>
-      <p style='margin: 0;'>Pattern: {{tire.pattern}}</p>
-      <p style='margin: 0;'>Load: {{tire.load}}</p>
+      <h5>{{ cart_detail.tire.brand }}, {{ tire.year }}</h5>
+      <h4>{{ cart_detail.tire.name }} </h4>
+      <p style='margin: 0;'>Size: {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
+      <p style='margin: 0;'>Category: {{cart_detail.tire.season}}</p>
+      <p style='margin: 0;'>Pattern: {{cart_detail.tire.pattern}}</p>
+      <p style='margin: 0;'>Load: {{cart_detail.tire.load}}</p>
       <p style='margin: 0;'>Availability: 
-        {% if tire.current_quantity < 50 %}
+        {% if cart_detail.tire.current_quantity < 50 %}
           Low stock
           {% else %}
           In stock
@@ -33,21 +33,28 @@
       </p>
     </td>
     <td>
-      <form >
-        <input type="number" step="1" id="input" value={{ item.quantity }}>
-        <p><input type="submit" value="Update"></p>
+
+      <form method='POST' action="." >
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table>
+          {{ form }}
+          <p><input type="submit" name="submit" value="Update" /></p>
+        </table>
       </form>
-      <p><a href="{% url 'remove_tire' item.id %}">Remove</a></p>
+
+
+      <p><a href="{% url 'remove_tire' cart_detail.id %}">Remove</a></p>
     </td>
-    <td>${{ item.price_each }}</td>
-    <td>${{ item.get_subtotal }}</td>
+    <td>${{ cart_detail.price_each }}</td>
+    <td>${{ cart_detail.get_subtotal }}</td>
   </tr>
   {% endfor %}
   <tr>
     <td></td>
     <td></td>
     <td>Sub-total: </td>
-    <td>${{ cart.get_subtotal }}</td>
+    <td>${{ cart_detail.cart.get_subtotal }}</td>
   </tr>
   <tr>
     <td></td>
@@ -64,4 +71,7 @@
     </tr>
   </tfoot>
 </table>
+
+</div>
+
 {% endblock %}
