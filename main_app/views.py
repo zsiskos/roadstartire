@@ -86,10 +86,7 @@ def custom_user_edit(req):
       message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (http://localhost:8000/admin/login/) and re-verify their account."
       mail_admins(subject, message, fail_silently=False)
       return redirect('account')
-  context = {
-    "form": form
-  }
-  return render(req, 'custom_user_edit_form.html', context)
+  return render(req, 'custom_user_edit_form.html', {'form': form})
 
 # THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
 # def custom_user_edit(request):
