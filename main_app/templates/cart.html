@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% if cart.get_item_count > 0 %}
 <h1>Cart</h1>
   <div style="border: 1px dashed lightgray; margin: 1rem;">
     <table style="border-collapse: collapse; width: 100%">
@@ -80,9 +81,10 @@
     </table>
   </div>
   <div>
-    {% if cart %}
-      <a href="{% url 'cart_order' cart.id %}"><button>Place order</button></a>
-    {% endif %}
+  <a href="{% url 'cart_order' cart.id %}"><button>Place order</button></a>
+  {% else %}
+  <h1>There are no items in your cart.</h1>
+  {% endif %}
     <a href="{% url 'tire_list' %}"><button>Continue shopping</button></a>
   </div>
 {% endblock %}
