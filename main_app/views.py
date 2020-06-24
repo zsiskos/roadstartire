@@ -119,7 +119,7 @@ def services(req):
 def tires(req):
   return render(req, 'tires.html')
 
-def cartDetail(req):
+def cart_detail(req):
   cart = Cart.objects.filter(user_id=req.user.id, status=0).order_by('date_ordered').last()
   if cart is None:
     return render(req, 'cart.html')
@@ -134,31 +134,22 @@ def cartDetail(req):
   zipped_data = zip(cart_details, formset)
   return render(req, 'cart.html', {'cart': cart, 'zipped_data': zipped_data, 'formset': formset})
 
-def removeTire(req, item_id):
+def remove_tire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
   return redirect('cart_detail')
 
-def updateTire(req, item_id):
-  item = CartDetail.objects.get(id=item_id)
- 
-  form = CartDetailCreationForm(req.POST, instance=item)
-  if form.is_valid():
-    item.quantity = 10
-    item.save()
-  return redirect('cart_detail')
-
-def orderDetail(req, cart_id):
+def order_detail(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order_detail = CartDetail.objects.filter(cart_id=cart_id)
   return render(req, 'order_detail.html', { 'order': order, 'order_detail': order_detail })
 
-def orderCancel(req, cart_id):
+def order_cancel(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = 2
   order.save()
   return redirect('order_detail', cart_id)
 
-def tireList(req):
+def tire_list(req):
   # tire_list = Tire.objects.all()
   # return render(req, 'tire_list.html', { 'tire_list': tire_list })
   errors = []
@@ -180,9 +171,7 @@ def tireList(req):
       return render(req, 'tire_list.html', {'tire_list': results})
   return render(req, 'tire_list.html', {'errors': errors})
 
-
-
-def tireDetail(req, tire_id):
+def tire_detail(req, tire_id):
   # Grab a reference to the current cart, and if it doesn't exist, then create one
   # If the tire exists in the cart already, then just add the inputted quantity to the current quantity
   # If it doesn't exist in the cart, create a new instance
