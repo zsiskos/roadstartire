@@ -80,7 +80,7 @@
     </table>
   </div>
   <div>
-    <button>Place order</button>
-    <a href='{% url 'tire_list' %}'><button>Continue shopping</button></a>
+    <a href="{% url 'cart_order' cart.id %}"><button>Place order</button></a>
+    <a href="{% url 'tire_list' %}"><button>Continue shopping</button></a>
   </div>
 {% endblock %}

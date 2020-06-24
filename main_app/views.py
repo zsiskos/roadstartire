@@ -134,6 +134,12 @@ def cart_detail(req):
   zipped_data = zip(cart_details, formset)
   return render(req, 'cart.html', {'cart': cart, 'zipped_data': zipped_data, 'formset': formset})
 
+def cart_order(req, cart_id):
+  order = Cart.objects.get(id=cart_id)
+  order.status = 1
+  order.save()
+  return redirect('order_detail', cart_id)
+
 def remove_tire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
   return redirect('cart_detail')
