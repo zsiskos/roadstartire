@@ -138,6 +138,11 @@ def cart_order(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = 1
   order.save()
+  # INFO NEEDED FOR EMAIL
+  user = req.user
+  subject = f"{user.company_name} placed Order #{order.id}"
+  message = f"This company - {user.company_name}, {user.email} - Placed an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
+  mail_admins(subject, message, fail_silently=False)
   return redirect('order_detail', cart_id)
 
 def remove_tire(req, item_id):
