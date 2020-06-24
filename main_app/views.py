@@ -127,18 +127,12 @@ def cartDetail(req):
   TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0)
 
   if req.method == 'POST':
-    print(req.POST)
-    formset = TireFormSet(req.POST, queryset=CartDetail.objects.filter(cart=cart))
-    if formset.is_valid():
-      print('valid')
-      formset.save()
-    else:
-      print('invalid')
-  
+    formset = TireFormSet(req.POST, req.FILES, queryset=CartDetail.objects.filter(cart=cart))
+    # if formset.is_valid(): TOOK OUT BUT NOT SURE WHY IT DOESN"T WORK WITH IT IN
+    formset.save()
   formset = TireFormSet(queryset=CartDetail.objects.filter(cart=cart))
   zipped_data = zip(cart_details, formset)
-  # return render(req, 'cart.html', {'zipped_data': zipped_data})
-  return render(req, 'cart.html', {'zipped_data': zipped_data, 'formset': formset})
+  return render(req, 'cart.html', {'cart': cart, 'zipped_data': zipped_data, 'formset': formset})
 
 def removeTire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
