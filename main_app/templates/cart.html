@@ -73,10 +73,14 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>Total:</td>
+          <td>Total (items: {{cart.get_item_count}}):</td>
           <td>${{ cart.get_total }}</td>
         </tr>
       </tfoot>
     </table>
+  </div>
+  <div>
+    <button>Place order</button>
+    <a href='{% url 'tire_list' %}'><button>Continue shopping</button></a>
   </div>
 {% endblock %}
