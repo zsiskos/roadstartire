@@ -18,7 +18,7 @@ urlpatterns = [
 
   path('cart/', views.cart_detail, name='cart_detail'), # Temporary path until we set up the cart model
   path('cart/remove/<int:item_id>', views.remove_tire, name='remove_tire'), #Removes tire (cartDetail) from the cart
-  path('cart/<int:cart_id>', views.cart_order, name='cart_order'), #Changes status of cart and notifies admin
+  path('cart/<int:cart_id>/order', views.cart_order, name='cart_order'), #Changes status of cart and notifies admin
 
   path('orders/<int:cart_id>/', views.order_detail, name='order_detail'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
   path('orders/<int:cart_id>/cancel', views.order_cancel, name='order_cancel'), # Cart page route - Current cart
