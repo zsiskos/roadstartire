@@ -44,9 +44,9 @@ class Cart(models.Model):
     elif self.status == 2:
       return 'Cancelled'
     elif self.status == 3:
-      return 'Abandoned'
-    elif self.status == 4:
       return 'Fulfilled'
+    elif self.status == -1:
+      return 'Abandoned'
 
   def __str__(self):
     return f'Cart #{self.id} - {self.get_readable_status()}'
