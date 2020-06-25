@@ -6,4 +6,4 @@ class MainAppConfig(AppConfig):
     verbose_name='Road Star Main App'
 
     def ready(self):
-        import main_app.signals # MOTE: If just using the @receiver() decorator, just import the signals module
+        import main_app.signals # NOTE: If just using the @receiver() decorator, just import the signals module
