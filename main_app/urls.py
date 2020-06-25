@@ -13,17 +13,15 @@ urlpatterns = [
   path('account/', views.account, name='account'), #Temporary route page until we set up the model
   path('account/edit/', views.custom_user_edit, name='custom_user_edit'), # User account page page route
 
-  path('tires/', views.tireList, name='tire_list'), # Tire search page route - Use of collapse/accordian to display tire details?
-  path('tires/<int:tire_id>', views.tireDetail, name='tire_detail'),
+  path('tires/', views.tire_list, name='tire_list'), # Tire search page route - Use of collapse/accordian to display tire details?
+  path('tires/<int:tire_id>', views.tire_detail, name='tire_detail'),
 
-  path('cart/', views.cartDetail, name='cart_detail'), # Temporary path until we set up the cart model
-  path('cart/remove/<int:item_id>', views.removeTire, name='remove_tire'),
-  path('cart/update/<int:item_id>', views.updateTire, name='update_tire'),
-  # path('cart/<int:cart_id>/', views.cartDetail, name='cart_detail'), # Cart detail page route for current cart
-  # path('cart/<int:cart_id>/update', views.cartUpdate, name='cart_update'), # Cart update page route fort current cart (eg. for changing quantities) --> Probably not needed
+  path('cart/', views.cart_detail, name='cart_detail'), # Temporary path until we set up the cart model
+  path('cart/remove/<int:item_id>', views.remove_tire, name='remove_tire'), #Removes tire (cartDetail) from the cart
+  path('cart/<int:cart_id>/order', views.cart_order, name='cart_order'), #Changes status of cart and notifies admin
 
-  path('orders/<int:cart_id>/', views.orderDetail, name='order_detail'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
-  path('orders/<int:cart_id>/cancel', views.orderCancel, name='order_cancel'), # Cart page route - Current cart
+  path('orders/<int:cart_id>/', views.order_detail, name='order_detail'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
+  path('orders/<int:cart_id>/cancel', views.order_cancel, name='order_cancel'), # Cart page route - Current cart
 ]
 
 # Possible cart statuses: 

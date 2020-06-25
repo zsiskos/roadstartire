@@ -1,18 +1,18 @@
 from django.conf import settings
 from django.contrib import auth, messages
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.mail import send_mail, mail_admins
+from django.db.models import Q
+from django.forms import formset_factory, modelformset_factory
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
+from main_app.forms import CartDetailCreationForm
+from .models import Tire, Cart, CartDetail
+import re
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
-from django.contrib.auth import login
-from django.db.models import Q
-from main_app.forms import CartDetailCreationForm
-import re
-from .models import Tire, Cart, CartDetail
-from django.forms import formset_factory, modelformset_factory
 
 def home(req):
   return render(req, 'home.html')
@@ -67,11 +67,13 @@ def logout(req):
   auth.logout(req)
   return render(req, 'home.html')
 
+@login_required(login_url='/login')
 def account(req):
   user = req.user
   carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
+@login_required(login_url='/login')
 def custom_user_edit(req):
   user = req.user
   form = CustomUserChangeForm(instance=user) #initiates form with user info
@@ -86,10 +88,7 @@ def custom_user_edit(req):
       message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (http://localhost:8000/admin/login/) and re-verify their account."
       mail_admins(subject, message, fail_silently=False)
       return redirect('account')
-  context = {
-    "form": form
-  }
-  return render(req, 'custom_user_edit_form.html', context)
+  return render(req, 'custom_user_edit_form.html', {'form': form})
 
 # THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
 # def custom_user_edit(request):
@@ -119,7 +118,8 @@ def services(req):
 def tires(req):
   return render(req, 'tires.html')
 
-def cartDetail(req):
+@login_required(login_url='/login')
+def cart_detail(req):
   cart = Cart.objects.filter(user_id=req.user.id, status=0).order_by('date_ordered').last()
   if cart is None:
     return render(req, 'cart.html')
@@ -134,31 +134,35 @@ def cartDetail(req):
   zipped_data = zip(cart_details, formset)
   return render(req, 'cart.html', {'cart': cart, 'zipped_data': zipped_data, 'formset': formset})
 
-def removeTire(req, item_id):
+@login_required(login_url='/login')
+def cart_order(req, cart_id):
+  order = Cart.objects.get(id=cart_id)
+  order.status = 1
+  order.save()
+  # INFO NEEDED FOR EMAIL
+  user = req.user
+  subject = f"{user.company_name} placed Order #{order.id}"
+  message = f"This company - {user.company_name}, {user.email} - Placed an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
+  mail_admins(subject, message, fail_silently=False)
+  return redirect('order_detail', cart_id)
+
+def remove_tire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
   return redirect('cart_detail')
 
-def updateTire(req, item_id):
-  item = CartDetail.objects.get(id=item_id)
- 
-  form = CartDetailCreationForm(req.POST, instance=item)
-  if form.is_valid():
-    item.quantity = 10
-    item.save()
-  return redirect('cart_detail')
-
-def orderDetail(req, cart_id):
+@login_required(login_url='/login')
+def order_detail(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order_detail = CartDetail.objects.filter(cart_id=cart_id)
   return render(req, 'order_detail.html', { 'order': order, 'order_detail': order_detail })
 
-def orderCancel(req, cart_id):
+def order_cancel(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = 2
   order.save()
   return redirect('order_detail', cart_id)
 
-def tireList(req):
+def tire_list(req):
   # tire_list = Tire.objects.all()
   # return render(req, 'tire_list.html', { 'tire_list': tire_list })
   errors = []
@@ -180,9 +184,7 @@ def tireList(req):
       return render(req, 'tire_list.html', {'tire_list': results})
   return render(req, 'tire_list.html', {'errors': errors})
 
-
-
-def tireDetail(req, tire_id):
+def tire_detail(req, tire_id):
   # Grab a reference to the current cart, and if it doesn't exist, then create one
   # If the tire exists in the cart already, then just add the inputted quantity to the current quantity
   # If it doesn't exist in the cart, create a new instance

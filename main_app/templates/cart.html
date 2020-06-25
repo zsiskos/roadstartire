@@ -1,80 +1,90 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
+{% if cart.get_item_count > 0 %}
 <h1>Cart</h1>
-<div style="border: 1px dashed lightgray; margin: 1rem;">
-<table style="border-collapse: collapse; width: 100%">
-  <tr>
-    <th>Items</th>
-    <th></th>
-    <th>Quantity</th>
-    <th>Price</th>
-    <th>Total</th>
-  </tr>
-  {% for cart_detail, form in zipped_data %}
-  <tr style="border: 1px dashed lightgray; margin: 1rem;">
-    <td>
-      <img src='{{cart_details.tire.image}}' alt='tire image' style="border: 1px dashed lightgray; margin: 1rem; height: 100px;"/>
-    </td>
-    <td style='margin: 0;'>
-      <h5>{{ cart_detail.tire.brand }}, {{ tire.year }}</h5>
-      <h4>{{ cart_detail.tire.name }} </h4>
-      <p style='margin: 0;'>Size: {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
-      <p style='margin: 0;'>Category: {{cart_detail.tire.season}}</p>
-      <p style='margin: 0;'>Pattern: {{cart_detail.tire.pattern}}</p>
-      <p style='margin: 0;'>Load: {{cart_detail.tire.load}}</p>
-      <p style='margin: 0;'>Availability: 
-        {% if cart_detail.tire.current_quantity < 50 %}
-          Low stock
-          {% else %}
-          In stock
-        {% endif %}
-      </p>
-    </td>
-    <td>
-
-      <form method='POST' action="." >
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table>
-          {{ form }}
-          <p><input type="submit" name="submit" value="Update" /></p>
-        </table>
-      </form>
-
-
-      <p><a href="{% url 'remove_tire' cart_detail.id %}">Remove</a></p>
-    </td>
-    <td>${{ cart_detail.price_each }}</td>
-    <td>${{ cart_detail.get_subtotal }}</td>
-  </tr>
-  {% endfor %}
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>Sub-total: </td>
-    <td>${{ cart.get_subtotal }}</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>Tax:</td>
-    <td>$$$</td>
-  </tr>
-  <tfoot>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>Total:</td>
-      <td>${{ cart.get_total }}</td>
-    </tr>
-  </tfoot>
-</table>
-
-</div>
-
+  <div style="border: 1px dashed lightgray; margin: 1rem;">
+    <table style="border-collapse: collapse; width: 100%">
+      <!-- ROW 1 - HEADER -->
+      <tr>
+        <th>Items</th>
+        <th></th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+      <!-- ROW 2 - ITEMS -->
+      {% for cart_detail, form in zipped_data %}
+      <tr style="border: 1px dashed lightgray; margin: 1rem;">
+        <!-- IMAGE -->
+        <td>
+          <img src='{{cart_detail.tire.image}}' alt='tire image' style="border: 1px dashed lightgray; margin: 1rem; height: 100px;"/>
+        </td>
+        <!-- ITEM DEETS -->
+        <td style='margin: 0;'>
+          <h5>{{ cart_detail.tire.brand }}, {{ tire.year }}</h5>
+          <h4>{{ cart_detail.tire.name }} </h4>
+          <p style='margin: 0;'>Size: {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
+          <p style='margin: 0;'>Category: {{cart_detail.tire.season}}</p>
+          <p style='margin: 0;'>Pattern: {{cart_detail.tire.pattern}}</p>
+          <p style='margin: 0;'>Load: {{cart_detail.tire.load}}</p>
+          <p style='margin: 0;'>Availability: 
+            {% if cart_detail.tire.current_quantity < 50 %}
+              Low stock
+              {% else %}
+              In stock
+            {% endif %}
+          </p>
+        </td>
+        <!-- QTY -->
+        <td>
+          <form method='POST' action="." >
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table>
+              {{ form }}
+              <p><input type="submit" name="submit" value="Update" /></p>
+            </table>
+          </form>
+          <p><a href="{% url 'remove_tire' cart_detail.id %}">Remove</a></p>
+        </td>
+        <!-- ITEM PRICE -->
+        <td>${{ cart_detail.price_each }}</td>
+        <!-- ITEM TOTAL -->
+        <td>${{ cart_detail.get_subtotal }}</td>
+      </tr>
+      {% endfor %}
+      <!-- ROW 3 - FOOTER -->
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Sub-total: </td>
+        <td>${{ cart.get_subtotal }}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Tax:</td>
+        <td>$$$</td>
+      </tr>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Total (items: {{cart.get_item_count}}):</td>
+          <td>${{ cart.get_total }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div>
+  <a href="{% url 'cart_order' cart.id %}"><button>Place order</button></a>
+  {% else %}
+  <h1>There are no items in your cart.</h1>
+  {% endif %}
+    <a href="{% url 'tire_list' %}"><button>Continue shopping</button></a>
+  </div>
 {% endblock %}

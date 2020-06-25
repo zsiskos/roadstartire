@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 <div>
   <h2>Account Information: Edit</h2>
   <div style="border: 1px dashed lightgray; margin: 1rem">
-    <form action='.' method='POST'> {% csrf_token %}
+    <form action="." method="POST"> {% csrf_token %}
       {{ form.as_p }}
-
-      <p>PLEASE NOTE: Editing account information will put the account as inactive as a RoadStar staff member must validate the account. This means you will be unable to place an order until then. If it is urgent, please call us at INSERT PHONE HERE.</p>
-      <input type='submit' value='save' />
+      <div id="modal-edit-confirm" style="display: none">
+        <span id="close">&times;</span>
+        <p>PLEASE NOTE: Editing account information will put the account as inactive as a RoadStar staff member must validate the account. This means you will be logged out and will not be able to place an order until then. If it is urgent, please call us at INSERT PHONE HERE.</p>
+        <input type="submit" value="confirm" />
+      </div>
     </form>
+    <button id="btn-save">Save</button>
   </div>
+
 </div>
 
 {% endblock %}
