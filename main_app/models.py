@@ -7,11 +7,11 @@ from django.db.models import Q
 
 class Cart(models.Model):
   class Status(models.IntegerChoices):
-    CURRENT = 0
-    IN_PROGRESS = 1
-    CANCELLED = 2
-    FULFILLED = 3
+    CURRENT = 1
     ABANDONED = -1
+    IN_PROGRESS = 2
+    CANCELLED = -2
+    FULFILLED = 3
 
   status_help_text = """
     <br/>
@@ -37,16 +37,16 @@ class Cart(models.Model):
   discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, blank=True, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
 
   def get_readable_status(self):
-    if self.status == 0:
+    if self.status == self.Status.CURRENT:
       return 'Current'
-    elif self.status == 1:
-      return 'In progress'
-    elif self.status == 2:
-      return 'Cancelled'
-    elif self.status == 3:
-      return 'Fulfilled'
-    elif self.status == -1:
+    elif self.status == self.Status.ABANDONED:
       return 'Abandoned'
+    elif self.status == self.Status.IN_PROGRESS:
+      return 'In progress'
+    elif self.status == self.Status.CANCELLED:
+      return 'Cancelled'
+    elif self.status == self.Status.FULFILLED:
+      return 'Fulfilled'
 
   def __str__(self):
     return f'Cart #{self.id} - {self.get_readable_status()}'
