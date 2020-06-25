@@ -26,5 +26,5 @@ class CustomUserChangeForm(UserChangeForm):
   class Meta:
     model = CustomUser
     fields = ['company_name', 'hst_number', 'first_name', 'last_name', 'email', 'business_phone', 'address', 'city', 'postal_code', 'province_iso', 'country_iso']
-    exclude = ['password',]
+
 
