@@ -1,25 +1,63 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 <div class="container-account">
-  <h2 class="title-account">Account Information</h2>
+  <h2>Account Information</h2>
+  <i class="fas fa-edit"></i><a class="account-btn" href="{% url 'custom_user_edit' %}">Edit</a>
+  <i class="fas fa-sign-out-alt"></i><a class="account-btn" href="{% url 'logout' %}">Log Out</a>
   <div class="container-account-info">
-
-    <p>Company Name: {{ user.company_name }}</p>
-    <p>HST #: {{ user.hst_number }}</p>
-    <p>First Name: {{ user.first_name }}</p>
-    <p>Last Name: {{ user.last_name }}</p>
-    <p>eMail: {{ user.email }}</p>
-    <p>Bus. phone: {{ user.business_phone }}</p>
-    <p>Address: {{ user.address }}</p>
-    <p>City: {{ user.city }}</p>
-    <p>Province: {{ user.province_iso }}</p>
-    <p>Postal Code: {{ user.postal_code }}</p>
-    <p>Country: {{ user.country_iso }}</p>
-    <p>Date Joined: {{ user.date_joined }}</p>
-    <a class="btn" href="{% url 'custom_user_edit' %}">Edit</a>
-    <a class="btn" href="{% url 'logout' %}">Log Out</a>
+    <div class="container-account-section">
+      <div class="account-details">
+        <p class="account-label">Company Name:<p>
+        <p class="account-data">{{ user.company_name }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">HST #:</p>
+        <p class="account-data">{{ user.hst_number }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">First Name:</p>
+        <p class="account-data"> {{ user.first_name }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">Last Name:</p>
+        <p class="account-data"> {{ user.last_name }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">eMail: </p>
+        <p class="account-data">{{ user.email }}</p>
+      </div>  
+      <div class="account-details" >
+        <p class="account-label">Bus. phone: </p>
+        <p class="account-data">{{ user.business_phone }}</p>
+      </div>
+    </div>
+    <div class="container-account-section">
+      <div class="account-details" >
+        <p class="account-label">Address: </p>
+        <p class="account-data">{{ user.address }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">City:</p>
+        <p class="account-data"> {{ user.city }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">Province: </p>
+        <p class="account-data">{{ user.province_iso }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">Postal Code: </p>
+        <p class="account-data">{{ user.postal_code }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">Country:
+        <p class="account-data"> {{ user.country_iso }}</p>
+      </div>
+      <div class="account-details" >
+        <p class="account-label">Date Joined:</p>
+        <p class="account-data"> {{ user.date_joined }}</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -36,7 +74,7 @@
       <p><span class="order-label">Status:</span> {{ cart.get_readable_status }} </p>
     </div>
     <div>
-      <a class="btn" href="{% url 'order_detail' cart.id %}">View Order</a>
+      <a class="order-btn" href="{% url 'order_detail' cart.id %}">View Order</a>
     </div>
   </div>
   {% endfor %}
