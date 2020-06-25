@@ -1,18 +1,18 @@
 from django.conf import settings
 from django.contrib import auth, messages
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.mail import send_mail, mail_admins
+from django.db.models import Q
+from django.forms import formset_factory, modelformset_factory
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
+from main_app.forms import CartDetailCreationForm
+from .models import Tire, Cart, CartDetail
+import re
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
-from django.contrib.auth import login
-from django.db.models import Q
-from main_app.forms import CartDetailCreationForm
-import re
-from .models import Tire, Cart, CartDetail
-from django.forms import formset_factory, modelformset_factory
 
 def home(req):
   return render(req, 'home.html')
@@ -67,11 +67,13 @@ def logout(req):
   auth.logout(req)
   return render(req, 'home.html')
 
+@login_required(login_url='/login')
 def account(req):
   user = req.user
   carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
+@login_required(login_url='/login')
 def custom_user_edit(req):
   user = req.user
   form = CustomUserChangeForm(instance=user) #initiates form with user info
@@ -116,6 +118,7 @@ def services(req):
 def tires(req):
   return render(req, 'tires.html')
 
+@login_required(login_url='/login')
 def cart_detail(req):
   cart = Cart.objects.filter(user_id=req.user.id, status=0).order_by('date_ordered').last()
   if cart is None:
@@ -131,6 +134,7 @@ def cart_detail(req):
   zipped_data = zip(cart_details, formset)
   return render(req, 'cart.html', {'cart': cart, 'zipped_data': zipped_data, 'formset': formset})
 
+@login_required(login_url='/login')
 def cart_order(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = 1
@@ -146,6 +150,7 @@ def remove_tire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
   return redirect('cart_detail')
 
+@login_required(login_url='/login')
 def order_detail(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order_detail = CartDetail.objects.filter(cart_id=cart_id)
