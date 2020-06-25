@@ -11,14 +11,17 @@ class Cart(models.Model):
     IN_PROGRESS = 1
     CANCELLED = 2
     FULFILLED = 3
+    ABANDONED = -1
 
   status_help_text = """
     <br/>
-    A Cart can be in 1 of 4 states:<br/>
+    A Cart can be in 1 of 5 states:<br/>
     1. <strong>Current</strong> - The currently open cart (each user can only have 1 cart in this state)<br/>
-    2. <strong>In progress</strong> - Cart has been submitted but not yet fulfilled nor cancelled<br/>
-    3. <strong>Cancelled</strong> - Cart can no longer be fulfilled<br/>
-    4. <strong>Fulfilled</strong> - Items have been delivered to client and payment has been received<br/>
+    2. <strong>Abandoned</strong> - The last item in the cart was removed or the cart timeout was reached<br/>
+    3. <strong>In progress</strong> - Cart has been submitted but not yet fulfilled nor cancelled<br/>
+    4. <strong>Cancelled</strong> - Cart can no longer be fulfilled<br/>
+    5. <strong>Fulfilled</strong> - Items have been delivered to client and payment has been received<br/>
+
     <br/>
     <strong>NOTE: </strong>A Cart's status must only ever progress forwards
   """
@@ -40,6 +43,8 @@ class Cart(models.Model):
       return 'In progress'
     elif self.status == 2:
       return 'Cancelled'
+    elif self.status == 3:
+      return 'Abandoned'
     elif self.status == 4:
       return 'Fulfilled'
 
