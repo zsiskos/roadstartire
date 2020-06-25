@@ -2,35 +2,42 @@
 {% load static %}
 
 {% block content %}
-<div>
-  <h2>Account Information</h2>
-  <div style="border: 1px dashed lightgray; margin: 1rem">
+<div class="container-account">
+  <h2 class="title-account">Account Information</h2>
+  <div class="container-account-info">
+
     <p>Company Name: {{ user.company_name }}</p>
     <p>HST #: {{ user.hst_number }}</p>
     <p>First Name: {{ user.first_name }}</p>
     <p>Last Name: {{ user.last_name }}</p>
     <p>eMail: {{ user.email }}</p>
-    <p>Bus. Phone: {{ user.business_phone }}</p>
+    <p>Bus. phone: {{ user.business_phone }}</p>
     <p>Address: {{ user.address }}</p>
     <p>City: {{ user.city }}</p>
     <p>Province: {{ user.province_iso }}</p>
     <p>Postal Code: {{ user.postal_code }}</p>
     <p>Country: {{ user.country_iso }}</p>
     <p>Date Joined: {{ user.date_joined }}</p>
-    <a href="{% url 'custom_user_edit' %}"><button>Edit</button></a>
-    <a href="{% url 'logout' %}"><button>Log Out</button></a>
+    <a class="btn" href="{% url 'custom_user_edit' %}">Edit</a>
+    <a class="btn" href="{% url 'logout' %}">Log Out</a>
   </div>
 </div>
 
-<div style="border: 1px dashed lightgray; margin: 1rem">
-  <h2>Previous Orders</h2>
+<div class="container-account">
+  <h2 class="title-account">Previous Orders</h2>
   {% for cart in carts %}
-  <div style="border: 1px dashed lightgray; margin: 1rem">
-    <p>Order #: {{ cart.id }}</p>
-    <p>Date Ordered: {{ cart.date_ordered }}</p>
-    <p>Total Cost: </p>
-    <p>Current Status: {{ cart.get_readable_status }} </p>
-    <a href="{% url 'order_detail' cart.id %}"><button>View Order</button></a>
+  <div class="container-order">
+    <div class="order-num">
+      <p>Order #: {{ cart.id }}</p>
+    </div>
+    <div class="order-info">
+      <p><span class="order-label">Ordered:</span> {{ cart.date_ordered }}</p>
+      <p><span class="order-label">Total:</span> ${{ cart.get_total}}</p>
+      <p><span class="order-label">Status:</span> {{ cart.get_readable_status }} </p>
+    </div>
+    <div>
+      <a class="btn" href="{% url 'order_detail' cart.id %}">View Order</a>
+    </div>
   </div>
   {% endfor %}
 </div>

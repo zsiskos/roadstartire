@@ -20,8 +20,10 @@
 
 body {
   font-family: Inter;
+  margin: 3rem 0;
   padding: 64px 0 0 0;
   min-height: 100vh;
+  font-size: 1rem;
 }
 
 body {
@@ -84,4 +86,80 @@ body {
   background-color: transparent;
   display: none;
   transition: all 0.2s ease-in-out;
+}
+
+/* Account Page  */
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+.title-account {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.container-account-info {
+  padding-bottom: 1rem;
+  border-bottom: .17rem solid  rgb(158, 158, 158);
+}
+.container-account {
+  margin: 0 auto;
+  width: 85%;
+  max-width: 900px;
+  margin-bottom: 1rem;
+}
+
+.container-order {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+  padding: .75em;
+  border-top: .17rem solid  rgb(158, 158, 158);
+  border-bottom: .17rem solid  rgb(158, 158, 158);
+  -webkit-box-shadow: 0px 0px 10px 0px rgb(158, 158, 158);
+  box-shadow: 0px 0px 10px 0px rgb(158, 158, 158);
+}
+
+.btn {
+  padding: .65em 2em;
+  border: 1px solid rgb(211, 121, 37);
+  color:rgb(211, 121, 37);
+  font-weight: 600;
+  font-size: 1.10rem;
+}
+
+.btn:hover,
+.btn:focus {
+  background: rgb(237, 118, 6);
+  color: #ffffff;
+}
+
+.order-num {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  border-radius: 1rem 0 0 1rem;
+}
+
+.order-label {
+  font-size: .75rem;
+}
+
+@media (max-width: 800px){
+  .container-order {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .order-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: .5rem 0;
+  }
+
 }
