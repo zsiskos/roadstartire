@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div>
-  <h2>Account Information: Edit</h2>
-  <div style="border: 1px dashed lightgray; margin: 1rem">
+<div class="container-account">
+  <h2 >Account Information: Edit</h2>
+  <div >
     <form action="." method="POST"> {% csrf_token %}
       {{ form.as_p }}
       <div id="modal-edit-confirm" style="display: none">
@@ -14,7 +14,6 @@
     </form>
     <button id="btn-save">Save</button>
   </div>
-
 </div>
-
+<script src="{% static 'js/user_edit_modal.js' %}"></script>
 {% endblock %}
