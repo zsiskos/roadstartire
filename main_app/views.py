@@ -120,7 +120,7 @@ def tires(req):
 
 @login_required(login_url='/login')
 def cart_detail(req):
-  cart = Cart.objects.filter(user_id=req.user.id, status=0).order_by('date_ordered').last()
+  cart = Cart.objects.filter(user_id=req.user.id, status=Cart.Status.CURRENT).order_by('date_ordered').last()
   if cart is None:
     return render(req, 'cart.html')
   cart_details = CartDetail.objects.filter(cart_id=cart.id)
@@ -137,7 +137,7 @@ def cart_detail(req):
 @login_required(login_url='/login')
 def cart_order(req, cart_id):
   order = Cart.objects.get(id=cart_id)
-  order.status = 1
+  order.status = Cart.Status.IN_PROGRESS
   order.save()
   # INFO NEEDED FOR EMAIL
   user = req.user
@@ -158,7 +158,7 @@ def order_detail(req, cart_id):
 
 def order_cancel(req, cart_id):
   order = Cart.objects.get(id=cart_id)
-  order.status = 2
+  order.status = Cart.Status.CANCELLED
   order.save()
   return redirect('order_detail', cart_id)
 
@@ -189,11 +189,11 @@ def tire_detail(req, tire_id):
   # If the tire exists in the cart already, then just add the inputted quantity to the current quantity
   # If it doesn't exist in the cart, create a new instance
   tire = Tire.objects.get(pk=tire_id)
-  if (Cart.objects.filter(user=req.user, status=0)).exists():
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     # If for some reason there is more than one current cart, use the most recent one
-    cart = Cart.objects.filter(user=req.user, status=0).order_by('date_ordered').last()
+    cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('date_ordered').last()
   else:
-    cart = Cart.objects.create(user=req.user, status=0) # Create a current cart if it does not exist
+    cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
   
   if req.method == 'POST':
     # Get the instance if it exists or create one if if doesn't
