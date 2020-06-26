@@ -5,6 +5,7 @@
   --accent-color-shadow:  rgb(158, 158, 158);
   --link-color-dark:  rgb(18, 24, 77);
   --link-color-hover: rgb(211, 121, 37);
+  --main-text-dark: rgb(56, 56, 56);
 }
 
 body {
