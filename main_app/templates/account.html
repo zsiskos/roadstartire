@@ -71,7 +71,7 @@
     <div class="order-info">
       <p><span class="order-label">Ordered:</span> {{ cart.date_ordered }}</p>
       <p><span class="order-label">Total:</span> ${{ cart.get_total}}</p>
-      <p><span class="order-label">Status:</span> {{ cart.get_readable_status }} </p>
+      <p><span class="order-label">Status:</span> {{ cart.get_status_display }} </p>
     </div>
     <div>
       <a class="order-btn" href="{% url 'order_detail' cart.id %}">View Order</a>
