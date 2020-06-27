@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  color: #383838;
+  color:var(--main-text-dark);
 }
 
 #hero {
@@ -14,14 +14,14 @@
 }
 
 .banner {
-  background-color: rgb(250, 148, 53);
+  background-color: var(--accent-color-bright);
   width: 100%;
   height: 475px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 40px;
-  color: #383838;
+  color: var(--main-text-dark);
 }
 
 /* ──────────────────────────────────────────────────────────────────────────────── */
@@ -42,24 +42,24 @@
 }
 
 #create-account-hero h1 {
-  font-size: 24px;
+  font-size: 1.2rem;
   color: whitesmoke;
   margin-bottom: 100px;
 }
 
 #create-account-hero .btn{        
-	font-size: 16px;
-  background: rgb(250, 148, 53);
+	font-size: 1rem;
+  background: var(--accent-color-bright);
   font-weight: 500;
 	border: none;
 }
 		
 #create-account-hero .btn:hover, #create-account-hero .btn:focus {
-	background: rgb(219, 130, 46);
+	background: var(--link-color-hover);
 	outline: none;
 }
 
 #create-account-hero .btn:focus {
-	border-color: rgb(250, 148, 53);
+	border-color: var(--accent-color-bright);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(250, 148, 53, 0.6);
 }

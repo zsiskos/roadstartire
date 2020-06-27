@@ -70,7 +70,7 @@ def logout(req):
 @login_required(login_url='/login')
 def account(req):
   user = req.user
-  carts = Cart.objects.filter(user_id=req.user.id).order_by('-date_ordered')
+  carts = Cart.objects.filter(user_id=req.user.id).exclude(status=-1).order_by('-date_ordered')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 @login_required(login_url='/login')
@@ -142,7 +142,7 @@ def cart_order(req, cart_id):
   # INFO NEEDED FOR EMAIL
   user = req.user
   subject = f"{user.company_name} placed Order #{order.id}"
-  message = f"This company - {user.company_name}, {user.email} - Placed an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
+  message = f"This company - {user.company_name}, {user.email} - placed an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
   mail_admins(subject, message, fail_silently=False)
   return redirect('order_detail', cart_id)
 
@@ -160,6 +160,11 @@ def order_cancel(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = Cart.Status.CANCELLED
   order.save()
+  # INFO NEEDED FOR EMAIL
+  user = req.user
+  subject = f"{user.company_name} cancelled order #{order.id}"
+  message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
+  mail_admins(subject, message, fail_silently=False)
   return redirect('order_detail', cart_id)
 
 def tire_list(req):

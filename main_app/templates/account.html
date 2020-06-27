@@ -3,8 +3,8 @@
 {% block content %}
 <div class="container-account">
   <h2>Account Information</h2>
-  <i class="fas fa-edit"></i><a class="account-btn" href="{% url 'custom_user_edit' %}">Edit</a>
-  <i class="fas fa-sign-out-alt"></i><a class="account-btn" href="{% url 'logout' %}">Log Out</a>
+  <a class="account-btn" href="{% url 'custom_user_edit' %}"><i class="fas fa-edit"></i>Edit</a>
+  <a class="account-btn" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Log Out</a>
   <div class="container-account-info">
     <div class="container-account-section">
       <div class="account-details">
