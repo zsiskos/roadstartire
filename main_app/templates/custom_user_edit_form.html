@@ -3,17 +3,21 @@
 {% block content %}
 <div class="container-account">
   <h2 >Account Information: Edit</h2>
-  <div >
-    <form action="." method="POST"> {% csrf_token %}
+  <a href="#" class="account-btn" id="btn-save" alt="save button"><i class="fas fa-save"></i>Save</a>
+  <a href="{% url 'account' %}" class="account-btn" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
+  <div class="container-account-info" >
+    <form id="account-save" action="." method="POST"> {% csrf_token %}
       {{ form.as_p }}
-      <div id="modal-edit-confirm" style="display: none">
-        <span id="close">&times;</span>
-        <p>PLEASE NOTE: Editing account information will put the account as inactive as a RoadStar staff member must validate the account. This means you will be logged out and will not be able to place an order until then. If it is urgent, please call us at INSERT PHONE HERE.</p>
-        <input type="submit" value="confirm" />
+      <div class="popup" id="popup-edit-confirm" style="display: none">
+        <div class="popup-copy">
+          <p><strong>PLEASE NOTE:</strong> Editing account information will make your account inactive, as a Road Star Tires staff member must validate the account.</p>
+          <p>This means <em>you will be logged out and will not be able to place an order</em> until then. If it is urgent, please call us at INSERT PHONE HERE.</p>
+          <a href="#" class="account-btn" onClick="document.forms['account-save'].submit();"/><i class="fas fa-check-square"></i>Confirm</a>
+          <a href="#" class="account-btn" id="close" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
+        </div>
       </div>
     </form>
-    <button id="btn-save">Save</button>
   </div>
 </div>
-<script src="{% static 'js/user_edit_modal.js' %}"></script>
+<script src="{% static 'js/user_edit_popup.js' %}"></script>
 {% endblock %}

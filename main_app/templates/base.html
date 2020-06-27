@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/account.css' %}">
   <script src="https://kit.fontawesome.com/7344249496.js" crossorigin="anonymous"></script>
   <title>Road Star Tire</title>
 </head>
@@ -36,11 +37,13 @@
       <a class="nav-item nav-link" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a>
       <a class="nav-item nav-link" id="nav-services" href={% url 'services' %}></i>Services</a>
       <a class="nav-item nav-link" id="nav-about" href={% url 'about' %}></i>About</a>
+      {% if user.is_authenticated %}
+      <a class="nav-item nav-link" id="nav-logout" href="{% url 'account' %}">Account</a>
+      <a class="nav-item nav-link" id="nav-cart-detail" href={% url 'cart_detail' %}><i class="fas fa-shopping-cart"></i></a>
+      {% else %}
       <a class="nav-item nav-link" id="nav-login" href={% url 'login' %}></i>Log in</a> <!-- SEPARATE PAGE FOR NOW, WILL COMBINE WITH SIGN UP -->
       <a class="nav-item nav-link" id="nav-signup" href={% url 'signup' %}></i>Sign Up</a>
-      <a class="nav-item nav-link" id="nav-cart-detail" href={% url 'cart_detail' %}>
-        <i class="fas fa-shopping-cart"></i>
-      </a>
+      {% endif %}
     <div>
   </nav>
   <main>
