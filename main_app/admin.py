@@ -1,8 +1,9 @@
 from django.contrib import admin
 from .models import Cart, Tire, CartDetail
-from django.contrib import messages
-from django.http import HttpResponseRedirect
 from django.db import IntegrityError
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+from django.utils.translation import ngettext
 
 # ────────────────────────────────────────────────────────────────────────────────
 # list_display - Controls which fields are displayed on the change list page
@@ -116,6 +117,29 @@ class CartAdmin(admin.ModelAdmin):
 
   inlines = (CartDetailInline,)
 
+  actions = [
+    'mark_as_cancelled',
+    'mark_as_fulfilled',
+  ] 
+
+  def mark_as_fulfilled(self, req, queryset):
+    updated = queryset.update(status=Cart.Status.FULFILLED)
+    self.message_user(req, ngettext(
+        "%d cart was successfully marked as 'Fulfilled'.",
+        "%d carts were successfully marked as 'Fulfilled'.",
+        updated,
+    ) % updated, messages.SUCCESS)
+  mark_as_fulfilled.short_description = "Mark selected carts as 'Fulfilled'"
+
+  def mark_as_cancelled(self, req, queryset):
+    updated = queryset.update(status=Cart.Status.CANCELLED)
+    self.message_user(req, ngettext(
+        "%d cart was successfully marked as 'Cancelled'.",
+        "%d carts were successfully marked as 'Cancelled'.",
+        updated,
+    ) % updated, messages.SUCCESS)
+  mark_as_cancelled.short_description = "Mark selected carts as 'Cancelled'"
+  
   # Override changeform_view and changelist_view to handle IntegrityError when UniqueConstraint on user and status, where status = 1
   # This is because Django does not throw a ValidationError when using UnqieConstraint with condition(s)
   def changeform_view(self, req, *args, **kwargs):
@@ -132,7 +156,7 @@ class CartAdmin(admin.ModelAdmin):
       return super().changelist_view(req, *args, **kwargs)
     except IntegrityError as err:
       if 'unique_current_cart' in str(err):
-        err = f"{req.user.full_name} already has a current cart (can\'t have more than one cart with 'Current' status)"
+        err = "Can\'t have more than one cart with 'Current' status"
       self.message_user(req, str(err), level=messages.ERROR)
       return HttpResponseRedirect(req.path)
 
