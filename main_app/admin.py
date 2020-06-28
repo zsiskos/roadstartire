@@ -52,6 +52,8 @@ class CartDetailAdmin(admin.ModelAdmin):
     else:
       return ('price_each',) # Creating an object
 
+  autocomplete_fields = ['tire']
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class CartDetailInline(admin.TabularInline):
@@ -63,6 +65,8 @@ class CartDetailInline(admin.TabularInline):
     'price_each',
     'get_subtotal',
   )
+
+  autocomplete_fields = ['tire']
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -159,6 +163,8 @@ class CartAdmin(admin.ModelAdmin):
         err = "Can\'t have more than one cart with 'Current' status"
       self.message_user(req, str(err), level=messages.ERROR)
       return HttpResponseRedirect(req.path)
+
+  date_hierarchy = 'date_ordered'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
