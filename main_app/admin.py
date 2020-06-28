@@ -116,11 +116,20 @@ class CartAdmin(admin.ModelAdmin):
 
   inlines = (CartDetailInline,)
 
-  # Needed to handle IntegrityError when UniqueConstraint on user and status, where status = 1
+  # Override changeform_view and changelist_view to handle IntegrityError when UniqueConstraint on user and status, where status = 1
   # This is because Django does not throw a ValidationError when using UnqieConstraint with condition(s)
   def changeform_view(self, req, *args, **kwargs):
     try:
       return super().changeform_view(req, *args, **kwargs)
+    except IntegrityError as err:
+      if 'unique_current_cart' in str(err):
+        err = f"{req.user.full_name} already has a current cart (can\'t have more than one cart with 'Current' status)"
+      self.message_user(req, str(err), level=messages.ERROR)
+      return HttpResponseRedirect(req.path)
+
+  def changelist_view(self, req, *args, **kwargs):
+    try:
+      return super().changelist_view(req, *args, **kwargs)
     except IntegrityError as err:
       if 'unique_current_cart' in str(err):
         err = f"{req.user.full_name} already has a current cart (can\'t have more than one cart with 'Current' status)"
