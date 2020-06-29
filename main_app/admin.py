@@ -25,6 +25,8 @@ class CartDetailAdmin(admin.ModelAdmin):
     'price_each',
     'quantity',
     'get_subtotal',
+    'created_at',
+    'updated_at',
   )
 
   list_display_links = (
@@ -64,6 +66,8 @@ class CartDetailInline(admin.TabularInline):
   readonly_fields = (
     'price_each',
     'get_subtotal',
+    'created_at',
+    'updated_at'
   )
 
   autocomplete_fields = ['tire']
@@ -75,7 +79,7 @@ class CartAdmin(admin.ModelAdmin):
     'id',
     'user',
     'get_owner',
-    'date_ordered',
+    'created_at',
     'status',
     'get_item_count',
     'discount_ratio_applied',
@@ -91,6 +95,8 @@ class CartAdmin(admin.ModelAdmin):
   list_editable = ('status',)
 
   list_filter = (
+    'created_at',
+    'updated_at',
     'date_ordered',
     'status',
   )
@@ -109,6 +115,9 @@ class CartAdmin(admin.ModelAdmin):
         'discount_ratio_applied',
         'get_subtotal',
         'get_total',
+        'created_at',
+        'updated_at',
+        'date_ordered',
       )
     }),
   )
@@ -116,7 +125,10 @@ class CartAdmin(admin.ModelAdmin):
   readonly_fields = (
     'get_item_count', 
     'get_subtotal',
-     'get_total',
+    'get_total',
+    'created_at',
+    'updated_at',
+    'date_ordered',
   )
 
   inlines = (CartDetailInline,)
@@ -164,7 +176,7 @@ class CartAdmin(admin.ModelAdmin):
       self.message_user(req, str(err), level=messages.ERROR)
       return HttpResponseRedirect(req.path)
 
-  date_hierarchy = 'date_ordered'
+  date_hierarchy = 'created_at'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
