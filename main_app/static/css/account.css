@@ -1,6 +1,10 @@
+
 /* ACCOUNT and CART PAGE  */
 
 /* TYPOGRAPHY */
+
+/* ACCOUNT PAGE  */
+
 .title-account {
   text-align: center;
   margin-bottom: 1rem;
@@ -29,6 +33,11 @@
 
 /* LAYOUT */
 .container-main {
+.fas {
+  margin-right: .25rem;
+}
+
+.container-account {
   margin: 0 auto;
   width: 85%;
   max-width: 900px;
@@ -44,7 +53,6 @@
   border-bottom: .17rem solid var(--accent-color-shadow);
 }
 
-
 .account-details {
   display: flex;
   align-items: center;
@@ -58,6 +66,23 @@
   margin-right: 15px;
   color: #333;
   font-size: .75rem;
+}
+
+.account-data {
+  font-size: 1.25rem;
+}
+
+/* Styles for the orders */
+.container-order {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+  padding: .75em;
+  border-top: .08rem solid  var(--accent-color-shadow);
+  border-bottom: .08rem solid  var(--accent-color-shadow);
+  -webkit-box-shadow: 0px 0px 10px 0pxvar(--accent-color-shadow);
+  box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
 }
 
 .order-btn {
@@ -97,6 +122,14 @@
     text-align: center;
   }
 
+  .container-account-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: .17rem solid  var(--accent-color-shadow);
+  }
+ 
   .container-account-section {
     width: 300px; 
     text-align: center
@@ -164,6 +197,11 @@
 .popup-copy p {
   margin: .25rem;
 }
+
+
+
+
+
 
 
 

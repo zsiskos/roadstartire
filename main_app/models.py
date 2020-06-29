@@ -81,10 +81,10 @@ class Cart(models.Model):
     return count
   get_item_count.short_description = 'Number of items'
 
-  # class Meta:
-  #   constraints = [
-  #     models.UniqueConstraint(fields=['user'], condition=Q(status=0), name='unique_current_cart')
-  #   ]
+  class Meta:
+    constraints = [
+      models.UniqueConstraint(fields=['user','status'], condition=Q(status=1), name='unique_current_cart')
+    ]
 
 # ────────────────────────────────────────────────────────────────────────────────
 
