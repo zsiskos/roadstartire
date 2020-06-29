@@ -5,7 +5,16 @@ from django.db.models import Q
 
 # ────────────────────────────────────────────────────────────────────────────────
 
-class Cart(models.Model):
+class TimeStampMixin(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date Created (UTC)')
+  updated_at = models.DateTimeField(auto_now=True, verbose_name='Date Modified (UTC)')
+
+  class Meta:
+    abstract = True
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class Cart(TimeStampMixin):
   class Status(models.IntegerChoices):
     CURRENT = 1
     ABANDONED = -1
@@ -32,7 +41,7 @@ class Cart(models.Model):
   """
 
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
-  date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Date Created (UTC)')
+  date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Date Ordered (UTC)')
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
   discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, blank=True, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
 
@@ -123,7 +132,7 @@ class Tire(models.Model):
 
 # ────────────────────────────────────────────────────────────────────────────────
 
-class CartDetail(models.Model):
+class CartDetail(TimeStampMixin):
   cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
   tire = models.ForeignKey(Tire, on_delete=models.CASCADE)
   quantity = models.PositiveIntegerField(default=1)

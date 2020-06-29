@@ -123,14 +123,14 @@ def cart_detail(req):
   cart = Cart.objects.filter(user_id=req.user.id, status=Cart.Status.CURRENT).order_by('date_ordered').last()
   if cart is None:
     return render(req, 'cart.html')
-  cart_details = CartDetail.objects.filter(cart_id=cart.id)
+  cart_details = cart.cartdetail_set.all().order_by('created_at')
   TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0)
 
   if req.method == 'POST':
-    formset = TireFormSet(req.POST, req.FILES, queryset=CartDetail.objects.filter(cart=cart))
+    formset = TireFormSet(req.POST, req.FILES, queryset=cart_details)
     # if formset.is_valid(): TOOK OUT BUT NOT SURE WHY IT DOESN"T WORK WITH IT IN
     formset.save()
-  formset = TireFormSet(queryset=CartDetail.objects.filter(cart=cart))
+  formset = TireFormSet(queryset=cart_details)
   zipped_data = zip(cart_details, formset)
   return render(req, 'cart.html', {'cart': cart, 'zipped_data': zipped_data, 'formset': formset})
 
