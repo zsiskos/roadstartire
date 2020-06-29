@@ -1,5 +1,6 @@
-/* ACCOUNT PAGE  */
+/* ACCOUNT and CART PAGE  */
 
+/* TYPOGRAPHY */
 .title-account {
   text-align: center;
   margin-bottom: 1rem;
@@ -12,18 +13,22 @@
   margin: 0 2rem 0 .2rem;
 }
 
+.cart-total .account-btn {
+  margin: 1rem 0 0 .7rem;
+}
+
 .account-btn:hover,
 .account-btn:focus {
   color: var(--link-color-hover);
   text-decoration: underline;
 }
 
-.fas {
-  margin-right: .25rem;
+.account-data {
+  font-size: 1.25rem;
 }
 
-
-.container-account {
+/* LAYOUT */
+.container-main {
   margin: 0 auto;
   width: 85%;
   max-width: 900px;
@@ -39,6 +44,7 @@
   border-bottom: .17rem solid var(--accent-color-shadow);
 }
 
+
 .account-details {
   display: flex;
   align-items: center;
@@ -52,23 +58,6 @@
   margin-right: 15px;
   color: #333;
   font-size: .75rem;
-}
-
-.account-data {
-  font-size: 1.25rem;
-}
-
-/* Styles for the orders */
-.container-order {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  margin-bottom: 1rem;
-  padding: .75em;
-  border-top: .08rem solid  var(--accent-color-shadow);
-  border-bottom: .08rem solid  var(--accent-color-shadow);
-  -webkit-box-shadow: 0px 0px 10px 0pxvar(--accent-color-shadow);
-  box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
 }
 
 .order-btn {
@@ -98,7 +87,7 @@
 }
 
 /* WHEN SCREEN GET SMALL */
-@media (max-width: 800px){
+@media (max-width: 900px){
   h2 {
     font-size: 1.5rem;
     margin:  .5rem 0 .05rem 0;
@@ -108,14 +97,6 @@
     text-align: center;
   }
 
-  .container-account-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 1rem;
-    border-bottom: .17rem solid  var(--accent-color-shadow);
-  }
-  
   .container-account-section {
     width: 300px; 
     text-align: center
@@ -146,6 +127,17 @@
   }
 }
 
+/* WHEN SCREEN GETS REALLY SMALL */
+@media (max-width: 500px){
+  .container-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: .17rem solid  var(--accent-color-shadow);
+  }
+}
+
 /* The Popup (background) */
 .popup {
   display: none; /* Hidden by default */
@@ -172,4 +164,7 @@
 .popup-copy p {
   margin: .25rem;
 }
+
+
+
 

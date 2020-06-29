@@ -1,0 +1,58 @@
+/* LAYOUT */
+.container-order {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: .5rem 0;
+  padding: .75em;
+  border-top: .08rem solid  var(--accent-color-shadow);
+  border-bottom: .08rem solid  var(--accent-color-shadow);
+  -webkit-box-shadow: 0px 0px 10px 0pxvar(--accent-color-shadow);
+  box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
+}
+
+.container-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container-price {
+  display: flex;
+  justify-content: space-between;
+  width: 250px;
+}
+
+.container-total {
+  text-align: right;
+  padding-right: .75em;
+}
+
+.container-total .account-btn {
+  margin: 0 0 0 2rem;
+}
+
+/* TYPOGRAPHY */
+#qty-update label {
+  display: none;
+}
+#qty-update input {
+  width: 5rem;
+}
+
+#submit-btn {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+}
+
+.cart-label {
+  font-weight: 700;
+}
+
+/* WHEN SCREEN GET SMALL */
+@media (max-width: 900px){
+  .label {
+    display: inline-flex;
+  }
+}
