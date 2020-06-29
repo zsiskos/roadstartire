@@ -1,3 +1,8 @@
+
+/* ACCOUNT and CART PAGE  */
+
+/* TYPOGRAPHY */
+
 /* ACCOUNT PAGE  */
 
 .title-account {
@@ -12,16 +17,25 @@
   margin: 0 2rem 0 .2rem;
 }
 
+.cart-total .account-btn {
+  margin: 1rem 0 0 .7rem;
+}
+
 .account-btn:hover,
 .account-btn:focus {
   color: var(--link-color-hover);
   text-decoration: underline;
 }
 
+.account-data {
+  font-size: 1.25rem;
+}
+
+/* LAYOUT */
+.container-main {
 .fas {
   margin-right: .25rem;
 }
-
 
 .container-account {
   margin: 0 auto;
@@ -98,7 +112,7 @@
 }
 
 /* WHEN SCREEN GET SMALL */
-@media (max-width: 800px){
+@media (max-width: 900px){
   h2 {
     font-size: 1.5rem;
     margin:  .5rem 0 .05rem 0;
@@ -115,7 +129,7 @@
     padding-bottom: 1rem;
     border-bottom: .17rem solid  var(--accent-color-shadow);
   }
-  
+ 
   .container-account-section {
     width: 300px; 
     text-align: center
@@ -146,6 +160,17 @@
   }
 }
 
+/* WHEN SCREEN GETS REALLY SMALL */
+@media (max-width: 500px){
+  .container-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: .17rem solid  var(--accent-color-shadow);
+  }
+}
+
 /* The Popup (background) */
 .popup {
   display: none; /* Hidden by default */
@@ -172,4 +197,12 @@
 .popup-copy p {
   margin: .25rem;
 }
+
+
+
+
+
+
+
+
 
