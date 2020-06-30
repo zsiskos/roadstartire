@@ -4,8 +4,10 @@
 <div class="container-main">
 {% if cart.get_item_count > 0 %}
   <h1>Your Cart</h1>
-  <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
-  <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
+  <div class="container-links">
+    <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
+    <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
+  </div>
   {% for cart_detail, form in zipped_data %}
     <div class="container-order">
       <div class="container-item">
@@ -20,7 +22,7 @@
             <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
             <p><span class="cart-label">Load:</span> {{cart_detail.tire.load}}</p>
             <p><span class="cart-label">Availability:</span> 
-              {% if cart_detail.tire.current_quantity < 50 %}
+              {% if cart_detail.tire.current_quantity < 20 %}
                 Low stock
                 {% else %}
                 In stock
@@ -55,11 +57,13 @@
       <p><span class="cart-label">Sub-total:</span> ${{ cart.get_subtotal }}</p>
       <p><span class="cart-label">Tax:</span> </p>
       <p><span class="cart-label">Total:</span> ${{ cart.get_total }} (items: {{cart.get_item_count}})</p>
-      <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
-      {% else %}
-      <h1>There are no items in your cart.</h1>
-      {% endif %}
-      <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
+      <div class="container-links">
+        <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
+        {% else %}
+        <h1>There are no items in your cart.</h1>
+        {% endif %}
+        <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
+      </div>
     </div>
 </div>
 {% endblock %}
