@@ -3,6 +3,7 @@ from django.conf import settings # Don't refer to the user model directly, it is
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
 from model_utils import FieldTracker
+from django.urls import reverse 
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -133,6 +134,9 @@ class Tire(models.Model):
       cd.price_each = self.price
       cd.save()
     super(Tire, self).save(*args, **kwargs)
+
+ def get_absolute_url(self):
+    return reverse('tire_detail', args=[str(self.id)])
 
 # ────────────────────────────────────────────────────────────────────────────────
 
