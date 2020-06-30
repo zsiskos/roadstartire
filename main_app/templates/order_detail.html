@@ -1,54 +1,41 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Order #: {{ order.id }}</h1>
-<div style="border: 1px dashed lightgray; margin: 1rem">
-  <h3>Date ordered: {{ order.ordered_at }}</h3>
-  <h3>Current Status: {{ order.get_status_display }} </h3>
-  <h4>Shipped to:</h4>
-  <p>Company Name: {{ user.company_name }}</p>
-  <p>Address: {{ user.address }}</p>
-  <p>City: {{ user.city }}</p>
-  <p>Province: {{ user.province_iso }}</p>
-  <p>Postal Code: {{ user.postal_code }}</p>
-  <table style="border-collapse: collapse; width: 100%">
-    <tr>
-      <th>Items</th>
-      <th>Quantity</th>
-      <th>Price</th>
-      <th>Total</th>
-    </tr>
+<div class="container-main">
+  <h1>Order #: {{ order.id }}</h1>
+  <div class="container-info order-detail-info">
+      <h4>Ordered: {{ order.date_ordered }}</h5>
+      <h4>Status: {{ order.get_status_display }} </h5>
+      <h5>Shipped to:</h5>
+      <p>Company Name: {{ user.company_name }}</p>
+      <p>Address: {{ user.address }}</p>
+      <p>City: {{ user.city }}</p>
+      <p>Province: {{ user.province_iso }}</p>
+      <p>Postal Code: {{ user.postal_code }}</p>
+
+    <div class="container-cart-headers">
+      <p class="cart-label">Items</p>
+      <p class="cart-label qty-col">Quantity</p>
+      <p class="cart-label total-col">Price</p>
+      <p class="cart-label total-col">Total</p>
+    </div>
+    
     {% for item in order_detail %}
-    <tr>
-      <td>{{ item.tire }}</td>
-      <td>{{ item.quantity }}</td>
-      <td>${{ item.price_each }}</td>
-      <td>$ {{ item.get_subtotal }}</td>
-    </tr>
+    <div class="container-cart-info">
+      <p>{{ item.tire }}</p>
+      <p class="qty-col">{{ item.quantity }}</p>
+      <p class='total-col'>${{ item.price_each }}</p>
+      <p class="total-col">$ {{ item.get_subtotal }}</p>
+    </div>
     {% endfor %}
-    <tr>
-      <td></td>
-      <td></td>
-      <td>Sub-total: </td>
-      <td>${{ order.get_subtotal }}</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td>Tax:</td>
-      <td>$$$</td>
-    </tr>
-    <tfoot>
-      <tr>
-        <td></td>
-        <td></td>
-        <td>Total:</td>
-        <td>${{ order.get_total }}</td>
-      </tr>
-    </tfoot>
-  </table>
-  {% if order.status == order.Status.CURRENT or order.status == order.Status.IN_PROGRESS %}
-  <a href="{% url 'order_cancel' order.id %}"><button>Cancel Order</button></a>
-  {% endif %}
+  </div>
+
+    <div class="container-total">
+      <p><span class="cart-label">Sub-total:</span> ${{ order.get_subtotal }}</p>
+      <p><span class="cart-label">Total:</span> ${{ order.get_total }}</p>
+      {% if order.status == order.Status.CURRENT or order.status == order.Status.IN_PROGRESS %}
+      <a class="account-btn" href="{% url 'order_cancel' order.id %}"><i class="fas fa-window-close"></i>Cancel Order</a>
+      {% endif %}
+    </div>
 </div>
 {% endblock %}

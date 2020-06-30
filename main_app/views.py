@@ -120,12 +120,11 @@ def tires(req):
 
 @login_required(login_url='/login')
 def cart_detail(req):
-  cart = Cart.objects.filter(user_id=req.user.id, status=Cart.Status.CURRENT).order_by('ordered_at').last()
+  cart = Cart.objects.get(user_id=req.user.id, status=Cart.Status.CURRENT)
   if cart is None:
     return render(req, 'cart.html')
-  cart_details = cart.cartdetail_set.all().order_by('created_at')
+  cart_details = cart.cartdetail_set.all()
   TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0)
-
   if req.method == 'POST':
     formset = TireFormSet(req.POST, req.FILES, queryset=cart_details)
     # if formset.is_valid(): TOOK OUT BUT NOT SURE WHY IT DOESN"T WORK WITH IT IN
