@@ -135,7 +135,7 @@ class Tire(models.Model):
       cd.save()
     super(Tire, self).save(*args, **kwargs)
 
- def get_absolute_url(self):
+  def get_absolute_url(self):
     return reverse('tire_detail', args=[str(self.id)])
 
 # ────────────────────────────────────────────────────────────────────────────────
