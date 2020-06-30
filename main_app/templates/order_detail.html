@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Order #: {{ order.id }}</h1>
 <div style="border: 1px dashed lightgray; margin: 1rem">
-  <h3>Date ordered: {{ order.date_ordered }}</h3>
+  <h3>Date ordered: {{ order.ordered_at }}</h3>
   <h3>Current Status: {{ order.get_status_display }} </h3>
   <h4>Shipped to:</h4>
   <p>Company Name: {{ user.company_name }}</p>

@@ -97,7 +97,7 @@ class CartAdmin(admin.ModelAdmin):
   list_filter = (
     'created_at',
     'updated_at',
-    'date_ordered',
+    'ordered_at',
     'status',
   )
 
@@ -117,7 +117,8 @@ class CartAdmin(admin.ModelAdmin):
         'get_total',
         'created_at',
         'updated_at',
-        'date_ordered',
+        'ordered_at',
+        'fulfilled_at',
       )
     }),
   )
@@ -128,7 +129,8 @@ class CartAdmin(admin.ModelAdmin):
     'get_total',
     'created_at',
     'updated_at',
-    'date_ordered',
+    'ordered_at',
+    'fulfilled_at',
   )
 
   inlines = (CartDetailInline,)

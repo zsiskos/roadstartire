@@ -13,6 +13,7 @@ from .models import Tire, Cart, CartDetail
 import re
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
+from django.utils import timezone
 
 def home(req):
   return render(req, 'home.html')
@@ -70,7 +71,7 @@ def logout(req):
 @login_required(login_url='/login')
 def account(req):
   user = req.user
-  carts = Cart.objects.filter(user_id=req.user.id).exclude(status=Cart.Status.ABANDONED).order_by('-date_ordered')
+  carts = Cart.objects.filter(user_id=req.user.id).exclude(status=Cart.Status.ABANDONED).order_by('-ordered_at')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 @login_required(login_url='/login')
@@ -120,7 +121,7 @@ def tires(req):
 
 @login_required(login_url='/login')
 def cart_detail(req):
-  cart = Cart.objects.filter(user_id=req.user.id, status=Cart.Status.CURRENT).order_by('date_ordered').last()
+  cart = Cart.objects.filter(user_id=req.user.id, status=Cart.Status.CURRENT).order_by('ordered_at').last()
   if cart is None:
     return render(req, 'cart.html')
   cart_details = cart.cartdetail_set.all().order_by('created_at')
@@ -138,6 +139,7 @@ def cart_detail(req):
 def cart_order(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = Cart.Status.IN_PROGRESS
+  order.ordered_at = timezone.now()
   order.save()
   # INFO NEEDED FOR EMAIL
   user = req.user
@@ -196,7 +198,7 @@ def tire_detail(req, tire_id):
   tire = Tire.objects.get(pk=tire_id)
   if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     # If for some reason there is more than one current cart, use the most recent one
-    cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('date_ordered').last()
+    cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
   else:
     cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
   

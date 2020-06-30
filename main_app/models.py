@@ -41,9 +41,10 @@ class Cart(TimeStampMixin):
   """
 
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
-  date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Date Ordered (UTC)')
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
   discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, blank=True, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
+  ordered_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Ordered (UTC)')
+  fulfilled_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Fulfilled (UTC)')
 
   def __str__(self):
     return f'Cart #{self.id} - {self.get_status_display()}'
