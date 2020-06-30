@@ -118,7 +118,7 @@ class CartAdmin(admin.ModelAdmin):
         'created_at',
         'updated_at',
         'ordered_at',
-        'fulfilled_at',
+        'cancelled_or_fulfilled_at',
       )
     }),
   )
@@ -130,7 +130,7 @@ class CartAdmin(admin.ModelAdmin):
     'created_at',
     'updated_at',
     'ordered_at',
-    'fulfilled_at',
+    'cancelled_or_fulfilled_at',
   )
 
   inlines = (CartDetailInline,)

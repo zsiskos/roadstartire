@@ -13,7 +13,6 @@ from .models import Tire, Cart, CartDetail
 import re
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
-from django.utils import timezone
 
 def home(req):
   return render(req, 'home.html')
@@ -139,7 +138,6 @@ def cart_detail(req):
 def cart_order(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = Cart.Status.IN_PROGRESS
-  order.ordered_at = timezone.now()
   order.save()
   # INFO NEEDED FOR EMAIL
   user = req.user

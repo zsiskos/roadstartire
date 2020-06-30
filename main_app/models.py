@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings # Don't refer to the user model directly, it is recommended to refer to the AUTH_USER_MODEL setting
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
+from model_utils import FieldTracker
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -44,7 +45,7 @@ class Cart(TimeStampMixin):
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
   discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, blank=True, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
   ordered_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Ordered (UTC)')
-  fulfilled_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Fulfilled (UTC)')
+  cancelled_or_fulfilled_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Cancelled/Fulfilled (UTC)')
 
   def __str__(self):
     return f'Cart #{self.id} - {self.get_status_display()}'
@@ -90,6 +91,8 @@ class Cart(TimeStampMixin):
       count += cartDetail.quantity
     return count
   get_item_count.short_description = 'Number of items'
+
+  status_tracker = FieldTracker(fields=['status'])
 
   class Meta:
     constraints = [
