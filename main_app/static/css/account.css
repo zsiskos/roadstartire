@@ -1,6 +1,3 @@
-
-/* ACCOUNT and CART PAGE  */
-
 /* TYPOGRAPHY */
 
 /* ACCOUNT PAGE  */
@@ -10,15 +7,15 @@
   margin-bottom: 1rem;
 }
 
+.account-data {
+  font-size: 1.25rem;
+}
+
 .account-btn {
   display: inline;
   color: var(--link-color-dark);
   font-weight: 600;
   margin: 0 2rem 0 .2rem;
-}
-
-.cart-total .account-btn {
-  margin: 1rem 0 0 .7rem;
 }
 
 .account-btn:hover,
@@ -27,36 +24,10 @@
   text-decoration: underline;
 }
 
-.account-data {
-  font-size: 1.25rem;
-}
-
 /* LAYOUT */
-.container-main {
-.fas {
-  margin-right: .25rem;
-}
-
-.container-account {
-  margin: 0 auto;
-  width: 85%;
-  max-width: 900px;
-  margin-bottom: 1rem;
-}
-
-.container-account-info {
-  display: flex;
-  justify-content: space-between;
-  margin-top: .5rem;
-  padding: 1em 0;
-  border-top: .17rem solid  var(--accent-color-shadow);
-  border-bottom: .17rem solid var(--accent-color-shadow);
-}
-
 .account-details {
   display: flex;
   align-items: center;
-  margin-bottom: .5rem;
 }
 
 .account-label {
@@ -64,7 +35,6 @@
   text-align: right;
   float: left;
   margin-right: 15px;
-  color: #333;
   font-size: .75rem;
 }
 
@@ -118,30 +88,8 @@
     margin:  .5rem 0 .05rem 0;
   }
 
-  .container-account {
-    text-align: center;
-  }
-
-  .container-account-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 1rem;
-    border-bottom: .17rem solid  var(--accent-color-shadow);
-  }
- 
-  .container-account-section {
-    width: 300px; 
-    text-align: center
-  }
-  
   .account-data {
     font-size: 1rem;
-  }
-
-  .container-order {
-    flex-direction: column;
-    justify-content: center;
   }
 
   .order-num {
@@ -160,18 +108,7 @@
   }
 }
 
-/* WHEN SCREEN GETS REALLY SMALL */
-@media (max-width: 500px){
-  .container-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 1rem;
-    border-bottom: .17rem solid  var(--accent-color-shadow);
-  }
-}
-
-/* The Popup (background) */
+/* The POPUP CONFIRMATION (background) */
 .popup {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
