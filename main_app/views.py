@@ -123,7 +123,7 @@ def cart_detail(req):
   cart = Cart.objects.get(user_id=req.user.id, status=Cart.Status.CURRENT)
   if cart is None:
     return render(req, 'cart.html')
-  cart_details = cart.cartdetail_set.all()
+  cart_details = cart.cartdetail_set.all().order_by('created_at') # Need to order for front-end to render properly after updating the quantity
   TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0)
   if req.method == 'POST':
     formset = TireFormSet(req.POST, req.FILES, queryset=cart_details)
