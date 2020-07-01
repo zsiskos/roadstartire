@@ -3,6 +3,7 @@ from django.contrib import auth, messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail, mail_admins
 from django.db.models import Q
 from django.forms import formset_factory, modelformset_factory
@@ -120,8 +121,9 @@ def tires(req):
 
 @login_required(login_url='/login')
 def cart_detail(req):
-  cart = Cart.objects.get(user_id=req.user.id, status=Cart.Status.CURRENT)
-  if cart is None:
+  try:
+    cart = Cart.objects.get(user_id=req.user.id, status=Cart.Status.CURRENT)
+  except Cart.DoesNotExist:
     return render(req, 'cart.html')
   cart_details = cart.cartdetail_set.all().order_by('created_at') # Need to order for front-end to render properly after updating the quantity
   TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0)

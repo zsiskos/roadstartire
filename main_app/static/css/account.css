@@ -7,10 +7,6 @@
   margin-bottom: 1rem;
 }
 
-.account-data {
-  font-size: 1.25rem;
-}
-
 .account-btn {
   display: inline;
   color: var(--link-color-dark);
@@ -36,10 +32,6 @@
   float: left;
   margin-right: 15px;
   font-size: .75rem;
-}
-
-.account-data {
-  font-size: 1.25rem;
 }
 
 /* Styles for the orders */
