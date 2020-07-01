@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="container-main">
-{% if cart.get_item_count > 0 %}
+{% if cart %}
   <h1>Your Cart</h1>
   <div class="container-links">
     <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
@@ -15,19 +15,19 @@
           <img src='{{cart_detail.tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px;"/>
         </div>
         <div class="item-tire">
-          <h6>{{ cart_detail.tire.brand }} {{ tire.year }}</h6>
-            <h4>{{ cart_detail.tire.name }} </h4>
-            <p><span class="cart-label">Size:</span> {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
-            <p><span class="cart-label">Category:</span> {{cart_detail.tire.season}}</p>
-            <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
-            <p><span class="cart-label">Load:</span> {{cart_detail.tire.load}}</p>
-            <p><span class="cart-label">Availability:</span> 
-              {% if cart_detail.tire.current_quantity < 20 %}
-                Low stock
-                {% else %}
-                In stock
-              {% endif %}
-            </p>
+          <h4>{{ cart_detail.tire.brand }} {{ tire.year }}</h4>
+          <h2>{{ cart_detail.tire.name }} </h2>
+          <p><span class="cart-label">Size:</span> {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
+          <p><span class="cart-label">Category:</span> {{cart_detail.tire.season}}</p>
+          <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
+          <p><span class="cart-label">Load:</span> {{cart_detail.tire.load}}</p>
+          <p><span class="cart-label">Availability:</span> 
+            {% if cart_detail.tire.current_quantity < 20 %}
+              Low stock
+              {% else %}
+              In stock
+            {% endif %}
+          </p>
         </div>
       </div>
       <div class="container-qty">
