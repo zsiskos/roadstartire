@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="container-main">
-{% if cart.get_item_count > 0 %}
+{% if cart %}
   <h1>Your Cart</h1>
   <div class="container-links">
     <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
