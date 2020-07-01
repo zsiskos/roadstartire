@@ -51,7 +51,7 @@ p {
 
 /* LAYOUT */
 main {
-  padding-top: 5rem;
+  padding-top: 6rem;
 }
 .container-main {
   margin: 0 auto;
@@ -135,14 +135,12 @@ nav li {
   font-size: .90rem;
 }
 
-
 nav a {
   text-decoration: none;
   text-transform: uppercase;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
 }
-
 
 /* Nav bar hamburger menu and functionality */
 .nav-toggle {
@@ -198,9 +196,6 @@ nav a {
 .nav-toggle-label span::after {
   top: 7px;
 }
-
-
-/* ──────────────────────────────────────────────────────────────────────────────── */
 
 /* When screen gets larger than 850px */
 @media screen and (min-width: 850px) {
