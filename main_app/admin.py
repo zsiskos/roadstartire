@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ngettext
+from django.utils import timezone
 
 # ────────────────────────────────────────────────────────────────────────────────
 # list_display - Controls which fields are displayed on the change list page
@@ -120,7 +121,7 @@ class CartAdmin(admin.ModelAdmin):
         'created_at',
         'updated_at',
         'ordered_at',
-        'cancelled_or_fulfilled_at',
+        'closed_at',
       )
     }),
   )
@@ -132,7 +133,7 @@ class CartAdmin(admin.ModelAdmin):
     'created_at',
     'updated_at',
     'ordered_at',
-    'cancelled_or_fulfilled_at',
+    'closed_at',
   )
 
   inlines = (CartDetailInline,)
@@ -143,20 +144,32 @@ class CartAdmin(admin.ModelAdmin):
   ] 
 
   def mark_as_fulfilled(self, req, queryset):
-    updated = queryset.update(status=Cart.Status.FULFILLED)
+    updated = 0
+    for cart in queryset:
+      if cart.status != Cart.Status.FULFILLED:
+        updated += 1
+      cart.status=Cart.Status.FULFILLED
+      cart.save()
+      if cart.status_tracker.has_changed('status'):
+        updated = 5
     self.message_user(req, ngettext(
-        "%d cart was successfully marked as 'Fulfilled'.",
-        "%d carts were successfully marked as 'Fulfilled'.",
-        updated,
+      "%d cart was successfully changed and marked as 'Fulfilled'.",
+      "%d carts were successfully changed and marked as 'Fulfilled'.",
+      updated,
     ) % updated, messages.SUCCESS)
   mark_as_fulfilled.short_description = "Mark selected carts as 'Fulfilled'"
 
   def mark_as_cancelled(self, req, queryset):
-    updated = queryset.update(status=Cart.Status.CANCELLED)
+    updated = 0
+    for cart in queryset:
+      if cart.status != Cart.Status.CANCELLED:
+        updated += 1
+      cart.status=Cart.Status.CANCELLED
+      cart.save()
     self.message_user(req, ngettext(
-        "%d cart was successfully marked as 'Cancelled'.",
-        "%d carts were successfully marked as 'Cancelled'.",
-        updated,
+      "%d cart was successfully changed and marked as 'Cancelled'.",
+      "%d carts were successfully changed and marked as 'Cancelled'.",
+      updated,
     ) % updated, messages.SUCCESS)
   mark_as_cancelled.short_description = "Mark selected carts as 'Cancelled'"
   

@@ -12,23 +12,16 @@ def delete_empty_cart(sender, instance, *args, **kwargs):
     cart.save()
 
 @receiver(pre_save, sender=Cart)
-def update_fulfilled_at(sender, instance, *args, **kwargs):
+def update_closed_at(sender, instance, *args, **kwargs):
   if instance.status_tracker.has_changed('status'):
     # ... --> IN_PROGRESS:
     if instance.status == Cart.Status.IN_PROGRESS:
-      instance.fulfilled_at = None
+      instance.closed_at = None
       instance.ordered_at = timezone.now()
-    # ... --> FULFILLED:
-    elif instance.status == Cart.Status.FULFILLED:
-      if instance.ordered_at is None:
-        instance.ordered_at = timezone.now()
-      instance.fulfilled_at = timezone.now()
-    # ... --> CANCELLED
-    elif instance.status == Cart.Status.CANCELLED:
-      if instance.ordered_at is None:
-        instance.ordered_at = timezone.now()
-      instance.fulfilled_at = None
-    # ... --> CURRENT/ABANDONED
-    elif instance.status == Cart.Status.CURRENT or instance.status == Cart.Status.ABANDONED:
+    # ... --> FULFILLED / CANCELLED / ABANDONED
+    elif instance.status == Cart.Status.FULFILLED or instance.status == Cart.Status.CANCELLED or instance.status == Cart.Status.ABANDONED:
+      instance.closed_at = timezone.now()
+    # ... --> CURRENT
+    elif instance.status == Cart.Status.CURRENT:
       instance.ordered_at = None
-      instance.fulfilled_at = None
+      instance.closed_at = None
