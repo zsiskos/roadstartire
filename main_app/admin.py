@@ -43,6 +43,8 @@ class CartDetailAdmin(admin.ModelAdmin):
         'tire',
         'price_each', # Should not be able to edit price directly
         'quantity',
+        'created_at',
+        'updated_at',
       )
     }),
   )
@@ -50,9 +52,9 @@ class CartDetailAdmin(admin.ModelAdmin):
   # Dynamic readonly
   def get_readonly_fields(self, request, obj=None):
     if obj:
-      return ('cart', 'tire', 'price_each') # Existing object
+      return ('cart', 'tire', 'price_each', 'created_at', 'updated_at',) # Existing object
     else:
-      return ('price_each',) # Creating an object
+      return ('price_each', 'created_at', 'updated_at',) # Creating an object
 
   autocomplete_fields = ['tire']
 
