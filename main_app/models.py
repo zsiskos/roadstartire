@@ -2,10 +2,21 @@ from django.db import models
 from django.conf import settings # Don't refer to the user model directly, it is recommended to refer to the AUTH_USER_MODEL setting
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
+from model_utils import FieldTracker
+from django.urls import reverse 
 
 # ────────────────────────────────────────────────────────────────────────────────
 
-class Cart(models.Model):
+class TimeStampMixin(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date Created (UTC)')
+  updated_at = models.DateTimeField(auto_now=True, verbose_name='Date Modified (UTC)')
+
+  class Meta:
+    abstract = True
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class Cart(TimeStampMixin):
   class Status(models.IntegerChoices):
     CURRENT = 1
     ABANDONED = -1
@@ -31,10 +42,15 @@ class Cart(models.Model):
     • Must be a number from 0.00 to 1.00 (up to 2 decimal places)
   """
 
+  closed_at_help_text = """
+    Date when the cart was last marked as <strong>Fulfilled</strong>, <strong>Cancelled</strong>, or <strong>Abandoned</strong>
+  """
+
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
-  date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Date Created (UTC)')
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
   discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, blank=True, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
+  ordered_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Ordered (UTC)')
+  closed_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Closed (UTC)', help_text=closed_at_help_text)
 
   def __str__(self):
     return f'Cart #{self.id} - {self.get_status_display()}'
@@ -81,6 +97,8 @@ class Cart(models.Model):
     return count
   get_item_count.short_description = 'Number of items'
 
+  status_tracker = FieldTracker(fields=['status'])
+
   class Meta:
     constraints = [
       models.UniqueConstraint(fields=['user','status'], condition=Q(status=1), name='unique_current_cart')
@@ -121,9 +139,12 @@ class Tire(models.Model):
       cd.save()
     super(Tire, self).save(*args, **kwargs)
 
+  def get_absolute_url(self):
+    return reverse('tire_detail', args=[str(self.id)])
+
 # ────────────────────────────────────────────────────────────────────────────────
 
-class CartDetail(models.Model):
+class CartDetail(TimeStampMixin):
   cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
   tire = models.ForeignKey(Tire, on_delete=models.CASCADE)
   quantity = models.PositiveIntegerField(default=1)

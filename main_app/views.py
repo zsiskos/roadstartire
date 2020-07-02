@@ -71,7 +71,7 @@ def logout(req):
 @login_required(login_url='/login')
 def account(req):
   user = req.user
-  carts = Cart.objects.filter(user_id=req.user.id).exclude(status=Cart.Status.ABANDONED).order_by('-date_ordered')
+  carts = Cart.objects.filter(user_id=req.user.id).exclude(status=Cart.Status.ABANDONED).order_by('-ordered_at')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 @login_required(login_url='/login')
@@ -125,7 +125,7 @@ def cart_detail(req):
     cart = Cart.objects.get(user_id=req.user.id, status=Cart.Status.CURRENT)
   except Cart.DoesNotExist:
     return render(req, 'cart.html')
-  cart_details = cart.cartdetail_set.all()
+  cart_details = cart.cartdetail_set.all().order_by('created_at') # Need to order for front-end to render properly after updating the quantity
   TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0)
   if req.method == 'POST':
     formset = TireFormSet(req.POST, req.FILES, queryset=cart_details)
@@ -197,7 +197,7 @@ def tire_detail(req, tire_id):
   tire = Tire.objects.get(pk=tire_id)
   if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     # If for some reason there is more than one current cart, use the most recent one
-    cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('date_ordered').last()
+    cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
   else:
     cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
   
