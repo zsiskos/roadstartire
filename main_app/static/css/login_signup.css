@@ -1,0 +1,22 @@
+
+/* LOGIN */
+.container-signup {
+  margin-top: 3rem;
+  padding-bottom: .5em;
+}
+
+.container-signup p {
+  margin-bottom: 2em;
+}
+
+.login-input {
+  margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 700px) {
+  .container-signup {
+    margin-top: 0rem;
+  }
+}
+
+/* SIGN UP */
