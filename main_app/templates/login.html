@@ -12,7 +12,7 @@
     </ul>
     {% endif %}
     <div class="container-info login">
-      <div class="container-login">
+      <div class="container-left">
         <form id="login-form" method="post" action="{% url 'login' %}">
           {% csrf_token %}
           <div class="login-input">
@@ -27,7 +27,7 @@
           <!-- <input type="submit" name="submit" value="Log In" /> -->
         </form>
       </div>
-      <div class="container-signup">
+      <div class="container-right">
         <h2>Don't have an account yet?</h2> 
         <p>Sign up to have a personalized member account.</p>
         <a href="{% url 'signup' %}" class="order-btn" alt="sign up button">Sign up</a>
