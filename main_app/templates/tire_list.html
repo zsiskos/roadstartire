@@ -4,23 +4,50 @@
 {% block content %}
 <h2>Tires</h2>
 
+<form class="" method="get" action="{% url 'tire_list' %}">
+  <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
+  <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
+  <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
+  <button type="submit">Search</button>
+</form>
+
 {% if tire_list|length == 0 %}
   <h3>No results</h3>
 {% else %}
   <table class="pure-table pure-table-striped">
       <thead>
           <tr>
-              <th>Name</th>
-              <th>Brand</th>   
-              <th>Price</th>
+              <th>TIRE</th>
+              <th>SIZE</th>   
+              <th>NAME</th>
+              <th>BRAND</th>
+              <th>LOAD</th>
+              <th>SEASON</th>
+              <th>PRICE</th>
+              <th>IN STOCK</th>
+              <th>QTY</th>
+              <th>ADD TO CART</th>
           </tr>
       </thead>
       <tbody>
           {% for tire in tire_list %}
               <tr>
+                <td>{{ tire.image }}</td>
+                <td>{{ tire.width }}/{{ tire.aspect_ratio }}/{{ tire.rim_size }}</td>
                 <td><a href="{% url 'tire_detail' tire.pk %}">{{ tire.name }}</td>
                 <td>{{ tire.brand }}</td>
+                <td>{{ tire.load }}</td>
+                <td>{{ tire.season }}</td>
                 <td>{{ tire.price }}</td>
+                <!-- {% if tire.current_quantity < 2 %} -->
+                  <td>CALL FOR AVAILABILITY</td>
+                <!-- {% elif tire.current_quantity <= 20 %} -->
+                  <!-- <td>LIMITED QUANTITY</td> -->
+                <!-- {% elif tire.current_quantity > 20 %} -->
+                  <!-- <td>20+ AVAILABLE</td> -->
+                <!-- {% endif %} -->
+                <td><input type="submit" name="submit" value="🛒 Add to Cart" /></td>
+                <td><!-- <a href={% url 'cart_detail' %}><i class="fas fa-shopping-cart"> --></i></td>
               </tr>
           {% endfor %}
       </tbody>
@@ -36,10 +63,4 @@
   
 {% endif %}
 
-  <form class="" method="get" action="{% url 'tire_list' %}">
-    <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
-    <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
-    <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
-    <button type="submit">Search</button>
-  </form>
 {% endblock %}
