@@ -45,24 +45,20 @@ def signup(req):
       form = CustomUserCreationForm()
     return render(req, 'signup.html', {'form': form}) # redirect to signup page
 
-def signin(req):
+def login(req):
   if req.user.is_authenticated:
     return redirect('tire_list')
-
   if req.method == 'POST':
     username = req.POST.get('username')
     password = req.POST.get('password')
     user = auth.authenticate(username=username, password=password)
-
     if user is not None:
       auth.login(req, user)
       return redirect('tire_list')
-
     else: 
       messages.error(req, 'Wrong email/password')
-  
   form = CustomUserCreationForm()
-  return render(req, 'signup.html', {'form': form})
+  return render(req, 'login.html', {'form': form})
 
 def logout(req):
   auth.logout(req)
