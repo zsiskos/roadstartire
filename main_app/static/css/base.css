@@ -1,5 +1,5 @@
 :root {
-  --navbar-bg-color: rgb(245, 245, 245);
+  --navbar-bg-color: rgb(240, 240, 240);
   --main-bg-color: rgb(245, 245, 245);
   --accent-color-bright: rgb(250, 148, 53);
   --accent-color-shadow:  rgb(158, 158, 158);
@@ -51,8 +51,9 @@ p {
 
 /* LAYOUT */
 main {
-  padding-top: 6rem;
+  padding-top: 4.75rem;
 }
+
 .container-main {
   margin: 0 auto;
   width: 85%;
@@ -199,6 +200,10 @@ nav a {
 
 /* When screen gets larger than 850px */
 @media screen and (min-width: 850px) {
+  main {
+    padding-top: 6rem;
+  }
+
   .nav-toggle-label {
     display: none;
   }
