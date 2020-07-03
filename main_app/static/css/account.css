@@ -8,10 +8,11 @@
 }
 
 .account-btn {
-  display: inline;
+  display: inline-block;
   color: var(--link-color-dark);
   font-weight: 600;
-  margin: 0 2rem 0 .2rem;
+  margin: .5rem 2rem 0 .2rem;
+  text-decoration: none;
 }
 
 .account-btn:hover,

@@ -1,5 +1,5 @@
 :root {
-  --navbar-bg-color: rgb(245, 245, 245);
+  --navbar-bg-color: rgb(240, 240, 240);
   --main-bg-color: rgb(245, 245, 245);
   --accent-color-bright: rgb(250, 148, 53);
   --accent-color-shadow:  rgb(158, 158, 158);
@@ -51,8 +51,9 @@ p {
 
 /* LAYOUT */
 main {
-  padding-top: 6rem;
+  padding-top: 5.5rem;
 }
+
 .container-main {
   margin: 0 auto;
   width: 85%;
@@ -81,9 +82,13 @@ main {
     display: flex;
     flex-direction: column;
   }
-
+  
   .container-info {
     padding: 1em 1em;
+  }
+  
+  .container-qty {
+    text-align: center;
   }
 }
 
@@ -199,6 +204,10 @@ nav a {
 
 /* When screen gets larger than 850px */
 @media screen and (min-width: 850px) {
+  main {
+    padding-top: 6.5rem;
+  }
+
   .nav-toggle-label {
     display: none;
   }
@@ -243,3 +252,8 @@ nav a {
     font-size: 1rem;
   }
 }
+
+/* tire-detail */
+#add-tire input {
+    width: 5rem;
+  }
