@@ -16,7 +16,7 @@
         </div>
         <div class="item-tire">
           <h4>{{ cart_detail.tire.brand }} {{ tire.year }}</h4>
-          <h2>{{ cart_detail.tire.name }} </h2>
+          <a class="account-btn" href="{% url 'tire_detail' cart_detail.tire.pk %}"><h2>{{ cart_detail.tire.name }} </h2></a>
           <p><span class="cart-label">Size:</span> {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
           <p><span class="cart-label">Category:</span> {{cart_detail.tire.season}}</p>
           <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
