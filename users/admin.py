@@ -19,6 +19,8 @@ class CartInline(admin.TabularInline):
     'get_item_count', 
     'get_subtotal',
     'get_total',
+    'ordered_at',
+    'closed_at'
   )
 
 class CustomUserAdmin(UserAdmin):
