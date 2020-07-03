@@ -54,9 +54,18 @@
     </div>
   {% endfor %}
     <div class="container-total">
-      <p><span class="cart-label">Sub-total:</span> ${{ cart.get_subtotal }}</p>
-      <p><span class="cart-label">Tax:</span> </p>
-      <p><span class="cart-label">Total:</span> ${{ cart.get_total }} (items: {{cart.get_item_count}})</p>
+      <p>
+        <span class="cart-label">Sub-total:</span> 
+        ${{ cart.get_subtotal }}
+      </p>
+      <p>
+        <span class="cart-label">Tax:</span> 
+      </p>
+      <p>
+        <span class="cart-label">Total:</span> 
+        ${{ cart.get_total }} (items: {{cart.get_item_count}})
+      </p>
+      
       <div class="container-links">
         <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
         {% else %}

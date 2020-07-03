@@ -71,6 +71,10 @@ main {
   border-bottom: .17rem solid var(--accent-color-shadow);
 }
 
+.container-qty {
+  text-align: center;
+}
+
 .order-detail-info {
   flex-direction: column;
 }
@@ -248,3 +252,9 @@ nav a {
     font-size: 1rem;
   }
 }
+
+/* tire-detail */
+
+#add-tire input {
+    width: 5rem;
+  }
