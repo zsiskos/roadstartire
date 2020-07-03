@@ -67,7 +67,7 @@ def logout(req):
 @login_required(login_url='/login')
 def account(req):
   user = req.user
-  carts = Cart.objects.filter(user_id=req.user.id).exclude(Q(status=1) | Q(status=-1)).order_by('-ordered_at')
+  carts = Cart.objects.filter(user_id=req.user.id).exclude(Q(status=Cart.Status.ABANDONED) | Q(status=Cart.Status.CURRENT)).order_by('-ordered_at')
   return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 @login_required(login_url='/login')
