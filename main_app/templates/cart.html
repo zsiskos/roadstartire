@@ -16,7 +16,7 @@
         </div>
         <div class="item-tire">
           <h4>{{ cart_detail.tire.brand }} {{ tire.year }}</h4>
-          <h2>{{ cart_detail.tire.name }} </h2>
+          <a class="account-btn" href="{% url 'tire_detail' cart_detail.tire.pk %}"><h2>{{ cart_detail.tire.name }} </h2></a>
           <p><span class="cart-label">Size:</span> {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
           <p><span class="cart-label">Category:</span> {{cart_detail.tire.season}}</p>
           <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
@@ -54,9 +54,18 @@
     </div>
   {% endfor %}
     <div class="container-total">
-      <p><span class="cart-label">Sub-total:</span> ${{ cart.get_subtotal }}</p>
-      <p><span class="cart-label">Tax:</span> </p>
-      <p><span class="cart-label">Total:</span> ${{ cart.get_total }} (items: {{cart.get_item_count}})</p>
+      <p>
+        <span class="cart-label">Sub-total:</span> 
+        ${{ cart.get_subtotal }}
+      </p>
+      <p>
+        <span class="cart-label">Tax:</span> 
+      </p>
+      <p>
+        <span class="cart-label">Total:</span> 
+        ${{ cart.get_total }} (items: {{cart.get_item_count}})
+      </p>
+      
       <div class="container-links">
         <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
         {% else %}

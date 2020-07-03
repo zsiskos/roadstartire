@@ -2,5 +2,36 @@
 {% load static %}
 
 {% block content %}
-<h1>Log In</h1>
+<div class="container-main">
+  <h1>Login</h1>
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="container-info login">
+      <div class="container-left">
+        <form id="login-form" method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="login-input">
+            <label for="id_username">Email:</label>
+            <input type="text" name="username" required="" id="username" />
+          </div>
+          <div class="login-input">
+            <label for="id_password">Password:</label>
+            <input type="password" name="password" required="" id="id_password"/>
+          </div>
+          <a href="#" class="account-btn" onClick="document.forms['login-form'].submit();"/><i class="fas fa-sign-in-alt"></i>Log In</a>
+          <!-- <input type="submit" name="submit" value="Log In" /> -->
+        </form>
+      </div>
+      <div class="container-right">
+        <h2>Don't have an account yet?</h2> 
+        <p>Sign up to have a personalized member account.</p>
+        <a href="{% url 'signup' %}" class="order-btn" alt="sign up button">Sign up</a>
+      </div>
+    </div>
+</div>
 {% endblock %}
