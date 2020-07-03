@@ -122,11 +122,12 @@ def cart_detail(req):
   except Cart.DoesNotExist:
     return render(req, 'cart.html')
   cart_details = cart.cartdetail_set.all().order_by('created_at') # Need to order for front-end to render properly after updating the quantity
-  TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0)
+  TireFormSet = modelformset_factory(CartDetail, fields=('quantity',), extra=0 )
   if req.method == 'POST':
     formset = TireFormSet(req.POST, req.FILES, queryset=cart_details)
     # if formset.is_valid(): TOOK OUT BUT NOT SURE WHY IT DOESN"T WORK WITH IT IN
     formset.save()
+    return redirect('cart_detail')
   formset = TireFormSet(queryset=cart_details)
   zipped_data = zip(cart_details, formset)
   return render(req, 'cart.html', {'cart': cart, 'zipped_data': zipped_data, 'formset': formset})
