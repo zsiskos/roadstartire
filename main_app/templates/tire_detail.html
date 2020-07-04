@@ -6,7 +6,6 @@
   <h2>{{ tire.name }}</h2>
   <p>By {{ tire.brand }}</p>
   <div class="container-info">
-
     <div class="container-item">
       <div class="image-tire">
         <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 200px;"/>
@@ -27,7 +26,6 @@
             {% endif %}</p>
       </div>
     </div>
-
     <div class="container-qty">
       <div>
         <h2>Price: ${{ tire.price|intcomma }}</h2>
