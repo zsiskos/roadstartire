@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block content %}
 <div class="container-main">
   <h2>{{ tire.name }}</h2>
@@ -30,7 +30,7 @@
 
     <div class="container-qty">
       <div>
-        <h2>Price: ${{ tire.price }}</h2>
+        <h2>Price: ${{ tire.price|intcomma }}</h2>
       </div>
       <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
         {% csrf_token %}

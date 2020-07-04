@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <div class="container-main">
   <h2>Account Information</h2>
@@ -70,7 +71,7 @@
     </div>
     <div class="order-info">
       <p class="account-ordered-at"><span class="order-label">Ordered: </span>{{ cart.ordered_at }}</p>
-      <p><span class="order-label">Total: </span>${{ cart.get_total }}</p>
+      <p><span class="order-label">Total: </span>${{ cart.get_total|intcomma }}</p>
       <p><span class="order-label">Status: </span>{{ cart.get_status_display }} </p>
     </div>
     <div>

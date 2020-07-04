@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block content %}
 <h2>Tires</h2>
 
@@ -20,7 +20,7 @@
               <tr>
                 <td><a href="{% url 'tire_detail' tire.pk %}">{{ tire.name }}</td>
                 <td>{{ tire.brand }}</td>
-                <td>{{ tire.price }}</td>
+                <td>${{ tire.price|intcomma }}</td>
               </tr>
           {% endfor %}
       </tbody>
