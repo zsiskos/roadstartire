@@ -1,6 +1,7 @@
 .container-home {
-  height: 100vh;
-  min-height: 700px;
+  height: 100%;
+  width: 100%;
+  min-height: 450px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,33 +11,67 @@
   color:var(--main-text-dark);
 }
 
-#hero-1 {
-  justify-content: flex-start;
+#hero-main {
   margin-top: -1.25rem;
+  background: var(--accent-color-bright);
 }
 
-.hero-1-banner {
-  background-color: var(--accent-color-bright);
+#hero-main::before,
+#hero-main::after {
+  position: absolute;
+  content: " ";
+  width: 150px;
+  height: 150px;
+  bottom: -1em;
+  background: var(--accent-color-bright);
+  border: 3px solid var(--accent-color-bright);
+  z-index: 1;
+}
+
+#hero-main::before {
+  right: 50%;
+  transform: skew(0, 20deg);
+}
+
+#hero-main::after {
+  left: 50%;
+  transform: skew(0, -20deg);
+}
+
+#hero-quality {
+  background: linear-gradient(rgba(0, 0, 0, 0.35),
+  rgba(0, 0, 0, 0.35)), url(../images/tires.png);
+  background-repeat: no-repeat;
+  object-fit: cover;
   width: 100%;
-  height: 475px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
-  color: var(--main-text-dark);
+  color: white;
 }
 
-#hero-3 {
-  background-color: rgb(240, 240, 240);
-}
-
-#hero-4 {
+#hero-signup {
   background-color: rgb(22, 29, 88);
   color: var(--main-bg-color);
-  height: 50vh;
-  min-height: 300px;
+  padding: 2em;
 }
 
-#hero-4 h2 {
+#hero-signup h2 {
   margin-bottom: 3rem;
+}
+
+@media screen and (min-width: 700px) {
+  .container-action {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  #hero-main::before {
+    right: 24.9%;
+  }
+  
+  #hero-main::after {
+    left: 75%;
+  }
+
+  #hero-quality {
+    max-width: 830px;
+  }
 }

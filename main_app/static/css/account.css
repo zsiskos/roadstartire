@@ -52,6 +52,8 @@
   padding: .65em 2em;
   border: 1px solid var(--link-color-hover);
   color:var(--link-color-hover);
+  background: var(--main-bg-color);
+  text-decoration: none;
   font-weight: 600;
   font-size: 1.10rem;
   border-radius: .25rem;
@@ -61,6 +63,7 @@
 .order-btn:focus {
   background: var(--link-color-hover);
   color: #ffffff;
+  text-decoration: underline;
 }
 
 .order-num {
