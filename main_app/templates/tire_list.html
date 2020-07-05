@@ -1,45 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block content %}
-<h2>Tires</h2>
-
-{% if tire_list|length == 0 %}
-  <h3>No results</h3>
-{% else %}
-  <table class="pure-table pure-table-striped">
-      <thead>
-          <tr>
-              <th>Name</th>
-              <th>Brand</th>   
-              <th>Price</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for tire in tire_list %}
+<div class="container-main">
+  <h2>Tires</h2>
+  <div class="container-info">
+    {% if tire_list|length == 0 %}
+      <h3>No results</h3>
+    {% else %}
+      <table class="pure-table pure-table-striped">
+          <thead>
               <tr>
-                <td><a href="{% url 'tire_detail' tire.pk %}">{{ tire.name }}</td>
-                <td>{{ tire.brand }}</td>
-                <td>{{ tire.price }}</td>
+                  <th>Name</th>
+                  <th>Brand</th>   
+                  <th>Price</th>
               </tr>
-          {% endfor %}
-      </tbody>
-  </table>
-
-  <!-- <form method="GET" >
-    <div class="input-field">
-        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search Here...">
-       <button class="btn" type="submit" name="action">See Availability</button>
-    </div>
-  </form> -->
-
-  
-{% endif %}
-
-  <form class="" method="get" action="{% url 'tire_list' %}">
-    <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
-    <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
-    <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
-    <button type="submit">Search</button>
-  </form>
+          </thead>
+          <tbody>
+              {% for tire in tire_list %}
+                  <tr>
+                    <td><a href="{% url 'tire_detail' tire.pk %}">{{ tire.name }}</td>
+                    <td>{{ tire.brand }}</td>
+                    <td>${{ tire.price|intcomma }}</td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      <!-- <form method="GET" >
+        <div class="input-field">
+            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search Here...">
+          <button class="btn" type="submit" name="action">See Availability</button>
+        </div>
+      </form> -->
+ 
+    {% endif %}
+  </div>
+  <div>
+    <form class="" method="get" action="{% url 'tire_list' %}">
+      <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
+      <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
+      <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

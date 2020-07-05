@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <div class="container-main">
 {% if cart %}
@@ -44,11 +45,11 @@
       <div class="container-price">
         <div>
           <p><span class="cart-label">Price: </span></p>
-          <p>${{ cart_detail.price_each }}</p>
+          <p>${{ cart_detail.price_each|intcomma }}</p>
         </div>
         <div>
           <p><span class="cart-label">Total: </span></p>
-          <p>${{ cart_detail.get_subtotal }}</p>
+          <p>${{ cart_detail.get_subtotal|intcomma }}</p>
         </div>
       </div>
     </div>
@@ -56,14 +57,14 @@
     <div class="container-total">
       <p>
         <span class="cart-label">Sub-total:</span> 
-        ${{ cart.get_subtotal }}
+        ${{ cart.get_subtotal|intcomma }}
       </p>
       <p>
         <span class="cart-label">Tax:</span> 
       </p>
       <p>
         <span class="cart-label">Total:</span> 
-        ${{ cart.get_total }} (items: {{cart.get_item_count}})
+        ${{ cart.get_total|intcomma }} (items: {{cart.get_item_count}})
       </p>
       
       <div class="container-links">
