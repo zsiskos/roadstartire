@@ -42,7 +42,7 @@
         <!-- <li><a class="account-btn" id="nav-admin" href='{% url 'admin:login' %}'></i>Admin</a></li> Do not include in production -->
         <li><a class="account-btn" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a></li>
         <li><a class="account-btn" id="nav-services" href={% url 'services' %}></i>Services</a></li>
-        <li><a class="account-btn" id="nav-about" href={% url 'about' %}></i>About</a></li>
+        <li><a class="account-btn" id="nav-about" href={% url 'contact' %}></i>Contact Us</a></li>
         {% if user.is_authenticated %}
         <li><a class="account-btn" id="nav-logout" href="{% url 'account' %}">Account</a></li>
         <li><a class="account-btn" id="nav-cart-detail" href={% url 'cart_detail' %}><i class="fas fa-shopping-cart"></i></a></li>
