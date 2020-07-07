@@ -1,0 +1,29 @@
+.container-service {
+  width: 100%;
+  height: 300px;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+  position: relative;
+  color:var(--main-text-dark);
+}
+
+.service {
+  flex-direction: row!important;
+}
+
+#oil-service,
+#brake-service,
+#tire-service {
+  background: linear-gradient(rgba(0, 0, 0, 0.35),rgba(0, 0, 0, 0.35)), url(../images/tires.png);
+  background-repeat: no-repeat;
+  object-fit: cover;
+  width: 100%;
+}
+
+#tire-service {
+  color: white;
+}
