@@ -4,18 +4,20 @@
 {% block content %}
 <div class="container-home" id="hero-main">
   <h1 class="hero-title">We know tires.</h1>
+  <p class="hero-copy">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro natus sit adipisci earum eius doloremque reprehenderit dolor perspiciatis soluta!</p>
+</div>
+<div class="container-home" id="hero-quality">
+  <h1 class="hero-title">Amazing selection.</h1>
+  <h1 class="hero-title">Reliable service.</h1>
 </div>
 <div class="container-action">
+  <div class="container-home" id="hero-contact">
+    <a href="{% url 'about' %}" class="contact-btn"><h1>Contact us</h1></a>
+    <p>for locations, quotes & appointments.</p>
+  </div>
   <div class="container-home" id='hero-signup'>
       <h2 class="hero-title">Create a free account and place your order today!</h2>
       <a href="{% url 'signup' %}" class="order-btn" alt="sign up button">Sign up</a>
   </div>
-  <div class="container-home" id="hero-quality">
-    <h1 class="hero-title">Amazing selection</h1>
-    <h1 class="hero-title">Reliable service</h1>
-  </div>
-</div>
-<div class="container-home" id="hero-testimonails">
-  <h1>Testimonials</h1>
 </div>
 {% endblock %}
