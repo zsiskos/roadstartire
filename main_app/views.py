@@ -24,13 +24,15 @@ def signup(req):
       if form.is_valid():
         user = form.save() # Add the user to the database
         login(req, user) #logs in on signup
-        email = user.email
         #Info needed to send user email
+        email = user.email
+        subject = f"Thank you for registering with Road Star Tires Wholesale."
+        message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111"
         send_mail(
-          "Thank you for registering with Road Star Tires Wholesale.",
-          f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111",
-          'settings.EMAIL_HOST_USER',
-          [email],
+          subject, 
+          message, 
+          'settings.EMAIL_HOST_USER', 
+          [email], 
           fail_silently=False
         )
         #Info needed to send admin email
@@ -39,13 +41,12 @@ def signup(req):
           f"This user - {user.company_name}, {user.email}, {user.phone} - needs to be verified. Please log in to your admin account (http://localhost:8000/admin/login/) and verify this new user.",
           fail_silently=False
         )
-
         return redirect('account')
     else:
       form = CustomUserCreationForm()
     return render(req, 'signup.html', {'form': form}) # redirect to signup page
 
-def login(req):
+def signin(req):
   if req.user.is_authenticated:
     return redirect('tire_list')
   if req.method == 'POST':
@@ -80,10 +81,25 @@ def custom_user_edit(req):
       user_update = form.save(commit=False)
       user_update.is_active = False # turns user to inactive and kicks them out
       form.save() # saves all the info
+      #Info needed to send user email
+      email = req.user.email
+      subject = f"You have edited your Road Star Tire Wholesale account."
+      message = f"A Road Star Tire staff member will have to re-verify your account before you can log in again to place an order. If this is an error or urgent, please call +1-905-660-3209."
+      send_mail(
+        subject, 
+        message, 
+        'settings.EMAIL_HOST_USER', 
+        [email], 
+        fail_silently=False
+      )
       # INFO NEEDED FOR EMAIL
       subject = f"{user.company_name} edited their account"
       message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (http://localhost:8000/admin/login/) and re-verify their account."
-      mail_admins(subject, message, fail_silently=False)
+      mail_admins(
+        subject, 
+        message, 
+        fail_silently=False
+      )
       return redirect('account')
   return render(req, 'custom_user_edit_form.html', {'form': form})
 
@@ -134,11 +150,26 @@ def cart_order(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = Cart.Status.IN_PROGRESS
   order.save()
+  #Info needed to send user email
+  email = req.user.email
+  subject = f"Thank you for ordering with Road Star Tires Wholesale."
+  message = f"Thank you for placing your order. A Road Star Tire staff member has been notified about your order and will be in touch regarding delivery details. If you need to contact us before then, please call +1-905-660-3209."
+  send_mail(
+    subject, 
+    message, 
+    'settings.EMAIL_HOST_USER', 
+    [email], 
+    fail_silently=False
+  )
   # INFO NEEDED FOR EMAIL
   user = req.user
   subject = f"{user.company_name} placed Order #{order.id}"
   message = f"This company - {user.company_name}, {user.email} - placed an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
-  mail_admins(subject, message, fail_silently=False)
+  mail_admins(
+    subject, 
+    message, 
+    fail_silently=False
+  )
   return redirect('order_detail', cart_id)
 
 def remove_tire(req, item_id):
@@ -155,11 +186,26 @@ def order_cancel(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = Cart.Status.CANCELLED
   order.save()
+  #Info needed to send user email
+  email = req.user.email
+  subject = f"You have cancelled Order #{order.id}."
+  message = f"If this email is in error or if you wish to change your order, please call +1-905-660-3209."
+  send_mail(
+    subject, 
+    message, 
+    'settings.EMAIL_HOST_USER', 
+    [email], 
+    fail_silently=False
+  )
   # INFO NEEDED FOR EMAIL
   user = req.user
   subject = f"{user.company_name} cancelled order #{order.id}"
   message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
-  mail_admins(subject, message, fail_silently=False)
+  mail_admins(
+    subject, 
+    message, 
+    fail_silently=False
+  )
   return redirect('order_detail', cart_id)
 
 @login_required(login_url='/login')
