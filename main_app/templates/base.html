@@ -40,14 +40,16 @@
       <!-- Navbar links -->
       <ul>
         <!-- <li><a class="account-btn" id="nav-admin" href='{% url 'admin:login' %}'></i>Admin</a></li> Do not include in production -->
+        {% if user.is_authenticated %}
         <li><a class="account-btn" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a></li>
+        {% endif %}
         <li><a class="account-btn" id="nav-services" href={% url 'services' %}></i>Services</a></li>
         <li><a class="account-btn" id="nav-about" href={% url 'contact' %}></i>Contact Us</a></li>
         {% if user.is_authenticated %}
         <li><a class="account-btn" id="nav-logout" href="{% url 'account' %}">Account</a></li>
         <li><a class="account-btn" id="nav-cart-detail" href={% url 'cart_detail' %}><i class="fas fa-shopping-cart"></i></a></li>
         {% else %}
-        <li><a class="account-btn" id="nav-login" href={% url 'login' %}></i>Log in</a></li> <!-- SEPARATE PAGE FOR NOW, WILL COMBINE WITH SIGN UP -->
+        <li><a class="account-btn" id="nav-login" href={% url 'login' %}></i>Log in</a></li>
         <li><a class="account-btn" id="nav-signup" href={% url 'signup' %}></i>Sign Up</a></li>
         {% endif %}
       </ul>

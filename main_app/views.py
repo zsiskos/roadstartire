@@ -112,9 +112,6 @@ def contact(req):
 def services(req):
   return render(req, 'services.html')
 
-def tires(req):
-  return render(req, 'tires.html')
-
 @login_required(login_url='/login')
 def cart_detail(req):
   try:
@@ -165,6 +162,7 @@ def order_cancel(req, cart_id):
   mail_admins(subject, message, fail_silently=False)
   return redirect('order_detail', cart_id)
 
+@login_required(login_url='/login')
 def tire_list(req):
   # tire_list = Tire.objects.all()
   # return render(req, 'tire_list.html', { 'tire_list': tire_list })
