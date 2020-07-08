@@ -5,10 +5,8 @@
 <div class="container-main">
 {% if cart %}
   <h1>Your Cart</h1>
-  <div class="container-links">
-    <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
-    <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
-  </div>
+  <a class="order-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
+  <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
   {% for cart_detail, form in zipped_data %}
     <div class="container-order">
       <div class="container-item">
@@ -66,14 +64,12 @@
         <span class="cart-label">Total:</span> 
         ${{ cart.get_total|intcomma }} (items: {{cart.get_item_count}})
       </p>
-      
-      <div class="container-links">
-        <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
-        {% else %}
-        <h1>There are no items in your cart.</h1>
-        {% endif %}
-        <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
-      </div>
+      <a class="order-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
+      <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
+      {% else %}
+      <h1>There are no items in your cart.</h1>
+      <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
+      {% endif %}
     </div>
 </div>
 {% endblock %}
