@@ -14,6 +14,7 @@ from .models import Tire, Cart, CartDetail
 import re
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
+from django.core.paginator import Paginator
 
 def home(req):
   return render(req, 'home.html')
@@ -68,7 +69,13 @@ def logout(req):
 def account(req):
   user = req.user
   carts = Cart.objects.filter(user_id=req.user.id).exclude(Q(status=Cart.Status.ABANDONED) | Q(status=Cart.Status.CURRENT)).order_by('-ordered_at')
-  return render(req, 'account.html', { 'user': user, 'carts': carts })
+
+  paginator = Paginator(carts, 5, 3) # x objects per page and y number of orphans
+  page_number = req.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  return render(req, 'account.html', {'user': user, 'carts': carts, 'page_obj': page_obj})
+
+  # return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 @login_required(login_url='/login')
 def custom_user_edit(req):
