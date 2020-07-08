@@ -6,7 +6,7 @@
       <form id="signup-form" method="post" action="{% url 'signup' %}">
         {% csrf_token %}
           {{ form.as_p }}
-          <a href="#" onClick="document.forms['sign-form'].submit();" class="order-btn" alt="sign up button">Sign up</a></td>
+          <a href="#" onClick="document.forms['signup-form'].submit();" class="order-btn" alt="sign up button">Sign up</a></td>
       </form>
     </div>
     <div class="container-right">

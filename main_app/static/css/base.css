@@ -1,6 +1,7 @@
 :root {
   --navbar-bg-color: rgb(240, 240, 240);
   --main-bg-color: rgb(245, 245, 245);
+  --accent-color-main: rgb(228, 228, 228);
   --accent-color-bright: rgb(250, 148, 53);
   --accent-color-shadow:  rgb(0, 0, 0, 0.1);
   --link-color-dark:  rgb(18, 24, 77);
