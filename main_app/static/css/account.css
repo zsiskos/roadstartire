@@ -61,6 +61,10 @@
   color: inherit;
 }
 
+.container-pagination {
+  text-align: center;
+}
+
 /* LAYOUT */
 .account-details {
   display: flex;
