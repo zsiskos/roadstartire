@@ -3,7 +3,8 @@
 /* ACCOUNT PAGE  */
 
 .title-account {
-  text-align: center;
+  /* text-align: center; */
+  margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
@@ -13,12 +14,51 @@
   font-weight: 600;
   margin: .5rem 2rem 0 .2rem;
   text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .account-btn:hover,
 .account-btn:focus {
   color: var(--link-color-hover);
-  text-decoration: underline;
+  transition: all 0.2s ease;
+}
+
+.page-btn {
+  color: var(--link-color-dark);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  text-align: center;
+  margin: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+  min-width: 20px;
+}
+
+.page-btn:hover,
+.page-btn:focus {
+  color: var(--accent-color-bright);
+  border-radius: 4px;
+}
+
+.page-btn-inactive {
+  color: var(--link-color-dark);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  text-align: center;
+  margin: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: not-allowed; 
+  opacity: .3;
+}
+
+.current-page-num {
+  background-color: var(--accent-color-bright);
+  border-radius: 4px;
+}
+
+.current-page-num:hover {
+  color: inherit;
 }
 
 /* LAYOUT */
@@ -38,43 +78,56 @@
 /* Styles for the orders */
 .container-order {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-evenly;
   margin-bottom: 1rem;
   padding: .75em;
   border-top: .08rem solid  var(--accent-color-shadow);
   border-bottom: .08rem solid  var(--accent-color-shadow);
   -webkit-box-shadow: 0px 0px 10px 0pxvar(--accent-color-shadow);
-  box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
+  box-shadow: 0px 0px 0px 0px var(--accent-color-shadow);
+  border-radius: 8px;
 }
 
 .order-btn {
-  padding: .65em 2em;
+  padding: .65em 1em;
   border: 1px solid var(--link-color-hover);
   color:var(--link-color-hover);
   background: var(--main-bg-color);
   text-decoration: none;
   font-weight: 600;
-  font-size: 1.10rem;
-  border-radius: .25rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
 .order-btn:hover,
 .order-btn:focus {
   background: var(--link-color-hover);
   color: #ffffff;
-  text-decoration: underline;
+  /* text-decoration: underline; */
+  transition: all 0.2s ease;
+}
+
+.order-num, .order-status {
+  text-align: start;
+  margin: 0;
 }
 
 .order-num {
-  text-align: center;
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin: 0;
 }
 
+.order-status {
+  font-size: .9rem;
+  margin: 0;
+}
+
 .order-label {
-  font-size: .75rem;
+  font-size: 1rem;
+  opacity: .7;
 }
 
 /* WHEN SCREEN GET SMALL */
@@ -87,10 +140,6 @@
   .account-data {
     font-size: 1rem;
   }
-
-  .order-num {
-    font-size: 1.75rem;
-  }
   
   .order-info {
     display: flex;
@@ -101,6 +150,10 @@
 
   .order-btn {
     font-size: .85rem;
+  }
+
+  .order-num, .order-status {
+    text-align: center;
   }
 }
 
