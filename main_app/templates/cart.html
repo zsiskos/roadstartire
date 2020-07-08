@@ -5,8 +5,7 @@
 <div class="container-main">
 {% if cart %}
   <h1>Your Cart</h1>
-  <a class="order-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
-  <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
+  <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
   {% for cart_detail, form in zipped_data %}
     <div class="container-order">
       <div class="container-item">
@@ -52,24 +51,25 @@
       </div>
     </div>
   {% endfor %}
-    <div class="container-total">
-      <p>
-        <span class="cart-label">Sub-total:</span> 
-        ${{ cart.get_subtotal|intcomma }}
-      </p>
-      <p>
-        <span class="cart-label">Tax:</span> 
-      </p>
-      <p>
-        <span class="cart-label">Total:</span> 
-        ${{ cart.get_total|intcomma }} (items: {{cart.get_item_count}})
-      </p>
-      <a class="order-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
-      <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
-      {% else %}
-      <h1>There are no items in your cart.</h1>
-      <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
-      {% endif %}
-    </div>
+  <div class="container-total">
+    <p>
+      <span class="cart-label">Sub-total:</span> 
+      ${{ cart.get_subtotal|intcomma }}
+    </p>
+    <p>
+      <span class="cart-label">Tax:</span> 
+    </p>
+    <p>
+      <span class="cart-label">Total:</span> 
+      ${{ cart.get_total|intcomma }} (items: {{cart.get_item_count}})
+    </p>
+
+    <!-- <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a> -->
+    <a class="order-btn-filled" href="{% url 'cart_order' cart.id %}">Place Order</a>
+  </div>
+{% else %}
+  <h1>There are no items in your cart</h1>
+  <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
+{% endif %}
 </div>
 {% endblock %}

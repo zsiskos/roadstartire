@@ -105,8 +105,9 @@ class CartAdmin(admin.ModelAdmin):
   )
 
   search_fields = (
-    'id',
-    'user',
+    'user__first_name',
+    'user__last_name',
+    'user__email',
   )
 
   fieldsets = (

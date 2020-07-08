@@ -10,6 +10,7 @@
   <div class="container-info order-detail-info">
     <h4 class="order-detail-ordered-at"><span>Ordered: </span>{{ order.ordered_at }}</h4>
     <h4 class="order-status">Status: {{ order.get_status_display }}</h4>
+
     <h4>Shipped to:</h4>
     <p>Company Name: {{ user.company_name }}</p>
     <p>Address: {{ user.address }}</p>

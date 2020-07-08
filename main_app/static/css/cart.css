@@ -34,7 +34,6 @@
   margin-right: 0;
 }
 
-
 /* LAYOUT */
 .container-order {
   display: flex;
@@ -70,6 +69,10 @@
   display: grid;
   grid-template-columns: 1.75fr 1fr 1fr 1.5fr;
   width: 100%;
+}
+
+.container-cart-headers {
+  margin-top: 1.5em;
 }
 
 .qty-col {
