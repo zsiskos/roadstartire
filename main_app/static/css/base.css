@@ -152,7 +152,7 @@ nav a {
 /* Nav bar hamburger menu and functionality */
 .nav-toggle {
   position: absolute !important;
-  top: -9999px !important;k
+  top: -9999px !important;
   left: -9999px !important;
 }
 

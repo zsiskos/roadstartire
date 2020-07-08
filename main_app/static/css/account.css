@@ -1,4 +1,4 @@
-/* TYPOGRAPHY
+/* TYPOGRAPHY */
 
 /* ACCOUNT PAGE  */
 
@@ -20,7 +20,6 @@
 .account-btn:hover,
 .account-btn:focus {
   color: var(--link-color-hover);
-  /* text-decoration: underline; */
   transition: all 0.2s ease;
 }
 
@@ -141,10 +140,6 @@
   .account-data {
     font-size: 1rem;
   }
-
-  /* .order-num {
-    font-size: 1.7rem;
-  } */
   
   .order-info {
     display: flex;

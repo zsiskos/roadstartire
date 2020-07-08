@@ -27,7 +27,6 @@
     {% for item in order_detail %}
     <div class="container-cart-info">
       <a class="tire-btn" href="{% url 'tire_detail' item.tire.pk %}"><p>{{ item.tire.name }} </p></a>
-      <!-- <p>{{ item.tire }}</p> -->
       <p class="qty-col">{{ item.quantity }}</p>
       <p class='total-col'>${{ item.price_each|intcomma }}</p>
       <p class="total-col">$ {{ item.get_subtotal|intcomma }}</p>
@@ -35,10 +34,10 @@
     {% endfor %}
   </div>
 
-    <div class="container-total">
-      <p><span class="cart-label">Sub-total:</span> ${{ order.get_subtotal|intcomma }}</p>
-      <p><span class="cart-label">Total:</span> ${{ order.get_total|intcomma }}</p>
-    </div>
+  <div class="container-total">
+    <p><span class="cart-label">Sub-total:</span> ${{ order.get_subtotal|intcomma }}</p>
+    <p><span class="cart-label">Total:</span> ${{ order.get_total|intcomma }}</p>
+  </div>
 </div>
 <script src="{% static 'js/order_detail.js' %}"></script>
 {% endblock %}
