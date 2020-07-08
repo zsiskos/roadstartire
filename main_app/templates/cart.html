@@ -3,7 +3,7 @@
 {% load humanize %}
 {% block content %}
 <div class="container-main">
-{% if cart %}
+{% if cart.cartdetail_set.all.count %}
   <h1>Your Cart</h1>
   <a class="order-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
   <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
