@@ -3,8 +3,10 @@
 {% load humanize %}
 {% block content %}
 <div class="container-main">
+  <h4>{{ tire.brand }}</h4>
   <h2>{{ tire.name }}</h2>
-  <p>By {{ tire.brand }}</p>
+  <!-- <p>By {{ tire.brand }}</p>
+  <h2>{{ tire.name }}</h2> -->
   <div class="container-info">
     <div class="container-item">
       <div class="image-tire">
@@ -18,12 +20,6 @@
         <p><span class="cart-label">Type:</span> {{ tire.type }}</p>
         <p><span class="cart-label">Pattern:</span> {{ tire.pattern }}</p>
         <p><span class="cart-label">Speed:</span> {{ tire.speed }}</p>
-        <p><span class="cart-label">Availability:</span> 
-          {% if tire.current_quantity < 20 %}
-              Low stock
-              {% else %}
-              In stock
-            {% endif %}</p>
       </div>
     </div>
     <div class="container-qty">
@@ -35,6 +31,14 @@
         {{ form.as_p }}
         <a href="#" onClick="document.forms['add-tire'].submit();" class="account-btn"><i class="fas fa-cart-plus"></i>Add to Cart</a>
       </form>
+      <br/>
+      <br/>
+      <p><span class="cart-label">Availability:</span> 
+        {% if tire.current_quantity < 20 %}
+            Low stock
+            {% else %}
+            In stock
+          {% endif %}</p>
     </div>
   </div>
 </div>

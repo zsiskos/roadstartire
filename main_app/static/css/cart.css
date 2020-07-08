@@ -1,5 +1,16 @@
 /* CART AND ORDER DETAIL PAGES */
 
+.tire-btn {
+  color: var(--link-color-dark);
+  text-decoration: none;
+}
+
+.tire-btn:hover,
+.tire-btn:focus {
+  color: var(--link-color-hover);
+  /* text-decoration: underline; */
+}
+
   /* TYPOGRAPHY */
 #qty-update label {
   display: none;

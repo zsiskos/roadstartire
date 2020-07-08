@@ -2,7 +2,7 @@
   --navbar-bg-color: rgb(240, 240, 240);
   --main-bg-color: rgb(245, 245, 245);
   --accent-color-bright: rgb(250, 148, 53);
-  --accent-color-shadow:  rgb(158, 158, 158);
+  --accent-color-shadow:  rgb(0, 0, 0, 0.1);
   --link-color-dark:  rgb(18, 24, 77);
   --link-color-hover: rgb(211, 121, 37);
   --main-text-dark: rgb(56, 56, 56);
@@ -67,8 +67,8 @@ main {
   justify-content: space-between;
   margin-top: .5rem;
   padding: 1em 1em;
-  border-top: .17rem solid  var(--accent-color-shadow);
-  border-bottom: .17rem solid var(--accent-color-shadow);
+  border-top: .10rem solid  var(--accent-color-shadow);
+  border-bottom: .10rem solid var(--accent-color-shadow);
 }
 
 .order-detail-info {
@@ -145,12 +145,14 @@ nav a {
   text-transform: uppercase;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
+  font-size: .85rem;
+  transition: all 0.2s ease;
 }
 
 /* Nav bar hamburger menu and functionality */
 .nav-toggle {
   position: absolute !important;
-  top: -9999px !important;
+  top: -9999px !important;k
   left: -9999px !important;
 }
 
@@ -241,6 +243,7 @@ nav a {
 
   nav a {
     opacity: 1;
+    transition: all 0.2s ease;
   }
 
   .nav-brand-image {
