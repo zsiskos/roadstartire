@@ -15,15 +15,26 @@
   flex-direction: row!important;
 }
 
-#oil-service,
-#brake-service,
-#tire-service {
-  background: linear-gradient(rgba(0, 0, 0, 0.35),rgba(0, 0, 0, 0.35)), url(../images/tires.png);
-  background-repeat: no-repeat;
-  object-fit: cover;
-  width: 100%;
+
+#oil-service {
+  background: linear-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)), url(../images/15_tireservice03.JPG);
+}
+
+#brake-service {
+  background: linear-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)), url(../images/14_tireservice02.JPG);
 }
 
 #tire-service {
+  background: linear-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)), url(../images/05_carlift.JPG);
   color: white;
+}
+
+#oil-service,
+#brake-service,
+#tire-service {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  position: relative;
 }
