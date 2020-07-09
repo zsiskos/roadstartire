@@ -4,11 +4,17 @@ from main_app.models import CartDetail
 from django.core.exceptions import ValidationError
 
 class CartDetailCreationForm(forms.ModelForm):
+  def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label_suffix = ""  # Removes : as label suffix
   class Meta:
     model = CartDetail
     fields = [
       'quantity',
     ]
+    labels = {
+      'quantity': 'Quantity'
+    }
 
 # THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
 # class CustomUserCreationForm2(forms.Form):

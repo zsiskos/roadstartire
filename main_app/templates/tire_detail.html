@@ -8,7 +8,7 @@
   <div class="container-info">
     <div class="container-item">
       <div class="image-tire">
-        <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 200px;"/>
+        <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 200px; border-radius: 8px;"/>
       </div>
       <div class="item-tire">
         <p><span class="cart-label">Year:</span> {{ tire.year }}</p>
@@ -22,12 +22,12 @@
     </div>
     <div class="container-qty">
       <div>
-        <h2>Price: ${{ tire.price|intcomma }}</h2>
+        <h2>${{ tire.price|intcomma }}</h2>
       </div>
       <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <a href="#" onClick="document.forms['add-tire'].submit();" class="account-btn"><i class="fas fa-cart-plus"></i>Add to Cart</a>
+        <a href="#" onClick="document.forms['add-tire'].submit();" class="order-btn-filled">Add to Cart</a>
       </form>
       <br/>
       <br/>

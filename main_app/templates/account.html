@@ -6,7 +6,7 @@
   <h1>Account Information</h1>
   <a class="account-btn" href="{% url 'custom_user_edit' %}"><i class="fas fa-edit"></i>Edit</a>
   <a class="account-btn" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Log Out</a>
-  <div class="container-info">
+  <div class="container-info .account-info">
     <div class="container-account-section">
       <div class="account-details">
         <p class="account-label">Company:<p>
@@ -65,9 +65,9 @@
 <div class="container-main">
   <h2 class="title-account">Previous Orders</h2>
   {% for cart in page_obj %}
-    <div class="container-order">
+    <div class="container-account-order">
       <div>
-        <p class="order-num">Order # {{ cart.id }}</p>
+        <a class="order-num" href="{% url 'order_detail' cart.id %}">Order # {{ cart.id }}</a>
         <p class="order-status"
           {% if cart.status == cart.Status.IN_PROGRESS %} 
           style="color: #1b66bb"
@@ -83,9 +83,7 @@
         <p class="account-ordered-at"><span class="order-label">Ordered: </span>{{ cart.ordered_at }}</p>
         <p><span class="order-label">Total: </span>${{ cart.get_total|intcomma }}</p>
       </div>
-      <div>
-        <a class="order-btn" href="{% url 'order_detail' cart.id %}">View Order</a>
-      </div>
+      <a class="order-btn" href="{% url 'order_detail' cart.id %}">View Order</a>
     </div>
     {% endfor %}
     <!-- ───────────────────────────────────────────────────────────────── -->
@@ -105,10 +103,10 @@
         {% endif %}
       </a>
       {% if page_obj.number > 5 %}
-        <span class='page-btn'>...</span>
+        <span>...</span>
       {% endif %}
       {% if num == page_obj.number|add:'5'  %}
-        <span class="page-btn" >...</span>
+        <span>...</span>
       {% endif %}
       <!-- Middle pages always display 7 pages at most -->
       {% for num in page_obj.paginator.page_range %}
@@ -124,8 +122,8 @@
           {% endif %}
         {% endif %}
       {% endfor %}
-      {% if page_obj.number <  page_obj.paginator.num_pages|add:'-4' %}
-        <span class='page-num'>...</span>
+      {% if page_obj.number < page_obj.paginator.num_pages|add:'-4' %}
+        <span>...</span>
       {% endif %}
       <!-- Last page -->
       <a class='page-num' href="?page={{ page_obj.paginator.num_pages }}">
