@@ -19,33 +19,34 @@
           <p><span class="cart-label">Category:</span> {{cart_detail.tire.season}}</p>
           <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
           <p><span class="cart-label">Load:</span> {{cart_detail.tire.load}}</p>
-          <p><span class="cart-label">Availability:</span> 
+          <!-- <p><span class="cart-label">Availability:</span> 
             {% if cart_detail.tire.current_quantity < 20 %}
               Low stock
               {% else %}
               In stock
             {% endif %}
-          </p>
+          </p> -->
         </div>
       </div>
-      <div class="container-qty">
+      <div class="container-cart-qty">
+        <p><span class="cart-label">Quantity</span></p>
         <form id="qty-update" method='POST' action="." >
           {% csrf_token %}
           {{ formset.management_form }}
           <table>
             {{ form.as_p }}
-            <p><a class="account-btn" href="#"/><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update" /></a></p>
           </table>
         </form>
+        <p><a class="account-btn" href="#"><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update"/></a></p>
         <p><a class="account-btn" href="{% url 'remove_tire' cart_detail.id %}"><i class="fas fa-minus-square"></i>Remove</a></p>
       </div>
       <div class="container-price">
         <div>
-          <p><span class="cart-label">Price: </span></p>
+          <p><span class="cart-label">Price</span></p>
           <p>${{ cart_detail.price_each|intcomma }}</p>
         </div>
         <div>
-          <p><span class="cart-label">Total: </span></p>
+          <p><span class="cart-label">Total</span></p>
           <p>${{ cart_detail.get_subtotal|intcomma }}</p>
         </div>
       </div>
