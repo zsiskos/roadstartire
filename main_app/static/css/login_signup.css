@@ -13,6 +13,10 @@ a {
   display: none;
 }
 
+.confirmation-text {
+  margin-bottom: 1rem;
+}
+
 /* LAYOUT */
 .container-left {
   margin-top: .35rem;
