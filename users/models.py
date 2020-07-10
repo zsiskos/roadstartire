@@ -4,6 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.postgres.fields import CIEmailField
+from model_utils import FieldTracker
 
 from .managers import CustomUserManager
 
@@ -72,6 +73,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     validators=[MinValueValidator(0), MaxValueValidator(1),], 
     help_text=discount_ratio_help_text
   )
+
+  # is_active_status_tracker = FieldTracker(fields=['is_active'])
 
   class Meta:
     # Change model name in admin interface

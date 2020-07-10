@@ -151,8 +151,6 @@ class CartAdmin(admin.ModelAdmin):
         updated += 1
       cart.status=Cart.Status.FULFILLED
       cart.save()
-      if cart.status_tracker.has_changed('status'):
-        updated = 5
     self.message_user(req, ngettext(
       "%d cart was successfully changed and marked as 'Fulfilled'.",
       "%d carts were successfully changed and marked as 'Fulfilled'.",
