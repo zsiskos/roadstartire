@@ -4,6 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.postgres.fields import CIEmailField
+from model_utils import FieldTracker
 
 from .managers import CustomUserManager
 
@@ -41,7 +42,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
   is_active_help_text = """
     Designates whether this user account should be considered active.<br/>
-    <strong>NOTE:</strong> Only active users can log in.
+    <strong>NOTE:</strong> Recommended that you set this flag to False instead of deleting accounts; 
+    that way, if any applications store foreign keys to users, the foreign keys won’t break.
   """
   is_staff_help_text = """
     Designates whether this user can access the admin site.
@@ -72,6 +74,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     validators=[MinValueValidator(0), MaxValueValidator(1),], 
     help_text=discount_ratio_help_text
   )
+
+  # is_active_status_tracker = FieldTracker(fields=['is_active'])
 
   class Meta:
     # Change model name in admin interface
