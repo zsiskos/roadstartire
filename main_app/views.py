@@ -15,6 +15,7 @@ import re
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
 from django.core.paginator import Paginator
+from django.template import loader
 
 def home(req):
   return render(req, 'home.html')
@@ -24,7 +25,6 @@ def signup(req):
       form = CustomUserCreationForm(req.POST)
       if form.is_valid():
         user = form.save() # Add the user to the database
-        login(req, user) #logs in on signup
         #Info needed to send user email
         email = user.email
         subject = f"Thank you for registering with Road Star Tires Wholesale."
@@ -39,13 +39,17 @@ def signup(req):
         #Info needed to send admin email
         mail_admins(
           f"New signup: {user.company_name}",
-          f"This user - {user.company_name}, {user.email}, {user.phone} - needs to be verified. Please log in to your admin account (http://localhost:8000/admin/login/) and verify this new user.",
+          f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (http://localhost:8000/admin/login/) and verify this new user.",
           fail_silently=False
         )
-        return redirect('account')
+        return redirect('confirmation')
     else:
       form = CustomUserCreationForm()
     return render(req, 'signup.html', {'form': form}) # redirect to signup page
+
+def confirmation(req):
+  return render(req, 'confirmation.html')
+
 
 def signin(req):
   if req.user.is_authenticated:
@@ -156,17 +160,26 @@ def cart_detail(req):
 def cart_order(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = Cart.Status.IN_PROGRESS
+  order_detail = order.cartdetail_set.all()
   order.save()
   #Info needed to send user email
   email = req.user.email
   subject = f"Thank you for ordering with Road Star Tires Wholesale."
   message = f"Thank you for placing your order. A Road Star Tire staff member has been notified about your order and will be in touch regarding delivery details. If you need to contact us before then, please call +1-905-660-3209."
+  html_message = loader.render_to_string(
+    'email/order_email.html',
+    { 'order': order,
+      'user': req.user,
+      'order_detail': order_detail
+    }
+  )
   send_mail(
     subject, 
     message, 
     'settings.EMAIL_HOST_USER', 
     [email], 
-    fail_silently=False
+    fail_silently=False,
+    html_message=html_message
   )
   # INFO NEEDED FOR EMAIL
   user = req.user
