@@ -8,6 +8,9 @@
   --link-color-hover: rgb(211, 121, 37);
   --main-text-dark: rgb(56, 56, 56);
   --main-text-dark:  #343d46;
+  --form-focus-border: rgb(250, 148, 53);
+  --form-focus-shadow: rgb(250, 148, 53, .5);
+  --form-focus-bg: #ebebeb;
 }
 
 *, 
