@@ -6,61 +6,52 @@
 
 <form class="" method="get" action="{% url 'tire_list' %}">
   <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
+  <input name="rim_size" id="id_q" type="text" class="form-control" placeholder="rim size" />
+  <input name="aspect_ratio" id="id_q" type="text" class="form-control" placeholder="aspect raio" />
   <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
   <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
   <button type="submit">Search</button>
 </form>
 
-{% if tire_list|length == 0 %}
-  <h3>No results</h3>
-{% else %}
-  <table class="pure-table pure-table-striped">
-      <thead>
-          <tr>
-              <th>TIRE</th>
-              <th>SIZE</th>   
-              <th>NAME</th>
-              <th>BRAND</th>
-              <th>LOAD</th>
-              <th>SEASON</th>
-              <th>PRICE</th>
-              <th>IN STOCK</th>
-              <th>QTY</th>
-              <th>ADD TO CART</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for tire in tire_list %}
-              <tr>
-                <td>{{ tire.image }}</td>
-                <td>{{ tire.width }}/{{ tire.aspect_ratio }}/{{ tire.rim_size }}</td>
-                <td><a href="{% url 'tire_detail' tire.pk %}">{{ tire.name }}</td>
-                <td>{{ tire.brand }}</td>
-                <td>{{ tire.load }}</td>
-                <td>{{ tire.season }}</td>
-                <td>{{ tire.price }}</td>
-                <!-- {% if tire.current_quantity < 2 %} -->
-                  <td>CALL FOR AVAILABILITY</td>
-                <!-- {% elif tire.current_quantity <= 20 %} -->
-                  <!-- <td>LIMITED QUANTITY</td> -->
-                <!-- {% elif tire.current_quantity > 20 %} -->
-                  <!-- <td>20+ AVAILABLE</td> -->
-                <!-- {% endif %} -->
-                <td><input type="submit" name="submit" value="🛒 Add to Cart" /></td>
-                <td><!-- <a href={% url 'cart_detail' %}><i class="fas fa-shopping-cart"> --></i></td>
-              </tr>
-          {% endfor %}
-      </tbody>
-  </table>
 
-  <!-- <form method="GET" >
-    <div class="input-field">
-        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search Here...">
-       <button class="btn" type="submit" name="action">See Availability</button>
+{% for tire in tire_list %}
+    <div class="container-order">
+      <div class="container-item">
+        <div class="image-tire">
+          <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px;"/>
+        </div>
+        <div class="item-tire">
+          <a class="tire-btn" href="{% url 'tire_detail' tire.id %}"><h2>{{ tire.name }}</h2></a>
+          <p><span class="cart-label">Size:</span> {{tire.width}} / {{tire.aspect_ratio}} / {{tire.rim_size}}</p>
+          <p><span class="cart-label">Category:</span> {{tire.season}}</p>
+          <p><span class="cart-label">Pattern:</span> {{tire.pattern}}</p>
+          <p><span class="cart-label">Load:</span> {{tire.load}}</p>
+        </div>
+      </div>
+      <div class="container-qty">
+        <p>
+          <span class="cart-label">Price:</span>
+          ${{tire.price}}
+        </p>
+      </div>
+      <div class="container-price">
+        <p><span class="cart-label">Availability:</span>
+          {% if tire.current_quantity <= 20 %}
+            limited quantity
+          {% elif tire.current_quantity < 2 %}
+            call for availability
+          {% elif tire.current_quantity > 20 %}
+            20+ Available
+          {% endif %}
+        </p>
+        <form id="qty-update" method='POST' action="{% url 'tire_list' %}" >
+          {% csrf_token %}
+          <input type="number" value="1" min="1" name="quantity"/>
+          <input type="hidden" value="{{ tire.id }}" name="id"/>
+          <p><a class="account-btn" href="#"/><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update" /></a></p>
+        </form>
+      </div>
     </div>
-  </form> -->
-
-  
-{% endif %}
+  {% endfor %}
 
 {% endblock %}

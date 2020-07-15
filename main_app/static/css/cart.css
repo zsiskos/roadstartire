@@ -1,5 +1,17 @@
 /* CART AND ORDER DETAIL PAGES */
 
+.tire-btn {
+  color: var(--link-color-dark);
+  text-decoration: none;
+  transition: all .1s ease-in;
+}
+
+.tire-btn:hover,
+.tire-btn:focus {
+  color: var(--link-color-hover);
+  transition: all .1s ease-out;
+}
+
   /* TYPOGRAPHY */
 #qty-update label {
   display: none;
@@ -8,14 +20,19 @@
   width: 5rem;
 }
 
+.cart-label {
+  font-weight: 600;
+}
+
 #submit-btn {
   background: none!important;
   border: none;
   padding: 0!important;
 }
 
-.cart-label {
-  font-weight: 600;
+.shop-btn {
+  display: block;
+  margin-right: 0;
 }
 
 /* LAYOUT */
@@ -27,8 +44,9 @@
   padding: .75em;
   border-top: .08rem solid  var(--accent-color-shadow);
   border-bottom: .08rem solid  var(--accent-color-shadow);
-  -webkit-box-shadow: 0px 0px 10px 0pxvar(--accent-color-shadow);
+  -webkit-box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
   box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
+  border-radius: 8px;
 }
 
 .container-item {
@@ -41,15 +59,16 @@
   display: flex;
   justify-content: space-between;
   width: 250px;
+  text-align: end;
+}
+
+.shipping-info {
+  margin-top: 1em;
 }
 
 .container-total {
-  text-align: right;
+  text-align: end;
   padding-right: .75em;
-}
-
-.container-total .account-btn {
-  margin: 0 0 0 2rem;
 }
 
 .container-cart-headers,
@@ -57,6 +76,14 @@
   display: grid;
   grid-template-columns: 1.75fr 1fr 1fr 1.5fr;
   width: 100%;
+}
+
+.container-cart-headers {
+  margin-top: 1em;
+}
+
+.container-cart-qty {
+  text-align: inherit;
 }
 
 .qty-col {
@@ -84,4 +111,5 @@
   .container-cart-headers,
   .container-cart-info {  
     font-size: .65rem;
+  }
 }

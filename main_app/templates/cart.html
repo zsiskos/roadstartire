@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <div class="container-main">
-{% if cart %}
+{% if cart.cartdetail_set.all.count %}
   <h1>Your Cart</h1>
-  <div class="container-links">
-    <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
-    <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
-  </div>
+  <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
   {% for cart_detail, form in zipped_data %}
     <div class="container-order">
       <div class="container-item">
@@ -15,55 +13,64 @@
           <img src='{{cart_detail.tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px;"/>
         </div>
         <div class="item-tire">
-          <h4>{{ cart_detail.tire.brand }} {{ tire.year }}</h4>
-          <h2>{{ cart_detail.tire.name }} </h2>
+          <h4>{{ cart_detail.tire.brand }}</h4>
+          <a class="tire-btn" href="{% url 'tire_detail' cart_detail.tire.pk %}"><h2>{{ cart_detail.tire.name }}</h2></a>
           <p><span class="cart-label">Size:</span> {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
           <p><span class="cart-label">Category:</span> {{cart_detail.tire.season}}</p>
           <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
           <p><span class="cart-label">Load:</span> {{cart_detail.tire.load}}</p>
-          <p><span class="cart-label">Availability:</span> 
+          <!-- <p><span class="cart-label">Availability:</span> 
             {% if cart_detail.tire.current_quantity < 20 %}
               Low stock
               {% else %}
               In stock
             {% endif %}
-          </p>
+          </p> -->
         </div>
       </div>
-      <div class="container-qty">
+      <div class="container-cart-qty">
+        <p><span class="cart-label">Quantity</span></p>
         <form id="qty-update" method='POST' action="." >
           {% csrf_token %}
           {{ formset.management_form }}
           <table>
             {{ form.as_p }}
-            <p><a class="account-btn" href="#"/><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update" /></a></p>
           </table>
         </form>
+        <p><a class="account-btn" href="#"><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update"/></a></p>
         <p><a class="account-btn" href="{% url 'remove_tire' cart_detail.id %}"><i class="fas fa-minus-square"></i>Remove</a></p>
       </div>
       <div class="container-price">
         <div>
-          <p><span class="cart-label">Price: </span></p>
-          <p>${{ cart_detail.price_each }}</p>
+          <p><span class="cart-label">Price</span></p>
+          <p>${{ cart_detail.price_each|intcomma }}</p>
         </div>
         <div>
-          <p><span class="cart-label">Total: </span></p>
-          <p>${{ cart_detail.get_subtotal }}</p>
+          <p><span class="cart-label">Total</span></p>
+          <p>${{ cart_detail.get_subtotal|intcomma }}</p>
         </div>
       </div>
     </div>
   {% endfor %}
-    <div class="container-total">
-      <p><span class="cart-label">Sub-total:</span> ${{ cart.get_subtotal }}</p>
-      <p><span class="cart-label">Tax:</span> </p>
-      <p><span class="cart-label">Total:</span> ${{ cart.get_total }} (items: {{cart.get_item_count}})</p>
-      <div class="container-links">
-        <a class="account-btn" href="{% url 'cart_order' cart.id %}"><i class="fas fa-receipt"></i>Place order</a>
-        {% else %}
-        <h1>There are no items in your cart.</h1>
-        {% endif %}
-        <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a>
-      </div>
-    </div>
+  <div class="container-total">
+    <p>
+      <span class="cart-label">Sub-total:</span> 
+      ${{ cart.get_subtotal|intcomma }}
+    </p>
+    <p>
+      <span class="cart-label">Tax:</span> 
+    </p>
+    <p>
+      <span class="cart-label">Total:</span> 
+      ${{ cart.get_total|intcomma }} (items: {{cart.get_item_count}})
+    </p>
+
+    <!-- <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a> -->
+    <a class="order-btn-filled" href="{% url 'cart_order' cart.id %}">Place Order</a>
+  </div>
+{% else %}
+  <h1>There are no items in your cart</h1>
+  <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
+{% endif %}
 </div>
 {% endblock %}

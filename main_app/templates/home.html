@@ -2,19 +2,22 @@
 {% load static %}
 
 {% block content %}
-<div class="page" id="hero">
-  <div class='banner'>We know tires</div>
-  <h1></h1>
+<div class="container-home" id="hero-main">
+  <h1 class="hero-title">We know tires.</h1>
+  <p class="hero-copy">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro natus sit adipisci earum eius doloremque reprehenderit dolor perspiciatis soluta!</p>
 </div>
-<div class="page" id="hero-2">
-  <h1>Amazing selection</h1>
+<div class="container-home" id="hero-quality">
+  <h1 class="hero-title">Amazing selection.</h1>
+  <h1 class="hero-title">Reliable service.</h1>
 </div>
-<div class="page" id="hero-3">
-  <h1>Reliable service</h1>
+<div class="container-action">
+  <div class="container-home" id="hero-contact">
+    <a href="{% url 'contact' %}" class="contact-btn"><h1>Contact us</h1></a>
+    <p>for locations, quotes & appointments.</p>
+  </div>
+  <div class="container-home" id='hero-signup'>
+      <h2 class="hero-title">Create a free account and place your order today!</h2>
+      <a href="{% url 'signup' %}" class="order-btn" alt="sign up button">Sign up</a>
+  </div>
 </div>
-<div class="page" id='create-account-hero'>
-  <h1>Create a free account and place your order today!</h1>
-  <button type="button" class="btn btn-primary">Sign Up</button>
-</div>
-
 {% endblock %}

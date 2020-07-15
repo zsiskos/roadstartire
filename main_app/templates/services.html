@@ -1,6 +1,35 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
-<h1>Services</h1>
+<div class="container-main">
+
+<div class="container-info service">
+  <div class="container-service">
+    <h2 class="hero-title">Oil service</h2>
+    <a href="{% url 'contact' %}" class="order-btn" alt="contact us button">Book today</a>
+  </div>
+  <div class="container-service-image" id="oil-service">
+  </div>
+</div>
+
+<div class="container-info service">
+  <div class="container-service-image" id="brake-service">
+  </div>
+  <div class="container-service service-2">
+      <h2 class="hero-title">Brake Service</h2>
+      <a href="{% url 'contact' %}" class="order-btn" alt="contact us button">Book today</a>
+  </div>
+</div>
+
+<div class="container-info service">
+  <div class="container-service" id="tire-service">
+      <h2 class="hero-title">Tire Service</h2>
+      <a href="{% url 'contact' %}" class="order-btn" alt="contact us button">Book today</a>
+  </div>
+</div>
+
+</div>
+
+</div>
+
 {% endblock %}

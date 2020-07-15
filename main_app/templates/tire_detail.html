@@ -1,32 +1,44 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block content %}
-<div style="border: 1px dashed lightgray; margin: 1rem;">
+<div class="container-main">
+  <h4>{{ tire.brand }}</h4>
   <h2>{{ tire.name }}</h2>
-  <p>By {{ tire.brand }}</p>
-</div>
-<div style="border: 1px dashed lightgray; margin: 1rem;">
-  <h3>Price: ${{ tire.price }}</h3>
-  <form method="post" action="{% url 'tire_detail' tire.pk %}">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input type="submit" name="submit" value="🛒 Add to Cart" /></td>
-      </tr>
-    </table>
-  </form>
-</div>
-<div style="border: 1px dashed lightgray; margin: 1rem">
-  <p>Year: {{ tire.year }}</p>
-  <p>Width: {{ tire.width }}</p>
-  <p>Aspect Ratio: {{ tire.aspect_ratio }}</p>
-  <p>Rim Size: {{ tire.rim_size }}</p>
-  <p>Type: {{ tire.type }}</p>
-  <p>Pattern: {{ tire.pattern }}</p>
-  <p>Speed: {{ tire.speed }}</p>
-  <p>Current stock: {{ tire.current_quantity }}</p>
+  <div class="container-info">
+    <div class="container-item">
+      <div class="image-tire">
+        <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 200px; border-radius: 8px;"/>
+      </div>
+      <div class="item-tire">
+        <p><span class="cart-label">Year:</span> {{ tire.year }}</p>
+        <p><span class="cart-label">Width:</span> {{ tire.width }}</p>
+        <p><span class="cart-label">Aspect Ratio:</span> {{ tire.aspect_ratio }}</p>
+        <p><span class="cart-label">Rim Size:</span> {{ tire.rim_size }}</p>
+        <p><span class="cart-label">Type:</span> {{ tire.type }}</p>
+        <p><span class="cart-label">Pattern:</span> {{ tire.pattern }}</p>
+        <p><span class="cart-label">Speed:</span> {{ tire.speed }}</p>
+      </div>
+    </div>
+    <div class="container-qty">
+      <div>
+        <h2>${{ tire.price|intcomma }}</h2>
+      </div>
+      <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <a href="#" onClick="document.forms['add-tire'].submit();" class="order-btn-filled">Add to Cart</a>
+      </form>
+      <br/>
+      <br/>
+      <p><span class="cart-label">Availability:</span> 
+        {% if tire.current_quantity < 20 %}
+          Low stock
+          {% else %}
+          In stock
+        {% endif %}</p>
+      </div>
+    </div>
+  </div>  
 </div>
 {% endblock %}

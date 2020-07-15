@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <div class="container-main">
-  <h1>Order #: {{ order.id }}</h1>
+  <h1>Order # {{ order.id }}</h1>
+  {% if order.status == order.Status.CURRENT or order.status == order.Status.IN_PROGRESS %}
+  <a class="account-btn" href="{% url 'order_cancel' order.id %}"><i class="fas fa-window-close"></i>Cancel Order</a>
+  {% endif %}
   <div class="container-info order-detail-info">
-      <h4>Ordered: {{ order.date_ordered }}</h5>
-      <h4>Status: {{ order.get_status_display }} </h5>
-      <h5>Shipped to:</h5>
+    <h4 class="order-detail-ordered-at"><span>Ordered: </span>{{ order.ordered_at }}</h4>
+    <h4>Status: {{ order.get_status_display }}</h4>
+    <div class="shipping-info">
+      <h4>Shipped to:</h4>
       <p>Company Name: {{ user.company_name }}</p>
       <p>Address: {{ user.address }}</p>
       <p>City: {{ user.city }}</p>
       <p>Province: {{ user.province_iso }}</p>
       <p>Postal Code: {{ user.postal_code }}</p>
+    </div>
 
     <div class="container-cart-headers">
       <p class="cart-label">Items</p>
@@ -22,20 +28,18 @@
     
     {% for item in order_detail %}
     <div class="container-cart-info">
-      <p>{{ item.tire }}</p>
+      <a class="tire-btn" href="{% url 'tire_detail' item.tire.pk %}"><p>{{ item.tire.name }} </p></a>
       <p class="qty-col">{{ item.quantity }}</p>
-      <p class='total-col'>${{ item.price_each }}</p>
-      <p class="total-col">$ {{ item.get_subtotal }}</p>
+      <p class='total-col'>${{ item.price_each|intcomma }}</p>
+      <p class="total-col">${{ item.get_subtotal|intcomma }}</p>
     </div>
     {% endfor %}
   </div>
 
-    <div class="container-total">
-      <p><span class="cart-label">Sub-total:</span> ${{ order.get_subtotal }}</p>
-      <p><span class="cart-label">Total:</span> ${{ order.get_total }}</p>
-      {% if order.status == order.Status.CURRENT or order.status == order.Status.IN_PROGRESS %}
-      <a class="account-btn" href="{% url 'order_cancel' order.id %}"><i class="fas fa-window-close"></i>Cancel Order</a>
-      {% endif %}
-    </div>
+  <div class="container-total">
+    <p><span class="cart-label">Sub-total:</span> ${{ order.get_subtotal|intcomma }}</p>
+    <p><span class="cart-label">Total:</span> ${{ order.get_total|intcomma }}</p>
+  </div>
 </div>
+<script src="{% static 'js/order_detail.js' %}"></script>
 {% endblock %}

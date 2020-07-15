@@ -1,45 +1,19 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<h1>Sign Up</h1>
-<div style="border: 1px dashed lightgray; margin: 1rem;">
-  <form method="post" action="{% url 'signup' %}">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input type="submit" name="submit" value="Register" /></td>
-      </tr>
-    </table>
-  </form>
-</div>
-
-<h1>Login</h1>
-<div style="border: 1px dashed lightgray; margin: 1rem;">
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-      <tbody>
-        <tr>
-          <th><label for="id_username">Email:</label></th>
-          <td><input type="text" name="username" required="" id="username" /></td>
-        </tr>
-        <tr>
-          <th><label for="id_password">Enter password:</label></th>
-          <td><input type="password" name="password" required="" id="id_password"/></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><input type="submit" name="submit" value="Register" /></td>
-        </tr>
-      </tbody>
-    </table>
-  </form>
+<div class="container-main">
+  <h1>Sign Up</h1>
+  <div class="container-info">
+    <div class="container-left">
+      <form id="signup-form" method="post" action="{% url 'signup' %}">
+        {% csrf_token %}
+          {{ form.as_p }}
+          <a href="#" onClick="document.forms['signup-form'].submit();" class="order-btn" alt="sign up button">Sign up</a></td>
+      </form>
+    </div>
+    <div class="container-right">
+      <h2>Have an account?</h2> 
+      <p>Click here to log in to your personalized member account.</p>
+      <a href="{% url 'login' %}" class="account-btn" alt="log in button"><i class="fas fa-sign-in-alt"></i>Log In</a>
+    </div>
+  </div>
 </div>
 {% endblock %}

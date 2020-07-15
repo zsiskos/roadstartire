@@ -14,6 +14,7 @@ from .models import Tire, Cart, CartDetail
 import re
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
+from django.core.paginator import Paginator
 
 def home(req):
   return render(req, 'home.html')
@@ -24,13 +25,15 @@ def signup(req):
       if form.is_valid():
         user = form.save() # Add the user to the database
         login(req, user) #logs in on signup
-        email = user.email
         #Info needed to send user email
+        email = user.email
+        subject = f"Thank you for registering with Road Star Tires Wholesale."
+        message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111"
         send_mail(
-          "Thank you for registering with Road Star Tires Wholesale.",
-          f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111",
-          'settings.EMAIL_HOST_USER',
-          [email],
+          subject, 
+          message, 
+          'settings.EMAIL_HOST_USER', 
+          [email], 
           fail_silently=False
         )
         #Info needed to send admin email
@@ -39,7 +42,6 @@ def signup(req):
           f"This user - {user.company_name}, {user.email}, {user.phone} - needs to be verified. Please log in to your admin account (http://localhost:8000/admin/login/) and verify this new user.",
           fail_silently=False
         )
-
         return redirect('account')
     else:
       form = CustomUserCreationForm()
@@ -48,21 +50,17 @@ def signup(req):
 def signin(req):
   if req.user.is_authenticated:
     return redirect('tire_list')
-
   if req.method == 'POST':
     username = req.POST.get('username')
     password = req.POST.get('password')
     user = auth.authenticate(username=username, password=password)
-
     if user is not None:
       auth.login(req, user)
       return redirect('tire_list')
-
     else: 
       messages.error(req, 'Wrong email/password')
-  
   form = CustomUserCreationForm()
-  return render(req, 'signup.html', {'form': form})
+  return render(req, 'login.html', {'form': form})
 
 def logout(req):
   auth.logout(req)
@@ -71,8 +69,14 @@ def logout(req):
 @login_required(login_url='/login')
 def account(req):
   user = req.user
-  carts = Cart.objects.filter(user_id=req.user.id).exclude(status=Cart.Status.ABANDONED).order_by('-ordered_at')
-  return render(req, 'account.html', { 'user': user, 'carts': carts })
+  carts = Cart.objects.filter(user_id=req.user.id).exclude(Q(status=Cart.Status.ABANDONED) | Q(status=Cart.Status.CURRENT)).order_by('-ordered_at')
+
+  paginator = Paginator(carts, 5, 3) # x objects per page and y number of orphans
+  page_number = req.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  return render(req, 'account.html', {'user': user, 'carts': carts, 'page_obj': page_obj})
+
+  # return render(req, 'account.html', { 'user': user, 'carts': carts })
 
 @login_required(login_url='/login')
 def custom_user_edit(req):
@@ -84,10 +88,25 @@ def custom_user_edit(req):
       user_update = form.save(commit=False)
       user_update.is_active = False # turns user to inactive and kicks them out
       form.save() # saves all the info
+      #Info needed to send user email
+      email = req.user.email
+      subject = f"You have edited your Road Star Tire Wholesale account."
+      message = f"A Road Star Tire staff member will have to re-verify your account before you can log in again to place an order. If this is an error or urgent, please call +1-905-660-3209."
+      send_mail(
+        subject, 
+        message, 
+        'settings.EMAIL_HOST_USER', 
+        [email], 
+        fail_silently=False
+      )
       # INFO NEEDED FOR EMAIL
       subject = f"{user.company_name} edited their account"
       message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (http://localhost:8000/admin/login/) and re-verify their account."
-      mail_admins(subject, message, fail_silently=False)
+      mail_admins(
+        subject, 
+        message, 
+        fail_silently=False
+      )
       return redirect('account')
   return render(req, 'custom_user_edit_form.html', {'form': form})
 
@@ -110,14 +129,11 @@ def custom_user_edit(req):
 #   }
 #   return render(request, 'custom_user_edit_form.html', context)
 
-def about(req):
-  return render(req, 'about.html')
+def contact(req):
+  return render(req, 'contact.html')
 
 def services(req):
   return render(req, 'services.html')
-
-def tires(req):
-  return render(req, 'tires.html')
 
 @login_required(login_url='/login')
 def cart_detail(req):
@@ -131,6 +147,7 @@ def cart_detail(req):
     formset = TireFormSet(req.POST, req.FILES, queryset=cart_details)
     # if formset.is_valid(): TOOK OUT BUT NOT SURE WHY IT DOESN"T WORK WITH IT IN
     formset.save()
+    return redirect('cart_detail')
   formset = TireFormSet(queryset=cart_details)
   zipped_data = zip(cart_details, formset)
   return render(req, 'cart.html', {'cart': cart, 'zipped_data': zipped_data, 'formset': formset})
@@ -140,11 +157,26 @@ def cart_order(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = Cart.Status.IN_PROGRESS
   order.save()
+  #Info needed to send user email
+  email = req.user.email
+  subject = f"Thank you for ordering with Road Star Tires Wholesale."
+  message = f"Thank you for placing your order. A Road Star Tire staff member has been notified about your order and will be in touch regarding delivery details. If you need to contact us before then, please call +1-905-660-3209."
+  send_mail(
+    subject, 
+    message, 
+    'settings.EMAIL_HOST_USER', 
+    [email], 
+    fail_silently=False
+  )
   # INFO NEEDED FOR EMAIL
   user = req.user
   subject = f"{user.company_name} placed Order #{order.id}"
   message = f"This company - {user.company_name}, {user.email} - placed an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
-  mail_admins(subject, message, fail_silently=False)
+  mail_admins(
+    subject, 
+    message, 
+    fail_silently=False
+  )
   return redirect('order_detail', cart_id)
 
 def remove_tire(req, item_id):
@@ -161,34 +193,78 @@ def order_cancel(req, cart_id):
   order = Cart.objects.get(id=cart_id)
   order.status = Cart.Status.CANCELLED
   order.save()
+  #Info needed to send user email
+  email = req.user.email
+  subject = f"You have cancelled Order #{order.id}."
+  message = f"If this email is in error or if you wish to change your order, please call +1-905-660-3209."
+  send_mail(
+    subject, 
+    message, 
+    'settings.EMAIL_HOST_USER', 
+    [email], 
+    fail_silently=False
+  )
   # INFO NEEDED FOR EMAIL
   user = req.user
   subject = f"{user.company_name} cancelled order #{order.id}"
   message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
-  mail_admins(subject, message, fail_silently=False)
+  mail_admins(
+    subject, 
+    message, 
+    fail_silently=False
+  )
   return redirect('order_detail', cart_id)
 
+@login_required(login_url='/login')
 def tire_list(req):
-  # tire_list = Tire.objects.all()
-  # return render(req, 'tire_list.html', { 'tire_list': tire_list })
+  if req.method == 'POST':
+    print(req.POST["id"])
+    print(req.POST["quantity"])
+    tire = Tire.objects.get(pk=req.POST["id"])
+    if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+      # If for some reason there is more than one current cart, use the most recent one
+      cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
+    else:
+      cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
+
+    form = CartDetailCreationForm(
+      initial = {
+        'cart': cart,
+        'tire': tire,
+      }
+    )
+
+    instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+    if not created:
+      quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
+    else:
+      quantityToCarry = instance.quantity - 1 # Created cart, no value to carry over
+    instance.quantity = int(req.POST["quantity"]) + quantityToCarry
+    instance.save()
+
   errors = []
   if 'width' in req.GET:
-    field1 = req.GET['width']
-    field2 = req.GET['brand']
-    field3 = req.GET['season']
-    if not ((field1 or field2) or field3):
-      errors.append('Enter a search term.')
+    width = req.GET['width']
+    rim_size = req.GET['rim_size']
+    aspect_ratio = req.GET['aspect_ratio']
+    brand = req.GET['brand']
+    season = req.GET['season']
+    if not ((width or brand) or season):
+      results = Tire.objects.all()
     else:
       results = Tire.objects.filter(
-        width__icontains=field1
+        width__icontains=width
       ).filter(
-        brand__icontains=field2
+        rim_size__icontains=rim_size
       ).filter(
-        season__icontains=field3
+        aspect_ratio__icontains=aspect_ratio
+      ).filter(
+        brand__icontains=brand
+      ).filter(
+        season__icontains=season
       )
-      # query = "Field 1: %s, Field 2: %s, Field 3: %s" % (field1, field2, field3)
-      return render(req, 'tire_list.html', {'tire_list': results})
-  return render(req, 'tire_list.html', {'errors': errors})
+    return render(req, 'tire_list.html', {'tire_list': results})
+  return render(req, 'tire_list.html')
 
 def tire_detail(req, tire_id):
   # Grab a reference to the current cart, and if it doesn't exist, then create one

@@ -1,11 +1,13 @@
 :root {
-  --navbar-bg-color: rgb(245, 245, 245);
-  --main-bg-color: rgb(245, 245, 245);
+  --navbar-bg-color: rgb(255, 255, 255);
+  --main-bg-color: rgb(255, 255, 255);
+  --accent-color-main: rgb(228, 228, 228);
   --accent-color-bright: rgb(250, 148, 53);
-  --accent-color-shadow:  rgb(158, 158, 158);
-  --link-color-dark:  rgb(18, 24, 77);
+  --accent-color-shadow:  rgb(0, 0, 0, 0.1);
+  --link-color-dark:  rgb(30, 38, 126);
   --link-color-hover: rgb(211, 121, 37);
   --main-text-dark: rgb(56, 56, 56);
+  --main-text-dark:  #343d46;
 }
 
 *, 
@@ -51,8 +53,9 @@ p {
 
 /* LAYOUT */
 main {
-  padding-top: 6rem;
+  padding-top: 5.5rem;
 }
+
 .container-main {
   margin: 0 auto;
   width: 85%;
@@ -66,8 +69,14 @@ main {
   justify-content: space-between;
   margin-top: .5rem;
   padding: 1em 1em;
-  border-top: .17rem solid  var(--accent-color-shadow);
-  border-bottom: .17rem solid var(--accent-color-shadow);
+  border-top: .10rem solid  var(--accent-color-shadow);
+  border-bottom: .10rem solid var(--accent-color-shadow);
+  /* box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
+  border-radius: 8px; */
+}
+
+.container-qty {
+  text-align: end;
 }
 
 .order-detail-info {
@@ -81,7 +90,7 @@ main {
     display: flex;
     flex-direction: column;
   }
-
+  
   .container-info {
     padding: 1em 1em;
   }
@@ -140,6 +149,9 @@ nav a {
   text-transform: uppercase;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
+  font-size: .8rem;
+  transition: all 0.2s ease;
+  letter-spacing: 2.1px;
 }
 
 /* Nav bar hamburger menu and functionality */
@@ -199,6 +211,10 @@ nav a {
 
 /* When screen gets larger than 850px */
 @media screen and (min-width: 850px) {
+  main {
+    padding-top: 6.5rem;
+  }
+
   .nav-toggle-label {
     display: none;
   }
@@ -232,6 +248,7 @@ nav a {
 
   nav a {
     opacity: 1;
+    transition: all 0.2s ease;
   }
 
   .nav-brand-image {
@@ -241,5 +258,15 @@ nav a {
   
   .nav-brand-title {
     font-size: 1rem;
+    letter-spacing: .5px;
   }
+}
+
+/* tire-detail */
+#add-tire input {
+    width: 5rem;
+  }
+
+#add-tire {
+  margin-top: 1em;
 }
