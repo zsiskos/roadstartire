@@ -230,26 +230,54 @@ def order_cancel(req, cart_id):
 
 @login_required(login_url='/login')
 def tire_list(req):
-  # tire_list = Tire.objects.all()
-  # return render(req, 'tire_list.html', { 'tire_list': tire_list })
+  if req.method == 'POST':
+    print(req.POST["id"])
+    print(req.POST["quantity"])
+    tire = Tire.objects.get(pk=req.POST["id"])
+    if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+      # If for some reason there is more than one current cart, use the most recent one
+      cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
+    else:
+      cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
+
+    form = CartDetailCreationForm(
+      initial = {
+        'cart': cart,
+        'tire': tire,
+      }
+    )
+
+    instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+    if not created:
+      quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
+    else:
+      quantityToCarry = instance.quantity - 1 # Created cart, no value to carry over
+    instance.quantity = int(req.POST["quantity"]) + quantityToCarry
+    instance.save()
+
   errors = []
   if 'width' in req.GET:
-    field1 = req.GET['width']
-    field2 = req.GET['brand']
-    field3 = req.GET['season']
-    if not ((field1 or field2) or field3):
-      errors.append('Enter a search term.')
+    width = req.GET['width']
+    rim_size = req.GET['rim_size']
+    aspect_ratio = req.GET['aspect_ratio']
+    brand = req.GET['brand']
+    season = req.GET['season']
+    if not ((width or brand) or season):
+      results = Tire.objects.all()
     else:
       results = Tire.objects.filter(
-        width__icontains=field1
+        width__icontains=width
       ).filter(
-        brand__icontains=field2
+        rim_size__icontains=rim_size
       ).filter(
-        season__icontains=field3
+        aspect_ratio__icontains=aspect_ratio
+      ).filter(
+        brand__icontains=brand
+      ).filter(
+        season__icontains=season
       )
-      # query = "Field 1: %s, Field 2: %s, Field 3: %s" % (field1, field2, field3)
-      return render(req, 'tire_list.html', {'tire_list': results})
-  return render(req, 'tire_list.html', {'errors': errors})
+    return render(req, 'tire_list.html', {'tire_list': results})
+  return render(req, 'tire_list.html')
 
 def tire_detail(req, tire_id):
   # Grab a reference to the current cart, and if it doesn't exist, then create one
