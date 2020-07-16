@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+import environ
+environ.Env()
+environ.Env.read_env()
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -102,16 +106,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+email_key = os.environ['EMAIL']
+password_key = os.environ['PASSWORD']
+
 #required to send email
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = False
-# EMAIL_HOST = 'NEED THEIR HOST'
-# EMAIL_HOST_USER = 'NEED AN EMAIL'
-# EMAIL_HOST_PASSWORD = 'NEED A PASSWORD'
-# EMAIL_PORT = 587
-ADMINS = [('Zoë', 'zsiskos@gmail.com')]
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = email_key
+EMAIL_HOST_PASSWORD = password_key
+EMAIL_PORT = 587
+ADMINS = [('Mohsen', email_key)]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
