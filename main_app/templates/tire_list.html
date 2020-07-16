@@ -14,7 +14,7 @@
 </form>
 
 
-{% for tire in tire_list %}
+{% for tire in page_obj %}
     <div class="container-order">
       <div class="container-item">
         <div class="image-tire">
@@ -53,5 +53,61 @@
       </div>
     </div>
   {% endfor %}
+
+<div class="container-pagination">
+  <!-- 'Previous' button -->
+  {% if page_obj.has_previous %}
+    <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+  {% else %}
+    <a class="page-btn-inactive"><i class="fas fa-arrow-left"></i></a>
+  {% endif %}
+  <!-- First page -->
+    <a href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page=1">
+      {% if page_obj.number == 1 %}
+        <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page=1">1</a>
+      {% else %}
+        <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page=1">1</a>
+      {% endif %}
+    </a>
+  {% if page_obj.number > 5 %}
+    <span>...</span>
+  {% endif %}
+  {% if num == page_obj.number|add:'5' %}
+    <span>...</span>
+  {% endif %}
+  <!-- Middle pages always display 7 pages at most -->
+  {% for num in page_obj.paginator.page_range %}
+    {% if num != 1 and num != page_obj.paginator.num_pages %}
+      {% if page_obj.number == num %}
+        <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ num }}">{{ num }}</a>
+      {% elif num < 9 and num > page_obj.number|add:'-4' %}
+        <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ num }}">{{ num }}</a>
+      {% elif num > page_obj.paginator.num_pages|add:'-8' and page_obj.number > page_obj.paginator.num_pages|add:'-5' %}
+        <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ num }}">{{ num }}</a>
+      {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+        <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ num }}">{{ num }}</a>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  {% if page_obj.number < page_obj.paginator.num_pages|add:'-4' %}
+    <span>...</span>
+  {% endif %}
+  <!-- Last page -->
+  {% if page_obj.paginator.num_pages != 1 %}
+  <a class='page-num' href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ page_obj.paginator.num_pages }}">
+    {% if page_obj.number == page_obj.paginator.num_pages %}
+      <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+    {% else %}
+      <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+    {% endif %}
+  </a>
+  {% endif %}
+  <!-- 'Next' button -->
+  {% if page_obj.has_next %}
+    <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&brand={{brand}}&season={{season}}&page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+  {% else %}
+    <a class="page-btn-inactive"><i class="fas fa-arrow-right"></i></a>
+  {% endif %}
+  </div>
 
 {% endblock %}
