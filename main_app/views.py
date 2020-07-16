@@ -164,7 +164,7 @@ def cart_order(req, cart_id):
   order.save()
   #Info needed to send user email
   email = req.user.email
-  subject = f"Thank you for ordering with Road Star Tires Wholesale."
+  subject = f"Thank you for ordering with Road Star Tire Wholesale."
   message = f"Thank you for placing your order. A Road Star Tire staff member has been notified about your order and will be in touch regarding delivery details. If you need to contact us before then, please call +1-905-660-3209."
   html_message = loader.render_to_string(
     'email/order_email.html',
