@@ -46,6 +46,14 @@ p {
   margin-right: .25rem;
 }
 
+.footer-title {
+  font-weight: 800;
+}
+
+.footer-year {
+  font-style: italic;
+}
+
 /* WHEN SCREEN GETS SMALL */
 @media (max-width: 900px){
   h2 {
@@ -84,6 +92,11 @@ main {
 
 .order-detail-info {
   flex-direction: column;
+}
+
+footer {
+  text-align: center;
+  margin: 1rem 0;
 }
 
 /* WHEN SCREEN GETS REALLY SMALL */
