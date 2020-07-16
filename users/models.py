@@ -48,7 +48,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Designates whether this user can access the admin site.
   """
   discount_ratio_help_text = """
-    Designates whether this user can access the admin site.
+    Discount ratio applied to orders
+  """
+  tax_help_text = """
+    Tax applied to orders (defaults to <strong>0.13</strong>)
   """
 
   email = CIEmailField(unique=True)
@@ -66,12 +69,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   postal_code = models.CharField(max_length=30, blank=True)
   hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
   discount_ratio = models.DecimalField(
+    max_digits=4,
+    decimal_places=2,
+    default=0,
+    verbose_name='Discount',
+    validators=[MinValueValidator(0), MaxValueValidator(1),],
+    help_text=discount_ratio_help_text
+  )
+  tax = models.DecimalField(
     max_digits=4, 
     decimal_places=2, 
     default=0, 
-    verbose_name='Discount', 
+    verbose_name='Tax', 
     validators=[MinValueValidator(0), MaxValueValidator(1),], 
-    help_text=discount_ratio_help_text
+    help_text=tax_help_text
   )
 
   # is_active_status_tracker = FieldTracker(fields=['is_active'])
