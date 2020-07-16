@@ -65,6 +65,7 @@ p {
 /* LAYOUT */
 main {
   padding-top: 5.5rem;
+  min-height: calc(100vh - 130px);
 }
 
 .container-main {
@@ -96,7 +97,7 @@ main {
 
 footer {
   text-align: center;
-  margin: 1rem 0;
+  padding: 1em 0;
 }
 
 /* WHEN SCREEN GETS REALLY SMALL */
