@@ -2,19 +2,19 @@
 {% load static %}
 
 {% block content %}
-<h2>Tires</h2>
+<div class="container-main">
+  <h2>Tires</h2>
 
-<form class="" method="get" action="{% url 'tire_list' %}">
-  <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
-  <input name="rim_size" id="id_q" type="text" class="form-control" placeholder="rim size" />
-  <input name="aspect_ratio" id="id_q" type="text" class="form-control" placeholder="aspect raio" />
-  <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
-  <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
-  <button type="submit">Search</button>
-</form>
+  <form class="" method="get" action="{% url 'tire_list' %}">
+    <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
+    <input name="rim_size" id="id_q" type="text" class="form-control" placeholder="rim size" />
+    <input name="aspect_ratio" id="id_q" type="text" class="form-control" placeholder="aspect raio" />
+    <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
+    <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
+    <button type="submit">Search</button>
+  </form>
 
-
-{% for tire in tire_list %}
+  {% for tire in tire_list %}
     <div class="container-order">
       <div class="container-item">
         <div class="image-tire">
@@ -53,5 +53,5 @@
       </div>
     </div>
   {% endfor %}
-
+</div>
 {% endblock %}

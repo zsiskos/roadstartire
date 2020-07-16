@@ -36,8 +36,9 @@
           <table>
             {{ form.as_p }}
           </table>
+          <p><a class="account-btn" href="#"/><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update"/></a></p>
         </form>
-        <p><a class="account-btn" href="#"><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update"/></a></p>
+        
         <p><a class="account-btn" href="{% url 'remove_tire' cart_detail.id %}"><i class="fas fa-minus-square"></i>Remove</a></p>
       </div>
       <div class="container-price">
