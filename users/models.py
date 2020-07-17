@@ -48,7 +48,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Designates whether this user can access the admin site.
   """
   discount_ratio_help_text = """
-    Discount ratio applied to orders
+    • Discount ratio applied to orders
+    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)
   """
   tax_help_text = """
     Tax applied to orders (defaults to <strong>0.13</strong>)
