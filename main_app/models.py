@@ -58,7 +58,7 @@ class Cart(TimeStampMixin):
     MaxValueValidator(1),], 
     help_text=discount_ratio_applied_help_text
   )
-  tax = models.DecimalField(
+  tax_applied = models.DecimalField(
     max_digits=4, 
     decimal_places=2, 
     default=0.13, 
