@@ -79,7 +79,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   tax = models.DecimalField(
     max_digits=4, 
     decimal_places=2, 
-    default=0, 
+    default=0.13, 
     verbose_name='Tax', 
     validators=[MinValueValidator(0), MaxValueValidator(1),], 
     help_text=tax_help_text
