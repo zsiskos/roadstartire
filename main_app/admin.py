@@ -118,6 +118,7 @@ class CartAdmin(admin.ModelAdmin):
         'get_item_count', 
         'discount_ratio_applied',
         'get_subtotal',
+        'tax',
         'get_total',
         'created_at',
         'updated_at',

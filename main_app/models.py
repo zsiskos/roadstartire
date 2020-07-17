@@ -40,13 +40,32 @@ class Cart(TimeStampMixin):
     • Must be a number from 0.00 to 1.00 (up to 2 decimal places)
   """
 
+  tax_help_text = """
+    Tax applied to orders (defaults to <strong>0.13</strong>)
+  """
+
   closed_at_help_text = """
     Date when the cart was last marked as <strong>Fulfilled</strong>, <strong>Cancelled</strong>, or <strong>Abandoned</strong>
   """
 
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
-  discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, blank=True, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
+  discount_ratio_applied = models.DecimalField(
+    max_digits=4, 
+    decimal_places=2, 
+    blank=True, 
+    validators=[MinValueValidator(0), 
+    MaxValueValidator(1),], 
+    help_text=discount_ratio_applied_help_text
+  )
+  tax = models.DecimalField(
+    max_digits=4, 
+    decimal_places=2, 
+    default=0.13, 
+    verbose_name='Tax', 
+    validators=[MinValueValidator(0), MaxValueValidator(1),], 
+    help_text=tax_help_text
+  )
   ordered_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Ordered (UTC)')
   closed_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Closed (UTC)', help_text=closed_at_help_text)
 
