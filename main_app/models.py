@@ -99,7 +99,7 @@ class Cart(TimeStampMixin):
     total = 0
     for cartDetail in cart.cartdetail_set.all():
       total += cartDetail.quantity * cartDetail.tire.price
-    return round(total * (1 - self.discount_ratio_applied), 2)
+    return round(total * (1 - self.discount_ratio_applied) * (1 + cart.tax_applied), 2)
   get_total.short_description = 'Total ($)'
 
   def get_owner(self):
