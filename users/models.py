@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.postgres.fields import CIEmailField
 from model_utils import FieldTracker
+from main_app.models import Cart
 
 from .managers import CustomUserManager
 
@@ -48,7 +49,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Designates whether this user can access the admin site.
   """
   discount_ratio_help_text = """
-    • Discount ratio applied to orders
+    • Discount ratio applied to orders<br/>
     • Must be a number from 0.00 to 1.00 (up to 2 decimal places)
   """
   tax_help_text = """
@@ -78,15 +79,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     help_text=discount_ratio_help_text
   )
   tax = models.DecimalField(
-    max_digits=4, 
-    decimal_places=2, 
-    default=0.13, 
+    max_digits=5, 
+    decimal_places=4, 
+    default=0.1300,
     verbose_name='Tax', 
     validators=[MinValueValidator(0), MaxValueValidator(1),], 
     help_text=tax_help_text
   )
 
   # is_active_status_tracker = FieldTracker(fields=['is_active'])
+  tax_tracker = FieldTracker(fields=['tax'])
 
   class Meta:
     # Change model name in admin interface
@@ -106,3 +108,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   @property
   def full_name(self):
     return '%s %s' % (self.first_name, self.last_name)
+
+  # If the User's tax value is changed, then update the User's current cart if it exists
+  def save(self, *args, **kwargs):
+    if self.tax_tracker.has_changed('tax'):
+      try:
+        currentCart = self.cart_set.get(status=Cart.Status.CURRENT)
+        currentCart.tax_applied = self.tax
+        currentCart.save()
+      except Cart.DoesNotExist:
+        currentCart = None
+    super(CustomUser, self).save(*args, **kwargs)

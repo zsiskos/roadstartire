@@ -36,12 +36,13 @@ class Cart(TimeStampMixin):
   """
   
   discount_ratio_applied_help_text = """
-    • Leave this field blank to use the User's current discount ratio<br/>
-    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)
+    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)<br/>
+    • Defaults to using the User's discount ratio<br/>
   """
 
   tax_help_text = """
-    Tax applied to orders (defaults to <strong>0.13</strong>)
+    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)<br/>
+    • Defaults to using the User's tax value<br/>
   """
 
   closed_at_help_text = """
@@ -51,18 +52,16 @@ class Cart(TimeStampMixin):
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
   discount_ratio_applied = models.DecimalField(
-    max_digits=4, 
+    max_digits=3, 
     decimal_places=2, 
     blank=True, 
-    validators=[MinValueValidator(0), 
-    MaxValueValidator(1),], 
+    validators=[MinValueValidator(0), MaxValueValidator(1),], 
     help_text=discount_ratio_applied_help_text
   )
   tax_applied = models.DecimalField(
-    max_digits=4, 
-    decimal_places=2, 
-    default=0.13, 
-    verbose_name='Tax', 
+    max_digits=5, 
+    decimal_places=4, 
+    blank=True,
     validators=[MinValueValidator(0), MaxValueValidator(1),], 
     help_text=tax_help_text
   )
@@ -76,10 +75,12 @@ class Cart(TimeStampMixin):
   # def get_total(self):
   #   return self.cartDetail_set.all().count()
   
-  # When saving, use the User's current discount ratio if one is not explicitly entered
+  # discount_ratio_applied and tax_applied default values are pulled from the User when one is not explicitly entered
   def save(self, *args, **kwargs):
     if not self.discount_ratio_applied:
       self.discount_ratio_applied = self.user.discount_ratio
+    if not self.tax_applied:
+      self.tax_applied = self.user.tax
     super(Cart, self).save(*args, **kwargs)
 
 # @receiver(pre_save, sender=Cart)
@@ -87,19 +88,18 @@ class Cart(TimeStampMixin):
 #     instance.discount_ratio_applied = instance.user.discount_ratio
 
   def get_subtotal(self):
-    cart = Cart.objects.get(id=self.id)
-    total = 0
-    for cartDetail in cart.cartdetail_set.all():
-      total += cartDetail.quantity * cartDetail.tire.price
-    return total
+    subtotal = 0
+    for cartDetail in self.cartdetail_set.all():
+      subtotal += cartDetail.quantity * cartDetail.tire.price
+    return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
+
+  def get_tax_amount(self):
+    return round(self.get_subtotal() * self.tax_applied, 2)
+  get_tax_amount.short_description = 'Tax amount ($)'
   
   def get_total(self):
-    cart = Cart.objects.get(id=self.id)
-    total = 0
-    for cartDetail in cart.cartdetail_set.all():
-      total += cartDetail.quantity * cartDetail.tire.price
-    return round(total * (1 - self.discount_ratio_applied) * (1 + cart.tax_applied), 2)
+    return self.get_subtotal() + self.get_tax_amount()
   get_total.short_description = 'Total ($)'
 
   def get_owner(self):

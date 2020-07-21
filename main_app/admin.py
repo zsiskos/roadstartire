@@ -87,6 +87,7 @@ class CartAdmin(admin.ModelAdmin):
     'get_item_count',
     'discount_ratio_applied',
     'get_subtotal',
+    'get_tax_amount',
     'get_total',
   )
 
@@ -110,27 +111,46 @@ class CartAdmin(admin.ModelAdmin):
     'user__email',
   )
 
-  fieldsets = (
-    (None, {
-      'fields': (
-        'user',
-        'status',
-        'get_item_count', 
-        'discount_ratio_applied',
-        'get_subtotal',
-        'tax',
-        'get_total',
-        'created_at',
-        'updated_at',
-        'ordered_at',
-        'closed_at',
+  # Dynamic fieldsets
+  def get_fieldsets(self, request, obj=None):
+    if obj:
+      # fieldsets for Change form
+      fieldsets = (
+        (None, {
+          'fields': (
+            'user',
+            'status',
+            'get_item_count', 
+            'discount_ratio_applied',
+            'get_subtotal',
+            (
+              'get_tax_amount',
+              'tax_applied',
+            ),
+            'get_total',
+            'created_at',
+            'updated_at',
+            'ordered_at',
+            'closed_at',
+          )
+        }),
       )
-    }),
-  )
+    else:
+      # fieldsets for Add form
+      fieldsets = (
+        (None, {
+          'fields': (
+            'user',
+            'status',
+          )
+        }),
+      )
+    return fieldsets
 
   readonly_fields = (
     'get_item_count', 
     'get_subtotal',
+    'get_tax_amount',
     'get_total',
     'created_at',
     'updated_at',
@@ -196,6 +216,10 @@ class CartAdmin(admin.ModelAdmin):
   date_hierarchy = 'created_at'
 
   autocomplete_fields = ['user']
+
+  def add_view(self, request, extra_content=None):
+    self.exclude = ('get_tax_applied',)
+    return super(CartAdmin, self).add_view(request)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
