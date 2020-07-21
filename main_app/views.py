@@ -14,7 +14,7 @@ from .models import Tire, Cart, CartDetail
 import re
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
-from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template import loader
 
 def home(req):
@@ -164,7 +164,7 @@ def cart_order(req, cart_id):
   order.save()
   #Info needed to send user email
   email = req.user.email
-  subject = f"Thank you for ordering with Road Star Tires Wholesale."
+  subject = f"Thank you for ordering with Road Star Tire Wholesale."
   message = f"Thank you for placing your order. A Road Star Tire staff member has been notified about your order and will be in touch regarding delivery details. If you need to contact us before then, please call +1-905-660-3209."
   html_message = loader.render_to_string(
     'email/order_email.html',
@@ -231,8 +231,6 @@ def order_cancel(req, cart_id):
 @login_required(login_url='/login')
 def tire_list(req):
   if req.method == 'POST':
-    print(req.POST["id"])
-    print(req.POST["quantity"])
     tire = Tire.objects.get(pk=req.POST["id"])
     if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
       # If for some reason there is more than one current cart, use the most recent one
@@ -255,7 +253,6 @@ def tire_list(req):
     instance.quantity = int(req.POST["quantity"]) + quantityToCarry
     instance.save()
 
-  errors = []
   if 'width' in req.GET:
     width = req.GET['width']
     rim_size = req.GET['rim_size']
@@ -276,7 +273,12 @@ def tire_list(req):
       ).filter(
         season__icontains=season
       )
-    return render(req, 'tire_list.html', {'tire_list': results})
+
+    paginator = Paginator(results, 5) # x objects per page and y number of orphans
+    page_number = req.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(req, 'tire_list.html', {'results' : results, 'page_obj' : page_obj})
   return render(req, 'tire_list.html')
 
 def tire_detail(req, tire_id):
