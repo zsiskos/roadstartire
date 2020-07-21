@@ -217,10 +217,6 @@ class CartAdmin(admin.ModelAdmin):
 
   autocomplete_fields = ['user']
 
-  def add_view(self, request, extra_content=None):
-    self.exclude = ('get_tax_applied',)
-    return super(CartAdmin, self).add_view(request)
-
 # ────────────────────────────────────────────────────────────────────────────────
 
 class TireAdmin(admin.ModelAdmin):

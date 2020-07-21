@@ -3,7 +3,8 @@ from django.conf import settings # Don't refer to the user model directly, it is
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
 from model_utils import FieldTracker
-from django.urls import reverse 
+from django.urls import reverse
+from decimal import Decimal
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -88,8 +89,9 @@ class Cart(TimeStampMixin):
 #     instance.discount_ratio_applied = instance.user.discount_ratio
 
   def get_subtotal(self):
-    subtotal = 0
-    for cartDetail in self.cartdetail_set.all():
+    cart = Cart.objects.get(pk=self.pk)
+    subtotal = Decimal('0.00') # Need to use Decimal type so that 0 is displayed as 0.00
+    for cartDetail in cart.cartdetail_set.all():
       subtotal += cartDetail.quantity * cartDetail.tire.price
     return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
