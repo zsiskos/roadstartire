@@ -262,32 +262,6 @@ def email_invoice(req, cart_id):
   msg.send()
   return redirect('account')
 
-# def email_invoice(req, cart_id):
-#   order = Cart.objects.get(id=cart_id)
-#   order.status = Cart.Status.IN_PROGRESS
-#   order_detail = order.cartdetail_set.all()
-#   #Info needed to send user email
-#   email = req.user.email
-#   subject = f"ORDER SHIPPED"
-#   message = f"Your order has been shipped and an invoice will be provided. Please log into your account to view details."
-#   html_message = loader.render_to_string(
-#     'email/invoice_email.html',
-#     { 'order': order,
-#       'user': req.user,
-#       'order_detail': order_detail
-#     }
-#   )
-#   send_mail(
-#     subject, 
-#     message, 
-#     'settings.EMAIL_HOST_USER', 
-#     [email], 
-#     fail_silently=False,
-#     html_message=html_message
-#   )
-#   return redirect('account')
-
-
 @login_required(login_url='/login')
 def tire_list(req):
   if req.method == 'POST':
