@@ -4,18 +4,19 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail, mail_admins
+from django.core.mail import send_mail, mail_admins, EmailMultiAlternatives
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.forms import formset_factory, modelformset_factory
 from django.shortcuts import render, redirect
+from django.template import loader
 from django.views.generic import ListView
+from email.mime.image import MIMEImage
 from main_app.forms import CartDetailCreationForm
 from .models import Tire, Cart, CartDetail
-import re
+import re, os
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.template import loader
 
 def home(req):
   return render(req, 'home.html')
@@ -39,7 +40,7 @@ def signup(req):
         #Info needed to send admin email
         mail_admins(
           f"New signup: {user.company_name}",
-          f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (http://localhost:8000/admin/login/) and verify this new user.",
+          f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) and verify this new user.",
           fail_silently=False
         )
         return redirect('confirmation')
@@ -105,7 +106,7 @@ def custom_user_edit(req):
       )
       # INFO NEEDED FOR EMAIL
       subject = f"{user.company_name} edited their account"
-      message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (http://localhost:8000/admin/login/) and re-verify their account."
+      message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) and re-verify their account."
       mail_admins(
         subject, 
         message, 
@@ -164,8 +165,8 @@ def cart_order(req, cart_id):
   order.save()
   #Info needed to send user email
   email = req.user.email
-  subject = f"Thank you for ordering with Road Star Tire Wholesale."
-  message = f"Thank you for placing your order. A Road Star Tire staff member has been notified about your order and will be in touch regarding delivery details. If you need to contact us before then, please call +1-905-660-3209."
+  subject = f"ORDER CONFIRMATION"
+  message = f"Thank you for placing your order. Your order will be reviewed and shipped shortly. Here is a summary of your order below:"
   html_message = loader.render_to_string(
     'email/order_email.html',
     { 'order': order,
@@ -181,10 +182,10 @@ def cart_order(req, cart_id):
     fail_silently=False,
     html_message=html_message
   )
-  # INFO NEEDED FOR EMAIL
+  # Info needed for email to admin
   user = req.user
   subject = f"{user.company_name} placed Order #{order.id}"
-  message = f"This company - {user.company_name}, {user.email} - placed an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
+  message = f"This company - {user.company_name}, {user.email} - placed an order. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) to view the details."
   mail_admins(
     subject, 
     message, 
@@ -217,16 +218,75 @@ def order_cancel(req, cart_id):
     [email], 
     fail_silently=False
   )
-  # INFO NEEDED FOR EMAIL
+  # Info needed for email to admin
   user = req.user
   subject = f"{user.company_name} cancelled order #{order.id}"
-  message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (http://localhost:8000/admin/login/) to view the details."
+  message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) to view the details."
   mail_admins(
     subject, 
     message, 
     fail_silently=False
   )
   return redirect('order_detail', cart_id)
+
+#Uses a different email method so that images can be attached
+def email_invoice(req, cart_id):
+  order = Cart.objects.get(id=cart_id)
+  order.status = Cart.Status.IN_PROGRESS
+  order_detail = order.cartdetail_set.all()
+  #Info needed to send user email
+  email = req.user.email
+  subject = f"ORDER SHIPPED"
+  message = f"Your order has been shipped and an invoice will be provided. Please log into your account to view details."
+  html_message = loader.render_to_string(
+    'email/invoice_email.html',
+    { 'order': order,
+      'user': req.user,
+      'order_detail': order_detail
+    })
+  msg = EmailMultiAlternatives(
+    subject, 
+    message, 
+    'settings.EMAIL_HOST_USER', 
+    [email]
+  )
+  msg.attach_alternative(html_message, "text/html")
+  msg.mixed_subtype = 'related'
+  f = 'static/images/road-star-logo.png'
+  fp = open(os.path.join(os.path.dirname(__file__), f), 'rb')
+  msg_img = MIMEImage(fp.read())
+  fp.close()
+  msg_img.add_header('Content-ID', '<{}>'.format(f))
+  msg.attach(msg_img)
+  print(msg_img.get_filename())
+  msg.send()
+  return redirect('account')
+
+# def email_invoice(req, cart_id):
+#   order = Cart.objects.get(id=cart_id)
+#   order.status = Cart.Status.IN_PROGRESS
+#   order_detail = order.cartdetail_set.all()
+#   #Info needed to send user email
+#   email = req.user.email
+#   subject = f"ORDER SHIPPED"
+#   message = f"Your order has been shipped and an invoice will be provided. Please log into your account to view details."
+#   html_message = loader.render_to_string(
+#     'email/invoice_email.html',
+#     { 'order': order,
+#       'user': req.user,
+#       'order_detail': order_detail
+#     }
+#   )
+#   send_mail(
+#     subject, 
+#     message, 
+#     'settings.EMAIL_HOST_USER', 
+#     [email], 
+#     fail_silently=False,
+#     html_message=html_message
+#   )
+#   return redirect('account')
+
 
 @login_required(login_url='/login')
 def tire_list(req):
