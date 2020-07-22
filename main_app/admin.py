@@ -85,8 +85,8 @@ class CartAdmin(admin.ModelAdmin):
     'created_at',
     'status',
     'get_item_count',
-    'discount_percent_applied',
     'get_subtotal',
+    'get_discount_amount',
     'get_tax_amount',
     'get_total',
   )
@@ -121,8 +121,11 @@ class CartAdmin(admin.ModelAdmin):
             'user',
             'status',
             'get_item_count', 
-            'discount_percent_applied',
             'get_subtotal',
+            (
+              'get_discount_amount',
+              'discount_percent_applied',
+            ),
             (
               'get_tax_amount',
               'tax_percent_applied',
@@ -150,6 +153,7 @@ class CartAdmin(admin.ModelAdmin):
   readonly_fields = (
     'get_item_count', 
     'get_subtotal',
+    'get_discount_amount',
     'get_tax_amount',
     'get_total',
     'created_at',
