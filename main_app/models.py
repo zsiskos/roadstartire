@@ -3,7 +3,8 @@ from django.conf import settings # Don't refer to the user model directly, it is
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
 from model_utils import FieldTracker
-from django.urls import reverse 
+from django.urls import reverse
+from decimal import Decimal
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -35,9 +36,12 @@ class Cart(TimeStampMixin):
   
   """
   
-  discount_ratio_applied_help_text = """
-    • Leave this field blank to use the User's current discount ratio<br/>
-    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)
+  discount_percent_applied_help_text = """
+    Defaults to using the User's discount percent<br/>
+  """
+
+  tax_percent_help_text = """
+    Defaults to using the User's tax percent<br/>
   """
 
   closed_at_help_text = """
@@ -46,7 +50,22 @@ class Cart(TimeStampMixin):
 
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
-  discount_ratio_applied = models.DecimalField(max_digits=4, decimal_places=2, blank=True, validators=[MinValueValidator(0), MaxValueValidator(1),], help_text=discount_ratio_applied_help_text)
+  discount_percent_applied = models.DecimalField(
+    max_digits=5,
+    decimal_places=2,
+    blank=True,
+    validators=[MinValueValidator(0), MaxValueValidator(100),],
+    verbose_name='Discount (%)',
+    help_text=discount_percent_applied_help_text
+  )
+  tax_percent_applied = models.DecimalField(
+    max_digits=5,
+    decimal_places=2,
+    blank=True,
+    validators=[MinValueValidator(0), MaxValueValidator(100),],
+    verbose_name='Tax (%)',
+    help_text=tax_percent_help_text
+  )
   ordered_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Ordered (UTC)')
   closed_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Closed (UTC)', help_text=closed_at_help_text)
 
@@ -57,30 +76,36 @@ class Cart(TimeStampMixin):
   # def get_total(self):
   #   return self.cartDetail_set.all().count()
   
-  # When saving, use the User's current discount ratio if one is not explicitly entered
+  # discount_percent_applied and tax_percent_applied default values are pulled from the User when one is not explicitly entered
   def save(self, *args, **kwargs):
-    if not self.discount_ratio_applied:
-      self.discount_ratio_applied = self.user.discount_ratio
+    if not self.discount_percent_applied:
+      self.discount_percent_applied = self.user.discount_percent
+    if not self.tax_percent_applied:
+      self.tax_percent_applied = self.user.tax_percent
     super(Cart, self).save(*args, **kwargs)
 
 # @receiver(pre_save, sender=Cart)
 # def get_user_discount_ratio(sender, instance, *args, **kwargs):
-#     instance.discount_ratio_applied = instance.user.discount_ratio
+#     instance.discount_ratio = instance.user.discount_ratio
 
   def get_subtotal(self):
-    cart = Cart.objects.get(id=self.id)
-    total = 0
+    cart = Cart.objects.get(pk=self.pk)
+    subtotal = Decimal('0.00') # Need to use Decimal type so that 0 is displayed as 0.00
     for cartDetail in cart.cartdetail_set.all():
-      total += cartDetail.quantity * cartDetail.tire.price
-    return total
+      subtotal += cartDetail.quantity * cartDetail.tire.price
+    return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
+
+  def get_discount_amount(self):
+    return round(self.get_subtotal() * self.discount_percent_applied / 100, 2)
+  get_discount_amount.short_description = 'Tax amount ($)'
+
+  def get_tax_amount(self):
+    return round(self.get_subtotal() * self.tax_percent_applied / 100, 2)
+  get_tax_amount.short_description = 'Tax amount ($)'
   
   def get_total(self):
-    cart = Cart.objects.get(id=self.id)
-    total = 0
-    for cartDetail in cart.cartdetail_set.all():
-      total += cartDetail.quantity * cartDetail.tire.price
-    return round(total * (1 - self.discount_ratio_applied), 2)
+    return self.get_subtotal() - self.get_discount_amount() + self.get_tax_amount()
   get_total.short_description = 'Total ($)'
 
   def get_owner(self):
