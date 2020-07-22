@@ -55,15 +55,22 @@
   {% endfor %}
   <div class="container-total">
     <p>
-      <span class="cart-label">Sub-total:</span> 
+      <span class="cart-label">Items ({{cart.get_item_count}}):</span>
       ${{ cart.get_subtotal|intcomma }}
     </p>
+    {% if cart.discount_percent_applied %}
+      <p>
+        <span class="cart-label">Discount ({{cart.discount_percent_applied}}%):</span>
+        -${{ cart.get_discount_amount|intcomma }}
+      </p>
+    {% endif %}
     <p>
-      <span class="cart-label">Tax:</span> 
+      <span class="cart-label">Tax ({{cart.tax_percent_applied}}%):</span>
+      ${{ cart.get_tax_amount|intcomma }}
     </p>
     <p>
-      <span class="cart-label">Total:</span> 
-      ${{ cart.get_total|intcomma }} (items: {{cart.get_item_count}})
+      <span class="cart-label">Order Total:</span>
+      ${{ cart.get_total|intcomma }}
     </p>
 
     <!-- <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a> -->

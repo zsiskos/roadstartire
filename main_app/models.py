@@ -36,14 +36,12 @@ class Cart(TimeStampMixin):
   
   """
   
-  discount_ratio_applied_help_text = """
-    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)<br/>
-    • Defaults to using the User's discount ratio<br/>
+  discount_percent_applied_help_text = """
+    Defaults to using the User's discount percent<br/>
   """
 
-  tax_help_text = """
-    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)<br/>
-    • Defaults to using the User's tax value<br/>
+  tax_percent_help_text = """
+    Defaults to using the User's tax percent<br/>
   """
 
   closed_at_help_text = """
@@ -52,19 +50,21 @@ class Cart(TimeStampMixin):
 
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:M, a user can have many carts
   status = models.IntegerField(choices=Status.choices, help_text=status_help_text)
-  discount_ratio_applied = models.DecimalField(
-    max_digits=3, 
-    decimal_places=2, 
-    blank=True, 
-    validators=[MinValueValidator(0), MaxValueValidator(1),], 
-    help_text=discount_ratio_applied_help_text
-  )
-  tax_applied = models.DecimalField(
-    max_digits=5, 
-    decimal_places=4, 
+  discount_percent_applied = models.DecimalField(
+    max_digits=5,
+    decimal_places=2,
     blank=True,
-    validators=[MinValueValidator(0), MaxValueValidator(1),], 
-    help_text=tax_help_text
+    validators=[MinValueValidator(0), MaxValueValidator(100),],
+    verbose_name='Discount (%)',
+    help_text=discount_percent_applied_help_text
+  )
+  tax_percent_applied = models.DecimalField(
+    max_digits=5,
+    decimal_places=2,
+    blank=True,
+    validators=[MinValueValidator(0), MaxValueValidator(100),],
+    verbose_name='Tax (%)',
+    help_text=tax_percent_help_text
   )
   ordered_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Ordered (UTC)')
   closed_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Closed (UTC)', help_text=closed_at_help_text)
@@ -76,17 +76,17 @@ class Cart(TimeStampMixin):
   # def get_total(self):
   #   return self.cartDetail_set.all().count()
   
-  # discount_ratio_applied and tax_applied default values are pulled from the User when one is not explicitly entered
+  # discount_percent_applied and tax_percent_applied default values are pulled from the User when one is not explicitly entered
   def save(self, *args, **kwargs):
-    if not self.discount_ratio_applied:
-      self.discount_ratio_applied = self.user.discount_ratio
-    if not self.tax_applied:
-      self.tax_applied = self.user.tax
+    if not self.discount_percent_applied:
+      self.discount_percent_applied = self.user.discount_percent
+    if not self.tax_percent_applied:
+      self.tax_percent_applied = self.user.tax_percent
     super(Cart, self).save(*args, **kwargs)
 
 # @receiver(pre_save, sender=Cart)
 # def get_user_discount_ratio(sender, instance, *args, **kwargs):
-#     instance.discount_ratio_applied = instance.user.discount_ratio
+#     instance.discount_ratio = instance.user.discount_ratio
 
   def get_subtotal(self):
     cart = Cart.objects.get(pk=self.pk)
@@ -96,12 +96,16 @@ class Cart(TimeStampMixin):
     return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
 
+  def get_discount_amount(self):
+    return round(self.get_subtotal() * self.discount_percent_applied / 100, 2)
+  get_discount_amount.short_description = 'Tax amount ($)'
+
   def get_tax_amount(self):
-    return round(self.get_subtotal() * self.tax_applied, 2)
+    return round(self.get_subtotal() * self.tax_percent_applied / 100, 2)
   get_tax_amount.short_description = 'Tax amount ($)'
   
   def get_total(self):
-    return self.get_subtotal() + self.get_tax_amount()
+    return self.get_subtotal() - self.get_discount_amount() + self.get_tax_amount()
   get_total.short_description = 'Total ($)'
 
   def get_owner(self):

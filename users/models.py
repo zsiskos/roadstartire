@@ -48,12 +48,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   is_staff_help_text = """
     Designates whether this user can access the admin site.
   """
-  discount_ratio_help_text = """
-    • Discount ratio applied to orders<br/>
-    • Must be a number from 0.00 to 1.00 (up to 2 decimal places)
+  discount_percent_help_text = """
+    • Discount applied to orders (before tax)<br/>
+    • Must be a number from 0.00 to 100.00 (up to 2 decimal places)
   """
-  tax_help_text = """
-    Tax applied to orders (defaults to <strong>0.13</strong>)
+  tax_percent_help_text = """
+    Tax percentage applied to orders (defaults to <strong>13%</strong>)
   """
 
   email = CIEmailField(unique=True)
@@ -70,25 +70,25 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   address = models.CharField(max_length=30, blank=True)
   postal_code = models.CharField(max_length=30, blank=True)
   hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
-  discount_ratio = models.DecimalField(
-    max_digits=4,
+  discount_percent = models.DecimalField(
+    max_digits=5,
     decimal_places=2,
     default=0,
-    verbose_name='Discount',
-    validators=[MinValueValidator(0), MaxValueValidator(1),],
-    help_text=discount_ratio_help_text
+    verbose_name='Discount (%)',
+    validators=[MinValueValidator(0), MaxValueValidator(100),],
+    help_text=discount_percent_help_text
   )
-  tax = models.DecimalField(
-    max_digits=5, 
-    decimal_places=4, 
-    default=0.1300,
-    verbose_name='Tax', 
-    validators=[MinValueValidator(0), MaxValueValidator(1),], 
-    help_text=tax_help_text
+  tax_percent = models.DecimalField(
+    max_digits=5,
+    decimal_places=2,
+    default=13,
+    verbose_name='Tax (%)', 
+    validators=[MinValueValidator(0), MaxValueValidator(100),], 
+    help_text=tax_percent_help_text
   )
 
   # is_active_status_tracker = FieldTracker(fields=['is_active'])
-  tax_tracker = FieldTracker(fields=['tax'])
+  tax_percent_tracker = FieldTracker(fields=['tax_percent'])
 
   class Meta:
     # Change model name in admin interface
@@ -109,12 +109,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   def full_name(self):
     return '%s %s' % (self.first_name, self.last_name)
 
-  # If the User's tax value is changed, then update the User's current cart if it exists
+  # If the User's tax_percent is changed, then update the User's current cart if it exists
   def save(self, *args, **kwargs):
-    if self.tax_tracker.has_changed('tax'):
+    if self.tax_percent_tracker.has_changed('tax_percent'):
       try:
         currentCart = self.cart_set.get(status=Cart.Status.CURRENT)
-        currentCart.tax_applied = self.tax
+        currentCart.tax_percent_applied = self.tax_percent
         currentCart.save()
       except Cart.DoesNotExist:
         currentCart = None
