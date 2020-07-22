@@ -72,8 +72,6 @@
       <span class="cart-label">Total:</span>
       ${{ cart.get_total|intcomma }}
     </p>
-
-    <!-- <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a> -->
     <a class="order-btn-filled" href="{% url 'cart_order' cart.id %}">Place Order</a>
   </div>
 {% else %}
