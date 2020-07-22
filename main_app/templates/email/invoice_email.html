@@ -112,8 +112,8 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>Tax:</td>
-          <td>$$$</td>
+          <td>Tax ({{order.tax_percent_applied.normalize}}%):</td>
+          <td>${{ order.get_tax_amount }}</td>
         </tr>
         <tfoot>
           <tr>
