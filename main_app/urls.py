@@ -23,7 +23,8 @@ urlpatterns = [
   path('cart/<int:cart_id>/order', views.cart_order, name='cart_order'), #Changes status of cart and notifies admin
 
   path('orders/<int:cart_id>/', views.order_detail, name='order_detail'), # Orders detail page route - Detailed view of a cart that has been submitted/fulfilled
-  path('orders/<int:cart_id>/cancel', views.order_cancel, name='order_cancel'), # Cart page route - Current cart
+  path('orders/<int:cart_id>/cancel', views.order_cancel, name='order_cancel'), # cancels inprogress cart
+  path('orders/<int:cart_id>/email', views.email_invoice, name='email_invoice'), # Eamil invoice for fulfilled orders
 
   # Password reset links (ref: https://github.com/django/django/blob/master/django/contrib/auth/views.py)
   path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='registration/password_change_done.html'), name='password_change_done'),
