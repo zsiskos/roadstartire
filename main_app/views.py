@@ -237,7 +237,7 @@ def email_invoice(req, cart_id):
   #Info needed to send user email
   email = req.user.email
   subject = f"ORDER SHIPPED"
-  message = f"Your order has been shipped and an invoice will be provided. Please log into your account to view details."
+  message = f"Your order has been shipped and an invoice will be provided on delivery. Please log into your account to view details."
   html_message = loader.render_to_string(
     'email/invoice_email.html',
     { 'order': order,
