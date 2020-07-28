@@ -75,7 +75,8 @@ class CustomUserAdmin(UserAdmin):
         ('country_iso', 'province_iso'),
         ('city', 'address', 'postal_code',),
         'hst_number',
-        'discount_ratio',
+        'tax_percent',
+        'discount_percent',
       )
     }),
     ('Permissions', {
@@ -106,7 +107,8 @@ class CustomUserAdmin(UserAdmin):
         ('country_iso', 'province_iso'),
         ('city', 'address', 'postal_code',),
         'hst_number',
-        'discount_ratio',
+        'tax_percent',
+        'discount_percent',
       )
     }),
     ('Permissions', {

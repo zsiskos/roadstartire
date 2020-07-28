@@ -4,6 +4,9 @@
 {% block content %}
 <div class="container-main">
   <h1>Order # {{ order.id }}</h1>
+  {% if order.status == order.Status.FULFILLED %}
+  <a href="{% url 'email_invoice' order.id %}" class="account-btn"><i class="fas fa-envelope-open-text"></i>Email invoice</a>
+  {% endif %}
   {% if order.status == order.Status.CURRENT or order.status == order.Status.IN_PROGRESS %}
   <a class="account-btn" href="{% url 'order_cancel' order.id %}"><i class="fas fa-window-close"></i>Cancel Order</a>
   {% endif %}
@@ -37,8 +40,23 @@
   </div>
 
   <div class="container-total">
-    <p><span class="cart-label">Sub-total:</span> ${{ order.get_subtotal|intcomma }}</p>
-    <p><span class="cart-label">Total:</span> ${{ order.get_total|intcomma }}</p>
+    <p><span class="cart-label">Items ({{order.get_item_count}}):</span>
+      ${{ order.get_subtotal|intcomma }}
+    </p>
+    {% if order.discount_percent_applied %}
+      <p>
+        <span class="cart-label">Discount ({{order.discount_percent_applied.normalize}}%):</span>
+        -${{ order.get_discount_amount|intcomma }}
+      </p>
+    {% endif %}
+    <p>
+      <span class="cart-label">Tax ({{order.tax_percent_applied.normalize}}%):</span>
+      ${{ order.get_tax_amount|intcomma }}
+    </p>
+    <p>
+      <span class="cart-label">Total:</span>
+      ${{ order.get_total|intcomma }}
+    </p>
   </div>
 </div>
 <script src="{% static 'js/order_detail.js' %}"></script>

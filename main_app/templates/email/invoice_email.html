@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Email</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;750;800;900&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        font-family: Inter;
+      }
+      p {
+        margin: 0;
+      }
+      a {
+        text-decoration: none;
+        color: rgb(30, 38, 126);
+      }
+      .testing {
+        color: rgb(211, 121, 37);
+        font-size: 1rem; 
+        letter-spacing: .5px;
+        margin: 0;
+      }
+      h4 {
+        font-weight: 800;
+        margin: 0;
+      }
+      img {
+        height: 30px; 
+        margin-top: .75rem;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      .col-head {
+        font-weight: 800
+      }
+      hr {
+        width:100%;
+        text-align:left;
+      }
+    </style>
+  </head>
+  <body>  
+    <div class="container-main">
+      <p>Please find an email copy of your invoice below. We appreciate your business!</p>
+      <img src="cid:static/images/road-star-logo.png" alt="road star tire logo"/>
+      <h3 class="testing">ROAD STAR TIRE WHOLESALE</h3>
+      <p><a href="http://www.roadstartirewholesale.ca">www.RoadStarTireWholesale.ca</a></p>
+      <p>140 Doughton Rd, Concord, ON  L4K 1R3</p>
+      <p>(905) 660-3209</p>
+    <h1>Invoice # {{ order.id }}</h1>
+      <h3>Ordered: {{ order.ordered_at }}</h3>
+      <h3>Shipped: {{ order.closed_at }}</h3>
+      <h4>Invoice to / Ship to:</h4>
+      <p>Company Name: {{ user.company_name }}</p>
+      <p>Address: {{ user.address }}</p>
+      <p>City: {{ user.city }}</p>
+      <p>Province: {{ user.province_iso }}</p>
+      <p>Postal Code: {{ user.postal_code }}</p>
+      <hr>
+      <table>
+        <tr>
+          <td class="col-head">Item</td>
+          <td class="col-head">Brand</td>
+          <td class="col-head">Type</td>
+          <td class="col-head">Pattern</td>
+          <td class="col-head">Load/Speed</td>
+          <td class="col-head">Price</td>
+          <td class="col-head">Quantity</td>
+          <td class="col-head">Amount</td>
+        </tr>
+        {% for item in order_detail %}
+        <tr>
+          <td>{{ item.tire.width }}/{{ item.tire.aspect_ratio }}{{ item.tire.rim_size }}</td>
+          <td>{{ item.tire.brand }}</td>
+          <td>{{ item.tire.season }}</td>
+          <td>{{ item.tire.pattern }}</td>
+          <td>{{ item.load }}</td>
+          <td>${{ item.price_each }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>$ {{ item.get_subtotal }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td><hr></td>
+          <td><hr></td>
+          <td><hr></td>
+          <td><hr></td>
+          <td><hr></td>
+          <td><hr></td>
+          <td><hr></td>
+          <td><hr></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Sub-total: </td>
+          <td>${{ order.get_subtotal }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Tax ({{order.tax_percent_applied.normalize}}%):</td>
+          <td>${{ order.get_tax_amount }}</td>
+        </tr>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total:</td>
+            <td>${{ order.get_total }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    <p>GST/HST# {{ user.hst_number }}</p>
+    <p>WARRANTY 60,0000 KM (as it was shown and agreed with customer)</p>
+    </div>
+  </body>
+</html>
