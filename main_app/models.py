@@ -98,7 +98,7 @@ class Cart(TimeStampMixin):
 
   def get_discount_amount(self):
     return round(self.get_subtotal() * self.discount_percent_applied / 100, 2)
-  get_discount_amount.short_description = 'Tax amount ($)'
+  get_discount_amount.short_description = 'Discount amount ($)'
 
   def get_tax_amount(self):
     return round(self.get_subtotal() * self.tax_percent_applied / 100, 2)
@@ -193,3 +193,39 @@ class CartDetail(TimeStampMixin):
     super(CartDetail, self).save(*args, **kwargs)
     if self.quantity == 0:
       self.delete()
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class OrderShipping(models.Model):
+  COUNTRY_CHOICES = [
+    ('CAN', 'Canada'),
+    ('USA', 'United States')
+  ]
+
+  PROVINCE_CHOICES = [
+    ('AB', 'Alberta'),
+    ('BC', 'British Columbia'),
+    ('MB', 'Manitoba'),
+    ('NB', 'New Brunswick'),
+    ('NL', 'Newfoundland and Labrador'),
+    ('NS','Nova Scotia'),
+    ('NT', 'Northwest Territories'),
+    ('NU', 'Nunavut'),
+    ('ON', 'Ontario'), # Default
+    ('PE','Prince Edward Island'),
+    ('QC', 'Quebec'),
+    ('SK', 'Saskatchewan'),
+    ('YT', 'Yukon'),
+  ]
+
+  cart = models.OneToOneField(Cart, on_delete=models.CASCADE, primary_key=True)
+  first_name = models.CharField(max_length=30)
+  last_name = models.CharField(max_length=30)
+  company_name = models.CharField(max_length=50, blank=True, verbose_name='Company')
+  business_phone = models.CharField(max_length=30, blank=True, verbose_name='Phone')
+  country_iso = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default=COUNTRY_CHOICES[0][0], verbose_name='Country')
+  province_iso = models.CharField(max_length=2, choices=PROVINCE_CHOICES, default=PROVINCE_CHOICES[8][0], verbose_name='Province')
+  city = models.CharField(max_length=30, blank=True)
+  address = models.CharField(max_length=30, blank=True)
+  postal_code = models.CharField(max_length=30, blank=True)
+  hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')

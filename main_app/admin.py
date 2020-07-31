@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cart, Tire, CartDetail
+from .models import Cart, Tire, CartDetail, OrderShipping
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -285,7 +285,53 @@ class TireAdmin(admin.ModelAdmin):
 
 # ────────────────────────────────────────────────────────────────────────────────
 
+class OrderShippingAdmin(admin.ModelAdmin):
+  list_display = (
+    'cart',
+    'first_name',
+    'last_name',
+    'company_name',
+    'business_phone',
+    'country_iso',
+    'province_iso',
+    'city',
+    'address',
+    'postal_code',
+    'hst_number',
+  )
+
+  list_filter = (
+  
+  )
+
+  search_fields = (
+  
+  )
+
+  fieldsets = (
+    (None, {
+      'fields': (
+        'cart',
+        'first_name',
+        'last_name',
+        'company_name',
+        'business_phone',
+        'country_iso',
+        'province_iso',
+        'city',
+        'address',
+        'postal_code',
+        'hst_number',
+      )
+    }),
+  )
+
+  # readonly_fields = ('',)
+
+# ────────────────────────────────────────────────────────────────────────────────
+
 # Register your models here
 admin.site.register(CartDetail, CartDetailAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Tire, TireAdmin)
+admin.site.register(OrderShipping, OrderShippingAdmin)
