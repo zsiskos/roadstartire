@@ -16,9 +16,6 @@ import environ
 environ.Env()
 environ.Env.read_env()
 
-import environ
-environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -147,6 +144,10 @@ STATIC_URL = '/static/'
 # Need this so that Django knows to use the new User class
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+# Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())
 
 # ────────────────────────────────────────────────────────────────────────────────
 
