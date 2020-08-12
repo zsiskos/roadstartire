@@ -70,7 +70,7 @@ class Cart(TimeStampMixin):
   closed_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Closed (UTC)', help_text=closed_at_help_text)
 
   def __str__(self):
-    return f'Cart #{self.id} - {self.get_status_display()}'
+    return f'Cart #{self.id}'
     
   # @property
   # def get_total(self):
@@ -91,7 +91,7 @@ class Cart(TimeStampMixin):
   def get_subtotal(self):
     cart = Cart.objects.get(pk=self.pk)
     subtotal = Decimal('0.00') # Need to use Decimal type so that 0 is displayed as 0.00
-    for cartDetail in cart.cartdetail_set.all():
+    for cartDetail in self.cartdetail_set.all():
       subtotal += cartDetail.quantity * cartDetail.tire.price
     return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
@@ -126,6 +126,16 @@ class Cart(TimeStampMixin):
     constraints = [
       models.UniqueConstraint(fields=['user','status'], condition=Q(status=1), name='unique_current_cart')
     ]
+
+  @staticmethod
+  def does_state_require_shipping_info(status):
+    if (status == Cart.Status.IN_PROGRESS or status == Cart.Status.FULFILLED or status == Cart.Status.CANCELLED):
+      return True
+
+  def get_order_number(self):
+    order_number = self.ordershipping.pk
+    return order_number
+  get_order_number.short_description = 'Order #'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -174,7 +184,7 @@ class CartDetail(TimeStampMixin):
   price_each = models.DecimalField(max_digits=7, decimal_places=2, blank=True, verbose_name='Price per item ($)')
   
   def __str__(self):
-    return f'Cart {self.cart} contains {self.quantity} \'{self.tire}\' tires'
+    return f'{self.cart} –  {self.tire} - QTY: {self.quantity}'
 
   def get_subtotal(self):
     return self.quantity * self.tire.price
@@ -218,14 +228,21 @@ class OrderShipping(models.Model):
     ('YT', 'Yukon'),
   ]
 
-  cart = models.OneToOneField(Cart, on_delete=models.CASCADE, primary_key=True)
+  cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
   first_name = models.CharField(max_length=30)
   last_name = models.CharField(max_length=30)
   company_name = models.CharField(max_length=50, blank=True, verbose_name='Company')
   business_phone = models.CharField(max_length=30, blank=True, verbose_name='Phone')
   country_iso = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default=COUNTRY_CHOICES[0][0], verbose_name='Country')
   province_iso = models.CharField(max_length=2, choices=PROVINCE_CHOICES, default=PROVINCE_CHOICES[8][0], verbose_name='Province')
-  city = models.CharField(max_length=30, blank=True)
-  address = models.CharField(max_length=30, blank=True)
+  city = models.CharField(max_length=30)
+  address = models.CharField(max_length=30)
   postal_code = models.CharField(max_length=30, blank=True)
   hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
+
+  def __str__(self):
+    return f'Order # {self.pk}'
+
+  class Meta:
+    verbose_name = 'Shipping Info'
+    verbose_name_plural = 'Shipping Info'

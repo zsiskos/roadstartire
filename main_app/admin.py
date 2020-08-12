@@ -18,6 +18,43 @@ from django.utils import timezone
 
 admin.site.empty_value_display = '–'
 
+# ────────────────────────────────────────────────────────────────────────────────
+
+class OrderShippingInline(admin.StackedInline):
+  model = OrderShipping
+  can_delete = False
+  extra = 0 # Set to 0 to hide the form when there is no OrderShipping
+  show_change_link = True
+
+  readonly_fields = (
+    'first_name',
+    'last_name',
+    'company_name',
+    'business_phone',
+    'country_iso',
+    'province_iso',
+    'city',
+    'address',
+    'postal_code',
+    'hst_number',
+  )
+
+  fieldsets = (
+    (None, {
+      'fields': (
+        'first_name', 
+        'last_name',
+        'company_name',
+        'business_phone',
+        'country_iso', 'province_iso',
+        'city', 'address', 'postal_code',
+        'hst_number',
+      )
+    }),
+  )
+
+# ────────────────────────────────────────────────────────────────────────────────
+
 class CartDetailAdmin(admin.ModelAdmin):
   list_display = (
     'id',
@@ -52,10 +89,10 @@ class CartDetailAdmin(admin.ModelAdmin):
 
   # Dynamic readonly
   def get_readonly_fields(self, request, obj=None):
-    if obj:
-      return ('cart', 'tire', 'price_each', 'created_at', 'updated_at',) # Existing object
-    else:
-      return ('price_each', 'created_at', 'updated_at',) # Creating an object
+    if obj: # Change page
+      return ('cart', 'tire', 'price_each', 'created_at', 'updated_at',)
+    else:  # Add page
+      return ('price_each', 'created_at', 'updated_at',)
 
   autocomplete_fields = ['tire']
 
@@ -64,7 +101,8 @@ class CartDetailAdmin(admin.ModelAdmin):
 class CartDetailInline(admin.TabularInline):
   model = CartDetail
   can_delete = True
-  extra = 1 # Number of extra forms the formset will display in addition to the initial forms
+  extra = 1
+  show_change_link = True
 
   readonly_fields = (
     'price_each',
@@ -80,6 +118,7 @@ class CartDetailInline(admin.TabularInline):
 class CartAdmin(admin.ModelAdmin):
   list_display = (
     'id',
+    'get_order_number',
     'user',
     'get_owner',
     'created_at',
@@ -93,6 +132,7 @@ class CartAdmin(admin.ModelAdmin):
 
   list_display_links = (
     'id',
+    'get_order_number',
     'user',
   )
 
@@ -106,6 +146,8 @@ class CartAdmin(admin.ModelAdmin):
   )
 
   search_fields = (
+    'pk',
+    'ordershipping__pk',
     'user__first_name',
     'user__last_name',
     'user__email',
@@ -113,8 +155,7 @@ class CartAdmin(admin.ModelAdmin):
 
   # Dynamic fieldsets
   def get_fieldsets(self, request, obj=None):
-    if obj:
-      # fieldsets for Change form
+    if obj: # Change page
       fieldsets = (
         (None, {
           'fields': (
@@ -139,7 +180,7 @@ class CartAdmin(admin.ModelAdmin):
         }),
       )
     else:
-      # fieldsets for Add form
+      # Add page
       fieldsets = (
         (None, {
           'fields': (
@@ -151,6 +192,7 @@ class CartAdmin(admin.ModelAdmin):
     return fieldsets
 
   readonly_fields = (
+    'get_order_number',
     'get_item_count', 
     'get_subtotal',
     'get_discount_amount',
@@ -162,7 +204,11 @@ class CartAdmin(admin.ModelAdmin):
     'closed_at',
   )
 
-  inlines = (CartDetailInline,)
+  # Dynamic inlines
+  def get_inlines(self, request, obj):
+    if obj is None: # Add page
+      return (CartDetailInline,)
+    return (OrderShippingInline, CartDetailInline,) # Change page
 
   actions = [
     'mark_as_cancelled',
@@ -220,6 +266,20 @@ class CartAdmin(admin.ModelAdmin):
   date_hierarchy = 'created_at'
 
   autocomplete_fields = ['user']
+
+  # Dynamic choice fields
+  def formfield_for_choice_field(self, db_field, request, **kwargs):
+    if db_field.name == "status":
+      kwargs['choices'] = (
+        (Cart.Status.CURRENT, '🛒 Current'),
+        (Cart.Status.IN_PROGRESS, '⏳ In Progress'),
+        (Cart.Status.FULFILLED, '✅ Fulfilled'),
+        (Cart.Status.CANCELLED, '❌ Cancelled'),
+        (Cart.Status.ABANDONED, '🚧 Abandoned'),
+      )
+      # if request.user.is_superuser:
+      #   kwargs['choices'] += (('ready', 'Ready for deployment'),)
+    return super().formfield_for_choice_field(db_field, request, **kwargs)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -287,6 +347,7 @@ class TireAdmin(admin.ModelAdmin):
 
 class OrderShippingAdmin(admin.ModelAdmin):
   list_display = (
+    '__str__',
     'cart',
     'first_name',
     'last_name',
@@ -305,7 +366,10 @@ class OrderShippingAdmin(admin.ModelAdmin):
   )
 
   search_fields = (
-  
+    'pk',
+    'cart__pk',
+    'first_name',
+    'last_name',
   )
 
   fieldsets = (
@@ -326,7 +390,12 @@ class OrderShippingAdmin(admin.ModelAdmin):
     }),
   )
 
-  # readonly_fields = ('',)
+  # Dynamic readonly
+  def get_readonly_fields(self, request, obj=None):
+    if obj:
+      return ('cart',) # Existing object
+    else:
+      return ('',) # Creating an object
 
 # ────────────────────────────────────────────────────────────────────────────────
 
