@@ -227,7 +227,7 @@ class CartAdmin(admin.ModelAdmin):
       "%d carts were successfully changed and marked as 'Fulfilled'.",
       updated,
     ) % updated, messages.SUCCESS)
-  mark_as_fulfilled.short_description = "Mark selected carts as 'Fulfilled'"
+  mark_as_fulfilled.short_description = "Mark selected carts as '✅ Fulfilled'"
 
   def mark_as_cancelled(self, req, queryset):
     updated = 0
@@ -241,7 +241,7 @@ class CartAdmin(admin.ModelAdmin):
       "%d carts were successfully changed and marked as 'Cancelled'.",
       updated,
     ) % updated, messages.SUCCESS)
-  mark_as_cancelled.short_description = "Mark selected carts as 'Cancelled'"
+  mark_as_cancelled.short_description = "Mark selected carts as '❌ Cancelled'"
   
   # Override changeform_view and changelist_view to handle IntegrityError when UniqueConstraint on user and status, where status = 1
   # This is because Django does not throw a ValidationError when using UnqieConstraint with condition(s)
@@ -271,9 +271,9 @@ class CartAdmin(admin.ModelAdmin):
   def formfield_for_choice_field(self, db_field, request, **kwargs):
     if db_field.name == "status":
       kwargs['choices'] = (
-        (Cart.Status.CURRENT, '🛒 Current'),
-        (Cart.Status.IN_PROGRESS, '⏳ In Progress'),
-        (Cart.Status.FULFILLED, '✅ Fulfilled'),
+        (Cart.Status.CURRENT, '1. 🛒 Current'),
+        (Cart.Status.IN_PROGRESS, '2. ⏳ In Progress'),
+        (Cart.Status.FULFILLED, '3. ✅ Fulfilled'),
         (Cart.Status.CANCELLED, '❌ Cancelled'),
         (Cart.Status.ABANDONED, '🚧 Abandoned'),
       )
