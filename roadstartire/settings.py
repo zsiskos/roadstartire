@@ -181,6 +181,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 STATIC_URL  = '/static/'
 # Static files (CSS, JavaScript, Images)
