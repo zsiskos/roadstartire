@@ -31,6 +31,7 @@ SECRET_KEY = 'hc=@aet_2rzy+54#hnyoz)nco%fq@s8#^s%u67!z4pflgi=zdl'
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    '*',
     'localhost',
     '127.0.0.1',
     'www.roadstartirewholesale.ca',
@@ -53,8 +54,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -140,22 +141,21 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Need this so that Django knows to use the new User class
+AUTH_USER_MODEL = 'users.CustomUser'
 
+COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
+
+
+STATIC_URL  = '/static/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL  = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-
-COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
-
-# Need this so that Django knows to use the new User class
-
-AUTH_USER_MODEL = 'users.CustomUser'
 
 # Configure Django App for Heroku.
 import django_heroku
