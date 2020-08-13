@@ -76,7 +76,6 @@
       <div class="container-account-order">
         <div class="order-info">
           <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ cart.ordered_at }}</p>
-          <!-- <p><span class="order-label">Total: </span>${{ cart.get_total|intcomma }}</p> -->
         </div>
         <div class=container-num-status>
           <a class="order-label order-num" href="{% url 'order_detail' cart.id %}">Order # {{ cart.id }}</a>
