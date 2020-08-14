@@ -37,8 +37,8 @@ def update_cart_time_metadata(sender, instance, *args, **kwargs):
 def send_order_fulfilled_email(sender, instance, *args, **kwargs):
   if instance.status_tracker.has_changed('status') and instance.status == Cart.Status.FULFILLED:
     email = instance.user.email
-    subject = f"Order # {instance.pk} has been fulfilled"
-    message = f"This is an email confirmation to let you know that your order (# {instance.pk}) totalling ${instance.get_total()} has been successfully fulfilled. Thank you for your business!"
+    subject = f"Your order (# {instance.ordershipping.pk}) has been fulfilled"
+    message = f"This is an email confirmation to let you know that your order (# {instance.ordershipping.pk}) totalling ${instance.get_total()} has been successfully fulfilled. Thank you for your business!"
     send_mail(
       subject, 
       message, 

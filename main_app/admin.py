@@ -89,9 +89,9 @@ class CartDetailAdmin(admin.ModelAdmin):
 
   # Dynamic readonly
   def get_readonly_fields(self, request, obj=None):
-    if obj: # Change page
+    if obj: # Change view
       return ('cart', 'tire', 'price_each', 'created_at', 'updated_at',)
-    else:  # Add page
+    else: # Add view
       return ('price_each', 'created_at', 'updated_at',)
 
   autocomplete_fields = ['tire']
@@ -155,7 +155,7 @@ class CartAdmin(admin.ModelAdmin):
 
   # Dynamic fieldsets
   def get_fieldsets(self, request, obj=None):
-    if obj: # Change page
+    if obj: # Change view
       fieldsets = (
         (None, {
           'fields': (
@@ -179,8 +179,7 @@ class CartAdmin(admin.ModelAdmin):
           )
         }),
       )
-    else:
-      # Add page
+    else: # Add view
       fieldsets = (
         (None, {
           'fields': (
@@ -206,9 +205,9 @@ class CartAdmin(admin.ModelAdmin):
 
   # Dynamic inlines
   def get_inlines(self, request, obj):
-    if obj is None: # Add page
+    if obj is None: # Add view
       return (CartDetailInline,)
-    return (OrderShippingInline, CartDetailInline,) # Change page
+    return (OrderShippingInline, CartDetailInline,) # Change view
 
   actions = [
     'mark_as_cancelled',
@@ -223,8 +222,8 @@ class CartAdmin(admin.ModelAdmin):
       cart.status=Cart.Status.FULFILLED
       cart.save()
     self.message_user(req, ngettext(
-      "%d cart was successfully changed and marked as 'Fulfilled'.",
-      "%d carts were successfully changed and marked as 'Fulfilled'.",
+      "%d cart was successfully changed and marked as '✅ Fulfilled'.",
+      "%d carts were successfully changed and marked as '✅ Fulfilled'.",
       updated,
     ) % updated, messages.SUCCESS)
   mark_as_fulfilled.short_description = "Mark selected carts as '✅ Fulfilled'"
@@ -237,8 +236,8 @@ class CartAdmin(admin.ModelAdmin):
       cart.status=Cart.Status.CANCELLED
       cart.save()
     self.message_user(req, ngettext(
-      "%d cart was successfully changed and marked as 'Cancelled'.",
-      "%d carts were successfully changed and marked as 'Cancelled'.",
+      "%d cart was successfully changed and marked as '❌ Cancelled'.",
+      "%d carts were successfully changed and marked as '❌ Cancelled'.",
       updated,
     ) % updated, messages.SUCCESS)
   mark_as_cancelled.short_description = "Mark selected carts as '❌ Cancelled'"
@@ -267,6 +266,12 @@ class CartAdmin(admin.ModelAdmin):
 
   autocomplete_fields = ['user']
 
+  status = None
+  def get_form(self, request, obj=None, **kwargs):
+    if obj:
+      self.status = obj.status
+      return super(CartAdmin, self).get_form(request, obj, **kwargs)
+
   # Dynamic choice fields
   def formfield_for_choice_field(self, db_field, request, **kwargs):
     if db_field.name == "status":
@@ -275,10 +280,14 @@ class CartAdmin(admin.ModelAdmin):
         (Cart.Status.IN_PROGRESS, '2. ⏳ In Progress'),
         (Cart.Status.FULFILLED, '3. ✅ Fulfilled'),
         (Cart.Status.CANCELLED, '❌ Cancelled'),
-        (Cart.Status.ABANDONED, '🚧 Abandoned'),
+        (Cart.Status.ABANDONED, '🚧 Abandoned'),  
       )
-      # if request.user.is_superuser:
-      #   kwargs['choices'] += (('ready', 'Ready for deployment'),)
+      
+    # if request.user.is_superuser:
+    #   kwargs['choices'] += (('ready', 'Ready for deployment'),)
+
+    if self.status == Cart.Status.CURRENT:
+      kwargs['choices'] += (('ready', 'Ready for deployment'),)
     return super().formfield_for_choice_field(db_field, request, **kwargs)
 
 # ────────────────────────────────────────────────────────────────────────────────

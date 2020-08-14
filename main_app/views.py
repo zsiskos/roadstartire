@@ -13,7 +13,7 @@ from django.template import loader
 from django.views.generic import ListView
 from email.mime.image import MIMEImage
 from main_app.forms import CartDetailCreationForm
-from .models import Tire, Cart, CartDetail
+from .models import Tire, Cart, CartDetail, OrderShipping
 import re, os
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
@@ -51,7 +51,6 @@ def signup(req):
 def confirmation(req):
   return render(req, 'confirmation.html')
 
-
 def signin(req):
   if req.user.is_authenticated:
     return redirect('tire_list')
@@ -74,14 +73,11 @@ def logout(req):
 @login_required(login_url='/login')
 def account(req):
   user = req.user
-  carts = Cart.objects.filter(user_id=req.user.id).exclude(Q(status=Cart.Status.ABANDONED) | Q(status=Cart.Status.CURRENT)).order_by('-ordered_at')
-
-  paginator = Paginator(carts, 5, 3) # x objects per page and y number of orphans
+  orders = OrderShipping.objects.filter(cart__user_id=req.user.id).exclude(Q(cart__status=Cart.Status.ABANDONED) | Q(cart__status=Cart.Status.CURRENT)).order_by('-cart__ordered_at')
+  paginator = Paginator(orders, 5, 3) # x objects per page and y number of orphans
   page_number = req.GET.get('page')
   page_obj = paginator.get_page(page_number)
-  return render(req, 'account.html', {'user': user, 'carts': carts, 'page_obj': page_obj})
-
-  # return render(req, 'account.html', { 'user': user, 'carts': carts })
+  return render(req, 'account.html', {'user': user, 'orders': orders, 'page_obj': page_obj}) 
 
 @login_required(login_url='/login')
 def custom_user_edit(req):
@@ -95,7 +91,7 @@ def custom_user_edit(req):
       form.save() # saves all the info
       #Info needed to send user email
       email = req.user.email
-      subject = f"You have edited your Road Star Tire Wholesale account."
+      subject = f"You have edited your Road Star Tire Wholesale account"
       message = f"A Road Star Tire staff member will have to re-verify your account before you can log in again to place an order. If this is an error or urgent, please call +1-905-660-3209."
       send_mail(
         subject, 
@@ -159,19 +155,20 @@ def cart_detail(req):
 
 @login_required(login_url='/login')
 def cart_order(req, cart_id):
-  order = Cart.objects.get(id=cart_id)
-  order.status = Cart.Status.IN_PROGRESS
-  order_detail = order.cartdetail_set.all()
-  order.save()
+  cart = Cart.objects.get(id=cart_id)
+  cart.status = Cart.Status.IN_PROGRESS
+  cart_details = cart.cartdetail_set.all()
+  cart.save()
   #Info needed to send user email
   email = req.user.email
-  subject = f"ORDER CONFIRMATION"
-  message = f"Thank you for placing your order. Your order will be reviewed and shipped shortly. Here is a summary of your order below:"
+  subject = f"Your order has been received - Order # {cart.ordershipping.pk}"
+  message = f"Thank you for your business. Your order will be reviewed and shipped shortly. Here is a summary of your order below:"
   html_message = loader.render_to_string(
     'email/order_email.html',
-    { 'order': order,
+    {
       'user': req.user,
-      'order_detail': order_detail
+      'cart': cart,
+      'cart_details': cart_details
     }
   )
   send_mail(
@@ -183,33 +180,32 @@ def cart_order(req, cart_id):
     html_message=html_message
   )
   # Info needed for email to admin
-  user = req.user
-  subject = f"{user.company_name} placed Order #{order.id}"
-  message = f"This company - {user.company_name}, {user.email} - placed an order. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) to view the details."
+  subject = f"{req.user.company_name} placed Order #{cart.ordershipping.pk}"
+  message = f"This company - {cart.ordershipping.company_name}, {req.user.email} - placed an order. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) to view the details."
   mail_admins(
     subject, 
     message, 
     fail_silently=False
   )
-  return redirect('order_detail', cart_id)
+  return redirect('order_detail', cart.ordershipping.pk)
 
 def remove_tire(req, item_id):
   item = CartDetail.objects.get(id=item_id).delete()
   return redirect('cart_detail')
 
 @login_required(login_url='/login')
-def order_detail(req, cart_id):
-  order = Cart.objects.get(id=cart_id)
-  order_detail = CartDetail.objects.filter(cart_id=cart_id)
-  return render(req, 'order_detail.html', { 'order': order, 'order_detail': order_detail })
+def order_detail(req, order_id):
+  order = OrderShipping.objects.get(id=order_id)
+  cart_details = order.cart.cartdetail_set.all()
+  return render(req, 'order_detail.html', { 'order': order, 'cart_details': cart_details })
 
-def order_cancel(req, cart_id):
-  order = Cart.objects.get(id=cart_id)
-  order.status = Cart.Status.CANCELLED
-  order.save()
+def order_cancel(req, order_id):
+  order = OrderShipping.objects.get(pk=order_id)
+  order.cart.status = Cart.Status.CANCELLED
+  order.cart.save()
   #Info needed to send user email
   email = req.user.email
-  subject = f"You have cancelled Order #{order.id}."
+  subject = f"Your order (# {order.pk}) was successfully cancelled"
   message = f"If this email is in error or if you wish to change your order, please call +1-905-660-3209."
   send_mail(
     subject, 
@@ -220,20 +216,19 @@ def order_cancel(req, cart_id):
   )
   # Info needed for email to admin
   user = req.user
-  subject = f"{user.company_name} cancelled order #{order.id}"
+  subject = f"{user.company_name} cancelled order #{order.pk}"
   message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) to view the details."
   mail_admins(
     subject, 
     message, 
     fail_silently=False
   )
-  return redirect('order_detail', cart_id)
+  return redirect('order_detail', order.pk)
 
-#Uses a different email method so that images can be attached
-def email_invoice(req, cart_id):
-  order = Cart.objects.get(id=cart_id)
-  order.status = Cart.Status.IN_PROGRESS
-  order_detail = order.cartdetail_set.all()
+# Uses a different email method so that images can be attached
+def email_invoice(req, order_id):
+  order = OrderShipping.objects.get(id=order_id)
+  cart_details = order.cart.cartdetail_set.all()
   #Info needed to send user email
   email = req.user.email
   subject = f"ORDER SHIPPED"
@@ -242,7 +237,7 @@ def email_invoice(req, cart_id):
     'email/invoice_email.html',
     { 'order': order,
       'user': req.user,
-      'order_detail': order_detail
+      'cart_details': cart_details
     })
   msg = EmailMultiAlternatives(
     subject, 

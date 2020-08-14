@@ -1,13 +1,13 @@
 <div class="container-main">
 <p>Thank you for placing your order. Your order will be reviewed and shipped shortly. Here is a summary of your order below:</p>
-<h1>Order # {{ order.id }}</h1>
-  <h3 style="font-weight: 800">Ordered: {{ order.ordered_at }}</h3>
+<h1>Order # {{ cart.ordershipping.pk }}</h1>
+  <h3 style="font-weight: 800">Ordered: {{ cart.ordered_at }}</h3>
   <h4 style="font-weight: 800">Shipped to:</h4>
-  <p>Company Name: {{ user.company_name }}</p>
-  <p>Address: {{ user.address }}</p>
-  <p>City: {{ user.city }}</p>
-  <p>Province: {{ user.province_iso }}</p>
-  <p>Postal Code: {{ user.postal_code }}</p>
+  <p>Company Name: {{ cart.ordershipping.company_name }}</p>
+  <p>Address: {{ cart.ordershipping.address }}</p>
+  <p>City: {{ cart.ordershipping.city }}</p>
+  <p>Province: {{ cart.ordershipping.province_iso }}</p>
+  <p>Postal Code: {{ cart.ordershipping.postal_code }}</p>
   <hr style="width:70%;text-align:left;margin-left:0">
   <table style="border-collapse: collapse; width: 70%">
     <tr>
@@ -16,13 +16,13 @@
       <td style="font-weight: 800">Price</td>
       <td style="font-weight: 800">Total</td>
     </tr>
-    {% for item in order_detail %}
-    <tr>
-      <td>{{ item.tire.name }}</td>
-      <td>{{ item.quantity }}</td>
-      <td>${{ item.price_each }}</td>
-      <td>$ {{ item.get_subtotal }}</td>
-    </tr>
+    {% for item in cart_details %}
+      <tr>
+        <td>{{ item.tire.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>${{ item.price_each }}</td>
+        <td>$ {{ item.get_subtotal }}</td>
+      </tr>
     {% endfor %}
     <tr>
       <td><hr style="width:100%;text-align:left;margin-left:0"></td>
@@ -31,24 +31,29 @@
       <td><hr style="width:100%;text-align:left;margin-left:0"></td>
     </tr>
     <tr>
-      
       <td></td>
       <td></td>
-      <td>Sub-total: </td>
-      <td>${{ order.get_subtotal }}</td>
+      <td>Items ({{ cart.get_item_count }}):</td>
+      <td>${{ cart.get_subtotal }}</td>
     </tr>
     <tr>
       <td></td>
       <td></td>
-      <td>Tax:</td>
-      <td>$$$</td>
+      <td>Discount ({{ cart.discount_percent_applied.normalize }}%):</td>
+      <td>-${{ cart.get_discount_amount }}</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Tax ({{ cart.tax_percent_applied.normalize }}%):</td>
+      <td>${{ cart.get_tax_amount }}</td>
     </tr>
     <tfoot>
       <tr>
         <td></td>
         <td></td>
         <td>Total:</td>
-        <td>${{ order.get_total }}</td>
+        <td>${{ cart.get_total }}</td>
       </tr>
     </tfoot>
   </table>

@@ -48,19 +48,19 @@
     <div class="container-main">
       <p>Please find an email copy of your invoice below. We appreciate your business!</p>
       <img src="cid:static/images/road-star-logo.png" alt="road star tire logo"/>
-      <h3 class="testing">ROAD STAR TIRE WHOLESALE</h3>
-      <p><a href="http://www.roadstartirewholesale.ca">www.RoadStarTireWholesale.ca</a></p>
+      <h3 class="testing">ROADSTAR TIRE WHOLESALE</h3>
+      <p><a href="http://www.roadstartirewholesale.ca">www.RoadstarTireWholesale.ca</a></p>
       <p>140 Doughton Rd, Concord, ON  L4K 1R3</p>
       <p>(905) 660-3209</p>
-    <h1>Invoice # {{ order.id }}</h1>
-      <h3>Ordered: {{ order.ordered_at }}</h3>
-      <h3>Shipped: {{ order.closed_at }}</h3>
+    <h1>Invoice # {{ order.pk }}</h1>
+      <h3>Ordered: {{ order.cart.ordered_at }}</h3>
+      <h3>Shipped: {{ order.cart.closed_at }}</h3>
       <h4>Invoice to / Ship to:</h4>
-      <p>Company Name: {{ user.company_name }}</p>
-      <p>Address: {{ user.address }}</p>
-      <p>City: {{ user.city }}</p>
-      <p>Province: {{ user.province_iso }}</p>
-      <p>Postal Code: {{ user.postal_code }}</p>
+      <p>Company Name: {{ order.company_name }}</p>
+      <p>Address: {{ order.address }}</p>
+      <p>City: {{ order.city }}</p>
+      <p>Province: {{ order.province_iso }}</p>
+      <p>Postal Code: {{ order.postal_code }}</p>
       <hr>
       <table>
         <tr>
@@ -73,17 +73,17 @@
           <td class="col-head">Quantity</td>
           <td class="col-head">Amount</td>
         </tr>
-        {% for item in order_detail %}
-        <tr>
-          <td>{{ item.tire.width }}/{{ item.tire.aspect_ratio }}{{ item.tire.rim_size }}</td>
-          <td>{{ item.tire.brand }}</td>
-          <td>{{ item.tire.season }}</td>
-          <td>{{ item.tire.pattern }}</td>
-          <td>{{ item.load }}</td>
-          <td>${{ item.price_each }}</td>
-          <td>{{ item.quantity }}</td>
-          <td>$ {{ item.get_subtotal }}</td>
-        </tr>
+        {% for item in cart_details %}
+          <tr>
+            <td>{{ item.tire.width }}/{{ item.tire.aspect_ratio }}{{ item.tire.rim_size }}</td>
+            <td>{{ item.tire.brand }}</td>
+            <td>{{ item.tire.season }}</td>
+            <td>{{ item.tire.pattern }}</td>
+            <td>{{ item.load }}</td>
+            <td>${{ item.price_each }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>$ {{ item.get_subtotal }}</td>
+          </tr>
         {% endfor %}
         <tr>
           <td><hr></td>
@@ -102,8 +102,8 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>Sub-total: </td>
-          <td>${{ order.get_subtotal }}</td>
+          <td>Sub-total:</td>
+          <td>${{ order.cart.get_subtotal }}</td>
         </tr>
         <tr>
           <td></td>
@@ -128,7 +128,7 @@
           </tr>
         </tfoot>
       </table>
-    <p>GST/HST# {{ user.hst_number }}</p>
+    <p>GST/HST# {{ order.hst_number }}</p>
     <p>WARRANTY 60,0000 KM (as it was shown and agreed with customer)</p>
     </div>
   </body>
