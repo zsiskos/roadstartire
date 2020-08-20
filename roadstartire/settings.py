@@ -52,6 +52,10 @@ environ.Env()
 environ.Env.read_env()
 
 
+import environ
+environ.Env()
+environ.Env.read_env()
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -66,13 +70,11 @@ SECRET_KEY = 'hc=@aet_2rzy+54#hnyoz)nco%fq@s8#^s%u67!z4pflgi=zdl'
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '*',
     'localhost',
     '127.0.0.1',
     'www.roadstartirewholesale.ca',
-    'roadstar-tire.herokuapp.com',
+    'road-star.herokuapp.com',
 ]
-
 
 # Application definition
 
@@ -179,20 +181,17 @@ USE_TZ = True
 # Need this so that Django knows to use the new User class
 AUTH_USER_MODEL = 'users.CustomUser'
 
-COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-
-STATIC_URL  = '/static/'
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+# The absolute path to the directory where collectstatic will collect static files for deployment
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+STATIC_URL = '/static/'
+
 # Extra places for collectstatic to find static files.
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'main_app/static'),
+)
 
 # Configure Django App for Heroku.
 import django_heroku
