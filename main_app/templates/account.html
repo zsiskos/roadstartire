@@ -67,44 +67,44 @@
   <h2 class="title-account">Your Orders</h2>
 
   <!-- ───────────────────────────────────────────────────────────────── -->
-  {% if carts.count %}
+  {% if orders.count %}
     {% include "pagination.html" %}
   {% endif %}
   <!-- ───────────────────────────────────────────────────────────────── -->
-  {% if carts.count %}
-    {% for cart in page_obj %}
+  {% if orders.count %}
+    {% for order in page_obj %}
       <div class="container-account-order">
         <div class="order-info">
-          <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ cart.ordered_at }}</p>
+          <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ order.cart.ordered_at }}</p>
         </div>
         <div class=container-num-status>
-          <a class="order-label order-num" href="{% url 'order_detail' cart.id %}">Order # {{ cart.id }}</a>
+          <a class="order-label order-num" href="{% url 'order_detail' order.pk %}">Order # {{ order.id }}</a>
           <p class="order-status"
-            {% if cart.status == cart.Status.IN_PROGRESS %} 
+            {% if order.cart.status == order.cart.Status.IN_PROGRESS %} 
               style="color: #1b66bb"
-            {% elif cart.status == cart.Status.CANCELLED  %}
+            {% elif order.cart.status == order.cart.Status.CANCELLED  %}
               style="color: #e44e44"
-            {% elif cart.status == cart.Status.FULFILLED  %}
+            {% elif order.cart.status == order.cart.Status.FULFILLED  %}
               style="color: #509553"
             {% endif %}
-          >{{ cart.get_status_display }}
+          >{{ order.cart.get_status_display }}
           </p>
         </div>
-        <p class="account-total"><span class="order-label">Total</span>${{ cart.get_total|intcomma }}</p>
+        <p class="account-total"><span class="order-label">Total</span>${{ order.cart.get_total|intcomma }}</p>
         <div class="separator"></div>
         <div class="account-order-items">
-          {% for item in cart.cartdetail_set.all %}
+          {% for item in order.cart.cartdetail_set.all %}
             <div>{{ item.tire.name }} x {{ item.quantity }}</div>
           {% endfor %}
         </div>
-        <a class="order-btn" href="{% url 'order_detail' cart.id %}">View Order</a>
+        <a class="order-btn" href="{% url 'order_detail' order.pk %}">View Order</a>
       </div>
       {% endfor %}
     {% else %}
       <p>No orders to display</p>
     {% endif %}
     <!-- ───────────────────────────────────────────────────────────────── -->
-    {% if carts.count %}
+    {% if orders.count %}
       {% include "pagination.html" %}
     {% endif %}
     <!-- ───────────────────────────────────────────────────────────────── -->

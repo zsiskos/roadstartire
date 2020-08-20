@@ -89,6 +89,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
   # is_active_status_tracker = FieldTracker(fields=['is_active'])
   tax_percent_tracker = FieldTracker(fields=['tax_percent'])
+  discount_percent_tracker = FieldTracker(fields=['discount_percent'])
 
   class Meta:
     # Change model name in admin interface
@@ -111,11 +112,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
   # If the User's tax_percent is changed, then update the User's current cart if it exists
   def save(self, *args, **kwargs):
-    if self.tax_percent_tracker.has_changed('tax_percent'):
-      try:
-        currentCart = self.cart_set.get(status=Cart.Status.CURRENT)
+    try:
+      currentCart = self.cart_set.get(status=Cart.Status.CURRENT)
+      if self.tax_percent_tracker.has_changed('tax_percent'):
         currentCart.tax_percent_applied = self.tax_percent
-        currentCart.save()
-      except Cart.DoesNotExist:
-        currentCart = None
+      if self.discount_percent_tracker.has_changed('discount_percent'):
+        currentCart.discount_percent_applied = self.discount_percent
+      currentCart.save()
+    except Cart.DoesNotExist:
+      currentCart = None
     super(CustomUser, self).save(*args, **kwargs)
