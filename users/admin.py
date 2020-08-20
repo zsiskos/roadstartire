@@ -23,6 +23,8 @@ class CartInline(admin.TabularInline):
     'closed_at'
   )
 
+  show_change_link = True
+
 class CustomUserAdmin(UserAdmin):
   add_form = CustomUserCreationForm
   form = CustomUserChangeForm
@@ -150,6 +152,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
 
-admin.site.site_header = 'Road Star Tire'
-admin.site.site_title = 'Road Star Tire'
+admin.site.site_header = 'ROADSTAR TIRE WHOLESALE'
+admin.site.site_title = 'Roadstar Tire Wholesale'
 admin.site.index_title = 'Site Admin'

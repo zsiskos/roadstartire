@@ -10,6 +10,41 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'mysite.log',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['file'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'MYAPP': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    }
+}
+
+DEBUG_PROPAGATE_EXCEPTIONS = True
+
 import os
 import environ
 
@@ -32,9 +67,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'hc=@aet_2rzy+54#hnyoz)nco%fq@s8#^s%u67!z4pflgi=zdl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+<<<<<<< HEAD
 DEBUG = os.environ['DEBUG_VALUE'] == 'FALSE'
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', 'road-star.herokuapp.com']
+=======
+DEBUG = os.environ['DEBUG_VALUE'] == 'TRUE'
+
+ALLOWED_HOSTS = [
+    '*',
+    'localhost',
+    '127.0.0.1',
+    'www.roadstartirewholesale.ca',
+    'road-star.herokuapp.com',
+]
+>>>>>>> master
 
 # Application definition
 
@@ -51,8 +98,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -138,18 +185,20 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Need this so that Django knows to use the new User class
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# The absolute path to the directory where collectstatic will collect static files for deployment
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Need this so that Django knows to use the new User class
-
-AUTH_USER_MODEL = 'users.CustomUser'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'main_app/static'),
+)
 
 # Configure Django App for Heroku.
 import django_heroku

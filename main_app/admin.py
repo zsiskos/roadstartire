@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cart, Tire, CartDetail
+from .models import Cart, Tire, CartDetail, OrderShipping
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -17,6 +17,43 @@ from django.utils import timezone
 # ────────────────────────────────────────────────────────────────────────────────
 
 admin.site.empty_value_display = '–'
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class OrderShippingInline(admin.StackedInline):
+  model = OrderShipping
+  can_delete = False
+  extra = 0 # Set to 0 to hide the form when there is no OrderShipping
+  show_change_link = True
+
+  readonly_fields = (
+    'first_name',
+    'last_name',
+    'company_name',
+    'business_phone',
+    'country_iso',
+    'province_iso',
+    'city',
+    'address',
+    'postal_code',
+    'hst_number',
+  )
+
+  fieldsets = (
+    (None, {
+      'fields': (
+        'first_name', 
+        'last_name',
+        'company_name',
+        'business_phone',
+        'country_iso', 'province_iso',
+        'city', 'address', 'postal_code',
+        'hst_number',
+      )
+    }),
+  )
+
+# ────────────────────────────────────────────────────────────────────────────────
 
 class CartDetailAdmin(admin.ModelAdmin):
   list_display = (
@@ -52,10 +89,10 @@ class CartDetailAdmin(admin.ModelAdmin):
 
   # Dynamic readonly
   def get_readonly_fields(self, request, obj=None):
-    if obj:
-      return ('cart', 'tire', 'price_each', 'created_at', 'updated_at',) # Existing object
-    else:
-      return ('price_each', 'created_at', 'updated_at',) # Creating an object
+    if obj: # Change view
+      return ('cart', 'tire', 'price_each', 'created_at', 'updated_at',)
+    else: # Add view
+      return ('price_each', 'created_at', 'updated_at',)
 
   autocomplete_fields = ['tire']
 
@@ -64,7 +101,8 @@ class CartDetailAdmin(admin.ModelAdmin):
 class CartDetailInline(admin.TabularInline):
   model = CartDetail
   can_delete = True
-  extra = 1 # Number of extra forms the formset will display in addition to the initial forms
+  extra = 1
+  show_change_link = True
 
   readonly_fields = (
     'price_each',
@@ -80,19 +118,21 @@ class CartDetailInline(admin.TabularInline):
 class CartAdmin(admin.ModelAdmin):
   list_display = (
     'id',
+    'get_order_number',
     'user',
     'get_owner',
     'created_at',
     'status',
     'get_item_count',
-    'discount_percent_applied',
     'get_subtotal',
+    'get_discount_amount',
     'get_tax_amount',
     'get_total',
   )
 
   list_display_links = (
     'id',
+    'get_order_number',
     'user',
   )
 
@@ -106,6 +146,8 @@ class CartAdmin(admin.ModelAdmin):
   )
 
   search_fields = (
+    'pk',
+    'ordershipping__pk',
     'user__first_name',
     'user__last_name',
     'user__email',
@@ -113,16 +155,18 @@ class CartAdmin(admin.ModelAdmin):
 
   # Dynamic fieldsets
   def get_fieldsets(self, request, obj=None):
-    if obj:
-      # fieldsets for Change form
+    if obj: # Change view
       fieldsets = (
         (None, {
           'fields': (
             'user',
             'status',
             'get_item_count', 
-            'discount_percent_applied',
             'get_subtotal',
+            (
+              'get_discount_amount',
+              'discount_percent_applied',
+            ),
             (
               'get_tax_amount',
               'tax_percent_applied',
@@ -135,8 +179,7 @@ class CartAdmin(admin.ModelAdmin):
           )
         }),
       )
-    else:
-      # fieldsets for Add form
+    else: # Add view
       fieldsets = (
         (None, {
           'fields': (
@@ -148,8 +191,10 @@ class CartAdmin(admin.ModelAdmin):
     return fieldsets
 
   readonly_fields = (
+    'get_order_number',
     'get_item_count', 
     'get_subtotal',
+    'get_discount_amount',
     'get_tax_amount',
     'get_total',
     'created_at',
@@ -158,7 +203,11 @@ class CartAdmin(admin.ModelAdmin):
     'closed_at',
   )
 
-  inlines = (CartDetailInline,)
+  # Dynamic inlines
+  def get_inlines(self, request, obj):
+    if obj is None: # Add view
+      return (CartDetailInline,)
+    return (OrderShippingInline, CartDetailInline,) # Change view
 
   actions = [
     'mark_as_cancelled',
@@ -173,11 +222,11 @@ class CartAdmin(admin.ModelAdmin):
       cart.status=Cart.Status.FULFILLED
       cart.save()
     self.message_user(req, ngettext(
-      "%d cart was successfully changed and marked as 'Fulfilled'.",
-      "%d carts were successfully changed and marked as 'Fulfilled'.",
+      "%d cart was successfully changed and marked as '✅ Fulfilled'.",
+      "%d carts were successfully changed and marked as '✅ Fulfilled'.",
       updated,
     ) % updated, messages.SUCCESS)
-  mark_as_fulfilled.short_description = "Mark selected carts as 'Fulfilled'"
+  mark_as_fulfilled.short_description = "Mark selected carts as '✅ Fulfilled'"
 
   def mark_as_cancelled(self, req, queryset):
     updated = 0
@@ -187,11 +236,11 @@ class CartAdmin(admin.ModelAdmin):
       cart.status=Cart.Status.CANCELLED
       cart.save()
     self.message_user(req, ngettext(
-      "%d cart was successfully changed and marked as 'Cancelled'.",
-      "%d carts were successfully changed and marked as 'Cancelled'.",
+      "%d cart was successfully changed and marked as '❌ Cancelled'.",
+      "%d carts were successfully changed and marked as '❌ Cancelled'.",
       updated,
     ) % updated, messages.SUCCESS)
-  mark_as_cancelled.short_description = "Mark selected carts as 'Cancelled'"
+  mark_as_cancelled.short_description = "Mark selected carts as '❌ Cancelled'"
   
   # Override changeform_view and changelist_view to handle IntegrityError when UniqueConstraint on user and status, where status = 1
   # This is because Django does not throw a ValidationError when using UnqieConstraint with condition(s)
@@ -216,6 +265,30 @@ class CartAdmin(admin.ModelAdmin):
   date_hierarchy = 'created_at'
 
   autocomplete_fields = ['user']
+
+  status = None
+  def get_form(self, request, obj=None, **kwargs):
+    if obj:
+      self.status = obj.status
+      return super(CartAdmin, self).get_form(request, obj, **kwargs)
+
+  # Dynamic choice fields
+  def formfield_for_choice_field(self, db_field, request, **kwargs):
+    if db_field.name == "status":
+      kwargs['choices'] = (
+        (Cart.Status.CURRENT, '1. 🛒 Current'),
+        (Cart.Status.IN_PROGRESS, '2. ⏳ In Progress'),
+        (Cart.Status.FULFILLED, '3. ✅ Fulfilled'),
+        (Cart.Status.CANCELLED, '❌ Cancelled'),
+        (Cart.Status.ABANDONED, '🚧 Abandoned'),  
+      )
+      
+    # if request.user.is_superuser:
+    #   kwargs['choices'] += (('ready', 'Ready for deployment'),)
+
+    if self.status == Cart.Status.CURRENT:
+      kwargs['choices'] += (('ready', 'Ready for deployment'),)
+    return super().formfield_for_choice_field(db_field, request, **kwargs)
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -281,7 +354,62 @@ class TireAdmin(admin.ModelAdmin):
 
 # ────────────────────────────────────────────────────────────────────────────────
 
+class OrderShippingAdmin(admin.ModelAdmin):
+  list_display = (
+    '__str__',
+    'cart',
+    'first_name',
+    'last_name',
+    'company_name',
+    'business_phone',
+    'country_iso',
+    'province_iso',
+    'city',
+    'address',
+    'postal_code',
+    'hst_number',
+  )
+
+  list_filter = (
+  
+  )
+
+  search_fields = (
+    'pk',
+    'cart__pk',
+    'first_name',
+    'last_name',
+  )
+
+  fieldsets = (
+    (None, {
+      'fields': (
+        'cart',
+        'first_name',
+        'last_name',
+        'company_name',
+        'business_phone',
+        'country_iso',
+        'province_iso',
+        'city',
+        'address',
+        'postal_code',
+        'hst_number',
+      )
+    }),
+  )
+
+  # Dynamic readonly
+  def get_readonly_fields(self, request, obj=None):
+    if obj:
+      return ('cart',) # Existing object
+    else:
+      return ('',) # Creating an object
+
+# ────────────────────────────────────────────────────────────────────────────────
+
 # Register your models here
 admin.site.register(CartDetail, CartDetailAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Tire, TireAdmin)
+admin.site.register(OrderShipping, OrderShippingAdmin)
