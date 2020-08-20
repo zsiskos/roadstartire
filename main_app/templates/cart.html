@@ -19,13 +19,6 @@
           <p><span class="cart-label">Category:</span> {{cart_detail.tire.season}}</p>
           <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
           <p><span class="cart-label">Load:</span> {{cart_detail.tire.load}}</p>
-          <!-- <p><span class="cart-label">Availability:</span> 
-            {% if cart_detail.tire.current_quantity < 20 %}
-              Low stock
-              {% else %}
-              In stock
-            {% endif %}
-          </p> -->
         </div>
       </div>
       <div class="container-cart-qty">
@@ -72,8 +65,6 @@
       <span class="cart-label">Total:</span>
       ${{ cart.get_total|intcomma }}
     </p>
-
-    <!-- <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue shopping</a> -->
     <a class="order-btn-filled" href="{% url 'cart_order' cart.id %}">Place Order</a>
   </div>
 {% else %}
