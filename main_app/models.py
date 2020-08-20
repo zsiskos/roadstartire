@@ -28,11 +28,11 @@ class Cart(TimeStampMixin):
   status_help_text = """
     <br/>
     A Cart can be in 1 of 5 states:<br/>
-    1. <strong>Current</strong> - The currently open cart (each user can only have 1 cart in this state)<br/>
-    2. <strong>Abandoned</strong> - The last item in the cart was removed<br/>
-    3. <strong>In progress</strong> - Cart has been submitted but not yet fulfilled nor cancelled<br/>
-    4. <strong>Cancelled</strong> - Cart can no longer be fulfilled<br/>
-    5. <strong>Fulfilled</strong> - Items have been delivered to client and payment has been received<br/>
+    🛒 <strong>Current</strong> - The currently open cart (each user can only have 1 cart in this state)<br/>
+    ⏳ <strong>In progress</strong> - Cart has been submitted but not yet fulfilled or cancelled<br/>
+    ✅ <strong>Fulfilled</strong> - Items have been delivered to client and payment has been received<br/>
+    ❌ <strong>Cancelled</strong> - Cart can no longer be fulfilled<br/>
+    🚧 <strong>Abandoned</strong> - The last item in the cart was removed (this will occur automatically)<br/>
   
   """
   
@@ -70,7 +70,7 @@ class Cart(TimeStampMixin):
   closed_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Closed (UTC)', help_text=closed_at_help_text)
 
   def __str__(self):
-    return f'Cart #{self.id} - {self.get_status_display()}'
+    return f'Cart #{self.id}'
     
   # @property
   # def get_total(self):
@@ -91,14 +91,14 @@ class Cart(TimeStampMixin):
   def get_subtotal(self):
     cart = Cart.objects.get(pk=self.pk)
     subtotal = Decimal('0.00') # Need to use Decimal type so that 0 is displayed as 0.00
-    for cartDetail in cart.cartdetail_set.all():
+    for cartDetail in self.cartdetail_set.all():
       subtotal += cartDetail.quantity * cartDetail.tire.price
     return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
 
   def get_discount_amount(self):
     return round(self.get_subtotal() * self.discount_percent_applied / 100, 2)
-  get_discount_amount.short_description = 'Tax amount ($)'
+  get_discount_amount.short_description = 'Discount amount ($)'
 
   def get_tax_amount(self):
     return round(self.get_subtotal() * self.tax_percent_applied / 100, 2)
@@ -126,6 +126,16 @@ class Cart(TimeStampMixin):
     constraints = [
       models.UniqueConstraint(fields=['user','status'], condition=Q(status=1), name='unique_current_cart')
     ]
+
+  @staticmethod
+  def does_state_require_shipping_info(status):
+    if (status == Cart.Status.IN_PROGRESS or status == Cart.Status.FULFILLED or status == Cart.Status.CANCELLED):
+      return True
+
+  def get_order_number(self):
+    order_number = self.ordershipping.pk
+    return order_number
+  get_order_number.short_description = 'Order #'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -174,7 +184,7 @@ class CartDetail(TimeStampMixin):
   price_each = models.DecimalField(max_digits=7, decimal_places=2, blank=True, verbose_name='Price per item ($)')
   
   def __str__(self):
-    return f'Cart {self.cart} contains {self.quantity} \'{self.tire}\' tires'
+    return f'{self.cart} –  {self.tire} - QTY: {self.quantity}'
 
   def get_subtotal(self):
     return self.quantity * self.tire.price
@@ -193,3 +203,46 @@ class CartDetail(TimeStampMixin):
     super(CartDetail, self).save(*args, **kwargs)
     if self.quantity == 0:
       self.delete()
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class OrderShipping(models.Model):
+  COUNTRY_CHOICES = [
+    ('CAN', 'Canada'),
+    ('USA', 'United States')
+  ]
+
+  PROVINCE_CHOICES = [
+    ('AB', 'Alberta'),
+    ('BC', 'British Columbia'),
+    ('MB', 'Manitoba'),
+    ('NB', 'New Brunswick'),
+    ('NL', 'Newfoundland and Labrador'),
+    ('NS','Nova Scotia'),
+    ('NT', 'Northwest Territories'),
+    ('NU', 'Nunavut'),
+    ('ON', 'Ontario'), # Default
+    ('PE','Prince Edward Island'),
+    ('QC', 'Quebec'),
+    ('SK', 'Saskatchewan'),
+    ('YT', 'Yukon'),
+  ]
+
+  cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
+  first_name = models.CharField(max_length=30)
+  last_name = models.CharField(max_length=30)
+  company_name = models.CharField(max_length=50, blank=True, verbose_name='Company')
+  business_phone = models.CharField(max_length=30, blank=True, verbose_name='Phone')
+  country_iso = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default=COUNTRY_CHOICES[0][0], verbose_name='Country')
+  province_iso = models.CharField(max_length=2, choices=PROVINCE_CHOICES, default=PROVINCE_CHOICES[8][0], verbose_name='Province')
+  city = models.CharField(max_length=30)
+  address = models.CharField(max_length=30)
+  postal_code = models.CharField(max_length=30, blank=True)
+  hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
+
+  def __str__(self):
+    return f'Order # {self.pk}'
+
+  class Meta:
+    verbose_name = 'Shipping Info'
+    verbose_name_plural = 'Shipping Info'
