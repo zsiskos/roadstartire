@@ -67,9 +67,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'hc=@aet_2rzy+54#hnyoz)nco%fq@s8#^s%u67!z4pflgi=zdl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
+DEBUG = os.environ['DEBUG_VALUE'] == 'TRUE'
 
 ALLOWED_HOSTS = [
+    '*',
     'localhost',
     '127.0.0.1',
     'www.roadstartirewholesale.ca',
