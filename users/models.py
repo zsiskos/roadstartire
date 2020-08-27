@@ -6,6 +6,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.postgres.fields import CIEmailField
 from model_utils import FieldTracker
 from main_app.models import Cart
+import pytz
+from timezone_field import TimeZoneField
 
 from .managers import CustomUserManager
 
@@ -61,7 +63,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   last_name = models.CharField(max_length=30)
   is_active = models.BooleanField(default=False, help_text=is_active_help_text)
   is_staff = models.BooleanField(default=False, help_text=is_staff_help_text)
-  date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Date Joined (UTC)')
+  date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Date Joined')
   company_name = models.CharField(max_length=50, blank=True, verbose_name='Company')
   business_phone = models.CharField(max_length=30, blank=True, verbose_name='Phone')
   country_iso = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default=COUNTRY_CHOICES[0][0], verbose_name='Country')
@@ -86,6 +88,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     validators=[MinValueValidator(0), MaxValueValidator(100),], 
     help_text=tax_percent_help_text
   )
+  timezone = TimeZoneField(default='America/Toronto')
 
   # is_active_status_tracker = FieldTracker(fields=['is_active'])
   tax_percent_tracker = FieldTracker(fields=['tax_percent'])

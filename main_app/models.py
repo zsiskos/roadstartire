@@ -9,8 +9,8 @@ from decimal import Decimal
 # ────────────────────────────────────────────────────────────────────────────────
 
 class TimeStampMixin(models.Model):
-  created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date Created (UTC)')
-  updated_at = models.DateTimeField(auto_now=True, verbose_name='Date Modified (UTC)')
+  created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date Created')
+  updated_at = models.DateTimeField(auto_now=True, verbose_name='Date Modified')
 
   class Meta:
     abstract = True
@@ -66,8 +66,8 @@ class Cart(TimeStampMixin):
     verbose_name='Tax (%)',
     help_text=tax_percent_help_text
   )
-  ordered_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Ordered (UTC)')
-  closed_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Closed (UTC)', help_text=closed_at_help_text)
+  ordered_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Ordered')
+  closed_at = models.DateTimeField(null=True, blank=True, verbose_name='Date Closed', help_text=closed_at_help_text)
 
   def __str__(self):
     return f'Cart #{self.id}'
