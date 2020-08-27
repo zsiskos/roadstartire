@@ -63,11 +63,12 @@ class CustomUserAdmin(UserAdmin):
 
   # fieldsets control the layout of the change page
   fieldsets = (
-    ('Login Credentials', {
+    ('Personal', {
       'fields': (
         ('first_name', 'last_name',),
         'email', 
         'password',
+        'timezone',
       )
     }),
     ('Business Details', {
@@ -95,11 +96,12 @@ class CustomUserAdmin(UserAdmin):
 
   # add_fieldsets control the layout of the add page
   add_fieldsets = (
-    (None, {
+    ('Personal', {
       'fields': (
         ('first_name', 'last_name',),
         'email',
         ('password1', 'password2',),
+        'timezone',
       )
     }),
     ('Business Details', {

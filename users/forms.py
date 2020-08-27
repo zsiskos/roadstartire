@@ -18,13 +18,26 @@ class CustomUserCreationForm(UserCreationForm):
       'city', 
       'postal_code', 
       'province_iso', 
-      'country_iso',)
+      'country_iso',
+      'timezone',)
 
 class CustomUserChangeForm(UserChangeForm):
   password = None
   
   class Meta:
     model = CustomUser
-    fields = ['company_name', 'hst_number', 'first_name', 'last_name', 'email', 'business_phone', 'address', 'city', 'postal_code', 'province_iso', 'country_iso']
+    fields = [
+      'company_name', 
+      'hst_number',
+      'first_name',
+      'last_name',
+      'email',
+      'business_phone',
+      'address',
+      'city',
+      'postal_code',
+      'province_iso',
+      'country_iso',
+      'timezone',]
 
 

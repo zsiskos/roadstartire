@@ -80,6 +80,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'timezone_field',
     'main_app',
     'users',
     'django.contrib.admin',
@@ -100,6 +101,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'roadstartire.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'roadstartire.urls'
