@@ -18,7 +18,7 @@
     <div class="container-order">
       <div class="container-item">
         <div class="image-tire">
-          <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px;"/>
+          <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px; border-radius: 8px;"/>
         </div>
         <div class="item-tire">
           <a class="tire-btn" href="{% url 'tire_detail' tire.id %}"><h2>{{ tire.name }}</h2></a>
@@ -28,28 +28,27 @@
           <p><span class="cart-label">Load:</span> {{tire.load}}</p>
         </div>
       </div>
-      <div class="container-qty">
-        <p>
-          <span class="cart-label">Price:</span>
-          ${{tire.price}}
-        </p>
+      <div class="container-item">
+        <div>
+          <span class="cart-label">Price</span>
+          <h2>${{tire.price}}</h2>
+        </div>  
       </div>
-      <div class="container-price">
-        <p><span class="cart-label">Availability:</span>
-          {% if tire.current_quantity <= 20 %}
-            limited quantity
-          {% elif tire.current_quantity < 2 %}
-            call for availability
-          {% elif tire.current_quantity > 20 %}
-            20+ Available
-          {% endif %}
-        </p>
+      <div class="container-qty">
         <form id="qty-update" method='POST' action="{% url 'tire_list' %}" >
           {% csrf_token %}
-          <input type="number" value="1" min="1" name="quantity"/>
+          Quantity  <input type="number" value="1" min="1" name="quantity"/>
           <input type="hidden" value="{{ tire.id }}" name="id"/>
-          <p><a class="account-btn" href="#"/><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update" /></a></p>
+          <p><a class="order-btn-filled" href="#"/><input id="submit-btn" type="submit" name="submit" value="ADD TO CART"/></a></p>
         </form>
+        <br/>
+        <p><span class="cart-label">Availability:</span>
+          {% if tire.current_quantity > 20 %}
+            In stock
+          {% else %}
+            Low stock
+          {% endif %}
+        </p>
       </div>
     </div>
   {% endfor %}
