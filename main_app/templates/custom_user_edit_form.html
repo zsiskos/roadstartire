@@ -5,7 +5,8 @@
   <h2 >Account Information: Edit</h2>
   <a href="{% url 'account' %}" class="account-btn" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
   <div class="container-form" >
-    <form id="account-save" action="." method="POST" class="form-signin form-grid"> {% csrf_token %}
+    <form id="account-save" action="." method="POST" class="form-signin form-grid"> 
+      {% csrf_token %}
       {{ form }}
       <a href="#" class="order-btn-filled" id="btn-save" alt="save button">Save</a>
       <div class="popup" id="popup-edit-confirm" style="display: none">
