@@ -15,9 +15,9 @@
       <div class="container-left">
         <form class="form-signin form-grid" id="login-form" method="post" action="{% url 'login' %}">
           {% csrf_token %}
-            <label class="grid-label" for="id_username">Email:</label>
+            <label class="grid-label" for="id_username">Email</label>
             <input class="form-control" type="text" name="username" required="" id="username" />
-            <label class="grid-label"  for="id_password">Password:</label>
+            <label class="grid-label"  for="id_password">Password</label>
             <input class="form-control" type="password" name="password" required="" id="id_password"/>
             <button class="order-btn-filled" type="submit">Log In</button> 
             <a class="account-btn forgot-password" href="{% url 'password_reset' %}">Forgot password?</a>
