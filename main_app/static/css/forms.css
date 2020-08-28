@@ -40,7 +40,8 @@
   transition: all .1s ease-out
 }
 
-.form-grid button a {
+.form-grid button, 
+#btn-save {
   grid-column-start: 2;
   margin: 0;
   border: none;
