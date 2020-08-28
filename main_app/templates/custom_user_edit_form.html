@@ -3,11 +3,11 @@
 {% block content %}
 <div class="container-main">
   <h2 >Account Information: Edit</h2>
-  <a href="#" class="account-btn" id="btn-save" alt="save button"><i class="fas fa-save"></i>Save</a>
   <a href="{% url 'account' %}" class="account-btn" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
   <div class="container-form" >
     <form id="account-save" action="." method="POST" class="form-signin form-grid"> {% csrf_token %}
       {{ form }}
+      <a href="#" class="order-btn-filled" id="btn-save" alt="save button">Save</a>
       <div class="popup" id="popup-edit-confirm" style="display: none">
         <div class="popup-copy">
           <p><strong>PLEASE NOTE:</strong> Editing account information will make your account inactive, as a Road Star Tires staff member must validate the account.</p>
