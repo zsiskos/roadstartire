@@ -12,7 +12,7 @@ class CustomUserCreationForm(UserCreationForm):
       'last_name', 
       'email', 
       'company_name', 
-      'hst_number', 
+      'gst_number', 
       'business_phone', 
       'address', 
       'city', 
@@ -28,7 +28,7 @@ class CustomUserChangeForm(UserChangeForm):
     model = CustomUser
     fields = [
       'company_name', 
-      'hst_number',
+      'gst_number',
       'first_name',
       'last_name',
       'email',

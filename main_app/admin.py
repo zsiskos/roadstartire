@@ -36,7 +36,7 @@ class OrderShippingInline(admin.StackedInline):
     'city',
     'address',
     'postal_code',
-    'hst_number',
+    'gst_number',
   )
 
   fieldsets = (
@@ -48,7 +48,7 @@ class OrderShippingInline(admin.StackedInline):
         'business_phone',
         'country_iso', 'province_iso',
         'city', 'address', 'postal_code',
-        'hst_number',
+        'gst_number',
       )
     }),
   )
@@ -367,7 +367,7 @@ class OrderShippingAdmin(admin.ModelAdmin):
     'city',
     'address',
     'postal_code',
-    'hst_number',
+    'gst_number',
   )
 
   list_filter = (
@@ -394,7 +394,7 @@ class OrderShippingAdmin(admin.ModelAdmin):
         'city',
         'address',
         'postal_code',
-        'hst_number',
+        'gst_number',
       )
     }),
   )

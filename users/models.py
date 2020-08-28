@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.contrib.postgres.fields import CIEmailField
 from model_utils import FieldTracker
 from main_app.models import Cart
@@ -71,7 +71,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   city = models.CharField(max_length=30, blank=True)
   address = models.CharField(max_length=30, blank=True)
   postal_code = models.CharField(max_length=30, blank=True)
-  hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
+  gst_number = models.CharField(validators=[MinLengthValidator(15)], max_length=15, blank=True, verbose_name='GST/HST Number')
   discount_percent = models.DecimalField(
     max_digits=5,
     decimal_places=2,

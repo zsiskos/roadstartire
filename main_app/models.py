@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings # Don't refer to the user model directly, it is recommended to refer to the AUTH_USER_MODEL setting
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db.models import Q
 from model_utils import FieldTracker
 from django.urls import reverse
@@ -238,7 +238,7 @@ class OrderShipping(models.Model):
   city = models.CharField(max_length=30)
   address = models.CharField(max_length=30)
   postal_code = models.CharField(max_length=30, blank=True)
-  hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
+  gst_number = models.CharField(validators=[MinLengthValidator(15)], max_length=15, blank=True, verbose_name='GST/HST #')
 
   def __str__(self):
     return f'Order # {self.pk}'

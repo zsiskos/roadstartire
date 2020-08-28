@@ -77,7 +77,7 @@ class CustomUserAdmin(UserAdmin):
         'business_phone', 
         ('country_iso', 'province_iso'),
         ('city', 'address', 'postal_code',),
-        'hst_number',
+        'gst_number',
         'tax_percent',
         'discount_percent',
       )
@@ -110,7 +110,7 @@ class CustomUserAdmin(UserAdmin):
         'business_phone', 
         ('country_iso', 'province_iso'),
         ('city', 'address', 'postal_code',),
-        'hst_number',
+        'gst_number',
         'tax_percent',
         'discount_percent',
       )
