@@ -17,7 +17,7 @@
   padding: 0;
 }
 
-.grid-label {
+.form-grid label {
   text-align: right;
   font-weight: 500;
 }
@@ -54,4 +54,12 @@
 
 .container-errors {
   margin-top: 1rem;
+}
+
+/* WHEN SCREEN GETS SMALL */
+@media (max-width: 850px){
+  .form-grid label {
+    font-size: .5rem;
+    font-weight: 500;
+  }
 }
