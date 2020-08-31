@@ -57,7 +57,7 @@
       </div>
       <div class="account-details" >
         <p class="account-label">Date Joined:</p>
-        <p class="account-data" id="date-joined"> {{ user.date_joined }}</p>
+        <p class="account-data" id="date-joined"> {{ user.date_joined|date:'F j, Y' }}</p>
       </div>
     </div>
   </div>
@@ -75,7 +75,7 @@
     {% for order in page_obj %}
       <div class="container-account-order">
         <div class="order-info">
-          <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ order.cart.ordered_at }}</p>
+          <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ order.cart.ordered_at|date:'F j, Y' }}</p>
         </div>
         <div class=container-num-status>
           <a class="order-label order-num" href="{% url 'order_detail' order.pk %}">Order # {{ order.id }}</a>
@@ -109,5 +109,5 @@
     {% endif %}
     <!-- ───────────────────────────────────────────────────────────────── -->
   </div>
-<script src="{% static 'js/account.js' %}"></script>
+<!-- <script src="{% static 'js/account.js' %}"></script> -->
 {% endblock %}
