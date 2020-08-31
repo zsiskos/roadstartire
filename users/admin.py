@@ -75,9 +75,12 @@ class CustomUserAdmin(UserAdmin):
       'fields': (
         'company_name', 
         'business_phone', 
-        ('country_iso', 'province_iso'),
-        ('city', 'address', 'postal_code',),
-        'hst_number',
+        'country_iso', 
+        'province_iso',
+        'city', 
+        ('address', 'address_2',), 
+        'postal_code',
+        'gst_number',
         'tax_percent',
         'discount_percent',
       )
@@ -108,9 +111,12 @@ class CustomUserAdmin(UserAdmin):
       'fields': (
         'company_name', 
         'business_phone', 
-        ('country_iso', 'province_iso'),
-        ('city', 'address', 'postal_code',),
-        'hst_number',
+        'country_iso',
+        'province_iso',
+        'city',
+        ('address',), 
+        'postal_code',
+        'gst_number',
         'tax_percent',
         'discount_percent',
       )

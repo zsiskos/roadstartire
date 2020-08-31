@@ -94,7 +94,8 @@ def create_order_shipping(sender, instance, *args, **kwargs):
         'province_iso': instance.user.province_iso,
         'city': instance.user.city,
         'address': instance.user.address,
+        'address_2': instance.user.address_2,
         'postal_code': instance.user.postal_code,
-        'hst_number': instance.user.hst_number,
+        'gst_number': instance.user.gst_number,
       }
     )

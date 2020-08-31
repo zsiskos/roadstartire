@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.contrib.postgres.fields import CIEmailField
 from model_utils import FieldTracker
 from main_app.models import Cart
@@ -58,6 +58,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Tax percentage applied to orders (defaults to <strong>13%</strong>)
   """
 
+  address_help_text = """
+    Street address, P.O. box, c/o.
+  """
+
+  address_2_help_text = """
+    Apartment, suite, unit, building, floor, etc.
+  """
+
   email = CIEmailField(unique=True)
   first_name = models.CharField(max_length=30)
   last_name = models.CharField(max_length=30)
@@ -68,10 +76,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
   business_phone = models.CharField(max_length=30, blank=True, verbose_name='Phone')
   country_iso = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default=COUNTRY_CHOICES[0][0], verbose_name='Country')
   province_iso = models.CharField(max_length=2, choices=PROVINCE_CHOICES, default=PROVINCE_CHOICES[8][0], verbose_name='Province')
-  city = models.CharField(max_length=30, blank=True)
-  address = models.CharField(max_length=30, blank=True)
+  city = models.CharField(max_length=30, blank=True, verbose_name='City')
+  address = models.CharField(max_length=30, verbose_name='Address', help_text=address_help_text)
+  address_2 = models.CharField(max_length=30, blank=True, verbose_name='Address Line 2 (optional)', help_text=address_2_help_text)
   postal_code = models.CharField(max_length=30, blank=True)
-  hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
+  gst_number = models.CharField(validators=[MinLengthValidator(15)], max_length=15, blank=True, verbose_name='GST/HST Number')
   discount_percent = models.DecimalField(
     max_digits=5,
     decimal_places=2,

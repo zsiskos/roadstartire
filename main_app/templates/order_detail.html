@@ -11,12 +11,15 @@
     <a class="account-btn" href="{% url 'order_cancel' order.pk %}"><i class="fas fa-window-close"></i>Cancel Order</a>
   {% endif %}
   <div class="container-info order-detail-info">
-    <h4 class="order-detail-ordered-at"><span>Ordered: </span>{{ order.cart.ordered_at }}</h4>
+    <h4 class="order-detail-ordered-at"><span>Ordered: </span>{{ order.cart.ordered_at|date:'F j, Y' }}</h4>
     <h4>Status: {{ order.cart.get_status_display }}</h4>
     <div class="shipping-info">
       <h4>Shipped to:</h4>
       <p>Company Name: {{ order.company_name }}</p>
       <p>Address: {{ order.address }}</p>
+      {% if order.address_2 %}
+        <p>Address Line 2: {{ order.address_2 }}</p>
+      {% endif %}
       <p>City: {{ order.city }}</p>
       <p>Province: {{ ordershipping.province_iso }}</p>
       <p>Postal Code: {{ ordershipping.postal_code }}</p>
