@@ -5,6 +5,11 @@ from django import forms
 from .models import CustomUser
 
 class CustomUserCreationForm(UserCreationForm):
+  def __init__(self, *args, **kwargs):
+      super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+      for field in self.fields:
+          self.fields[field].widget.attrs['class'] = 'form-control'
+
   class Meta(UserCreationForm):
     model = CustomUser
     fields = (
@@ -23,10 +28,15 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomUserChangeForm(UserChangeForm):
   password = None
-  
+
+  def __init__(self, *args, **kwargs):
+        super(CustomUserChangeForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+            
   class Meta:
     model = CustomUser
-    fields = [
+    fields = (
       'company_name', 
       'hst_number',
       'first_name',
@@ -38,6 +48,4 @@ class CustomUserChangeForm(UserChangeForm):
       'postal_code',
       'province_iso',
       'country_iso',
-      'timezone',]
-
-
+      'timezone',)

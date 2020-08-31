@@ -101,6 +101,7 @@
   text-transform: uppercase;
   letter-spacing: 2.1px;
   margin-top: 1.5em;
+  text-align: center;
 }
 
 .order-btn-filled:hover,

@@ -20,6 +20,7 @@ a {
 /* LAYOUT */
 .container-left {
   margin-top: .35rem;
+  margin-right: 2rem;
 }
 
 .container-right {
