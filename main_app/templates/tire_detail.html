@@ -20,10 +20,13 @@
         <p><span class="cart-label">Speed:</span> {{ tire.speed }}</p>
       </div>
     </div>
-    <div class="container-qty">
+    <div class="container-item">
       <div>
-        <h2>${{ tire.price|intcomma }}</h2>
-      </div>
+        <span class="cart-label">Price</span>
+        <h2>${{tire.price|intcomma}}</h2>
+      </div>  
+    </div>
+    <div class="container-qty">
       <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
         {% csrf_token %}
         {{ form.as_p }}
