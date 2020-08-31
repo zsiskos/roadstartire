@@ -58,6 +58,9 @@
       <h4>Invoice to / Ship to:</h4>
       <p>Company Name: {{ order.company_name }}</p>
       <p>Address: {{ order.address }}</p>
+      {%  if order.address_2 %} 
+        <p>Address Line 2: {{ order.address_2 }}</p>
+      {% endif %}
       <p>City: {{ order.city }}</p>
       <p>Province: {{ order.province_iso }}</p>
       <p>Postal Code: {{ order.postal_code }}</p>

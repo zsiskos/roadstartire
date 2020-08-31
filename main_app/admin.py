@@ -35,6 +35,7 @@ class OrderShippingInline(admin.StackedInline):
     'province_iso',
     'city',
     'address',
+    'address_2',
     'postal_code',
     'gst_number',
   )
@@ -47,7 +48,7 @@ class OrderShippingInline(admin.StackedInline):
         'company_name',
         'business_phone',
         'country_iso', 'province_iso',
-        'city', 'address', 'postal_code',
+        'city', 'address','address_2', 'postal_code',
         'gst_number',
       )
     }),
@@ -266,12 +267,6 @@ class CartAdmin(admin.ModelAdmin):
 
   autocomplete_fields = ['user']
 
-  status = None
-  def get_form(self, request, obj=None, **kwargs):
-    if obj:
-      self.status = obj.status
-      return super(CartAdmin, self).get_form(request, obj, **kwargs)
-
   # Dynamic choice fields
   def formfield_for_choice_field(self, db_field, request, **kwargs):
     if db_field.name == "status":
@@ -282,12 +277,8 @@ class CartAdmin(admin.ModelAdmin):
         (Cart.Status.CANCELLED, '❌ Cancelled'),
         (Cart.Status.ABANDONED, '🚧 Abandoned'),  
       )
-      
     # if request.user.is_superuser:
     #   kwargs['choices'] += (('ready', 'Ready for deployment'),)
-
-    if self.status == Cart.Status.CURRENT:
-      kwargs['choices'] += (('ready', 'Ready for deployment'),)
     return super().formfield_for_choice_field(db_field, request, **kwargs)
 
 # ────────────────────────────────────────────────────────────────────────────────
@@ -366,6 +357,7 @@ class OrderShippingAdmin(admin.ModelAdmin):
     'province_iso',
     'city',
     'address',
+    'address_2',
     'postal_code',
     'gst_number',
   )
@@ -393,6 +385,7 @@ class OrderShippingAdmin(admin.ModelAdmin):
         'province_iso',
         'city',
         'address',
+        'address_2',
         'postal_code',
         'gst_number',
       )

@@ -5,6 +5,9 @@
   <h4 style="font-weight: 800">Shipped to:</h4>
   <p>Company Name: {{ cart.ordershipping.company_name }}</p>
   <p>Address: {{ cart.ordershipping.address }}</p>
+  {% if cart.ordershipping.address_2 %}
+    <p>Address Line 2: {{ cart.ordershipping.address_2 }}</p>
+  {% endif %}
   <p>City: {{ cart.ordershipping.city }}</p>
   <p>Province: {{ cart.ordershipping.province_iso }}</p>
   <p>Postal Code: {{ cart.ordershipping.postal_code }}</p>
