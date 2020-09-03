@@ -5,14 +5,30 @@
     <div class="container-left">
       <form class="form-signin form-grid" id="signup-form" method="post" action="{% url 'signup' %}">
         {% csrf_token %}
-          {{ form }}
+        {% for field in form %}
+        <div class="fieldWrapper">
+          {{ field.label }}
+        </div>
+        <div>
+          {{ field }}
+        </div>
+        {% if field.errors %}
+          <div class="field-error">
+            {{ field.errors }}
+          </div>
+        {% endif %}
+        {% if field.help_text %}
+          <div class="field-error">{{ field.help_text|safe }}</div>
+        {% endif %}
+      {% endfor %}
           <button class="order-btn-filled" type="submit">SIGN UP</button>  
       </form>
     </div>
     <div class="container-right">
       <h2>Have an account?</h2> 
       <p>Click here to log in to your personalized member account.</p>
-      <a href="{% url 'login' %}" class="account-btn" alt="log in button"><i class="fas fa-sign-in-alt"></i>Log In</a>
+      </br>
+      <a href="{% url 'login' %}" class="order-btn" alt="log in button">Log In</a>
     </div>
   </div>
 </div>

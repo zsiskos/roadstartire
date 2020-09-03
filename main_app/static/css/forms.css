@@ -22,6 +22,10 @@
   font-weight: 500;
 }
 
+.field-error {
+  grid-column: 1 / span 2;
+}
+
 .form-control {
   padding: .375rem .75rem;
   font-size: 1rem;
@@ -58,8 +62,11 @@
 
 /* WHEN SCREEN GETS SMALL */
 @media (max-width: 850px){
-  .form-grid label {
-    font-size: .5rem;
-    font-weight: 500;
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: .5rem;
   }
+
 }
