@@ -15,12 +15,12 @@
         {{ field }}
       </div>
       {% if field.errors %}
-        <div class="field-error">
+        <div class="form-grid-span">
           {{ field.errors }}
         </div>
       {% endif %}
       {% if field.help_text %}
-        <div class="field-error">{{ field.help_text|safe }}</div>
+        <div class="form-grid-span">{{ field.help_text|safe }}</div>
       {% endif %}
     {% endfor %}
       <a href="#" class="order-btn-filled" id="btn-save" alt="save button">Save</a>
