@@ -8,7 +8,7 @@
   <form class="" method="get" action="{% url 'tire_list' %}">
     <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
     <input name="rim_size" id="id_q" type="text" class="form-control" placeholder="rim size" />
-    <input name="aspect_ratio" id="id_q" type="text" class="form-control" placeholder="aspect raio" />
+    <input name="aspect_ratio" id="id_q" type="text" class="form-control" placeholder="aspect ratio" />
     <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
     <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
     <button type="submit">Search</button>
@@ -25,7 +25,7 @@
           <p><span class="cart-label">Size:</span> {{tire.width}} / {{tire.aspect_ratio}} / {{tire.rim_size}}</p>
           <p><span class="cart-label">Category:</span> {{tire.season}}</p>
           <p><span class="cart-label">Pattern:</span> {{tire.pattern}}</p>
-          <p><span class="cart-label">Load:</span> {{tire.load}}</p>
+          <p><span class="cart-label">Load / Speed:</span> {{tire.load_speed}}</p>
         </div>
       </div>
       <div class="container-item">
