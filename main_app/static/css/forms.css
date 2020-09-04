@@ -22,7 +22,7 @@
   font-weight: 500;
 }
 
-.field-error {
+.form-grid-span {
   grid-column: 1 / span 2;
 }
 
