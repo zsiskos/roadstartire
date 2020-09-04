@@ -22,31 +22,33 @@ def home(req):
   return render(req, 'home.html')
 
 def signup(req):
-    if req.method == 'POST':
-      form = CustomUserCreationForm(req.POST)
-      if form.is_valid():
-        user = form.save() # Add the user to the database
-        #Info needed to send user email
-        email = user.email
-        subject = f"Thank you for registering with Road Star Tires Wholesale."
-        message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111"
-        send_mail(
-          subject, 
-          message, 
-          'settings.EMAIL_HOST_USER', 
-          [email], 
-          fail_silently=False
-        )
-        #Info needed to send admin email
-        mail_admins(
-          f"New signup: {user.company_name}",
-          f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) and verify this new user.",
-          fail_silently=False
-        )
-        return redirect('confirmation')
-    else:
-      form = CustomUserCreationForm()
-    return render(req, 'signup.html', {'form': form}) # redirect to signup page
+  if req.user.is_authenticated:
+    return redirect('tire_list')
+  if req.method == 'POST':
+    form = CustomUserCreationForm(req.POST)
+    if form.is_valid():
+      user = form.save() # Add the user to the database
+      #Info needed to send user email
+      email = user.email
+      subject = f"Thank you for registering with Road Star Tires Wholesale."
+      message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111"
+      send_mail(
+        subject, 
+        message, 
+        'settings.EMAIL_HOST_USER', 
+        [email], 
+        fail_silently=False
+      )
+      #Info needed to send admin email
+      mail_admins(
+        f"New signup: {user.company_name}",
+        f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) and verify this new user.",
+        fail_silently=False
+      )
+      return redirect('confirmation')
+  else:
+    form = CustomUserCreationForm()
+  return render(req, 'signup.html', {'form': form}) # redirect to signup page
 
 def confirmation(req):
   return render(req, 'confirmation.html')
