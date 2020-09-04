@@ -7,12 +7,12 @@
 
   <form class="form-grid" method="get" action="{% url 'tire_list' %}">
     <div class="form-grid-span">
-      <input name="width" id="id_q" type="text" class="form-control" placeholder="width" style="max-width: 25%" />
-      <input name="rim_size" id="id_q" type="text" class="form-control" placeholder="rim size" style="max-width: 25%" />
-      <input name="aspect_ratio" id="id_q" type="text" class="form-control" placeholder="aspect ratio" style="max-width: 25%" />
+      <input name="width" id="id_q" type="text" class="form-control tire-size-input" placeholder="width"/>
+      <input name="rim_size" id="id_q" type="text" class="form-control tire-size-input" placeholder="rim size"/>
+      <input name="aspect_ratio" id="id_q" type="text" class="form-control tire-size-input" placeholder="aspect ratio"/>
     </div>
-    <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
-    <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
+    <input name="brand" id="id_q" type="text" class="form-control tire-detail-input" placeholder="brand" />
+    <input name="season" id="id_q" type="text" class="form-control tire-detail-input season-input" placeholder="season" />
     <button class="order-btn-filled" type="submit" style="grid-column-start: 1;">Search</button>
   </form>
 {% for tire in page_obj %}
