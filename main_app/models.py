@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings # Don't refer to the user model directly, it is recommended to refer to the AUTH_USER_MODEL setting
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db.models import Q
 from model_utils import FieldTracker
 from django.urls import reverse
@@ -228,6 +228,14 @@ class OrderShipping(models.Model):
     ('YT', 'Yukon'),
   ]
 
+  address_help_text = """
+    Street address, P.O. box, c/o.
+  """
+
+  address_2_help_text = """
+    Apartment, suite, unit, building, floor, etc.
+  """
+
   cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
   first_name = models.CharField(max_length=30)
   last_name = models.CharField(max_length=30)
@@ -236,9 +244,10 @@ class OrderShipping(models.Model):
   country_iso = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default=COUNTRY_CHOICES[0][0], verbose_name='Country')
   province_iso = models.CharField(max_length=2, choices=PROVINCE_CHOICES, default=PROVINCE_CHOICES[8][0], verbose_name='Province')
   city = models.CharField(max_length=30)
-  address = models.CharField(max_length=30)
+  address = models.CharField(max_length=30, verbose_name='Address', help_text=address_help_text)
+  address_2 = models.CharField(max_length=30, blank=True, verbose_name='Address Line 2 (optional)', help_text=address_2_help_text)
   postal_code = models.CharField(max_length=30, blank=True)
-  hst_number = models.CharField(max_length=30, blank=True, verbose_name='HST Number')
+  gst_number = models.CharField(validators=[MinLengthValidator(15)], max_length=15, blank=True, verbose_name='GST/HST #')
 
   def __str__(self):
     return f'Order # {self.pk}'

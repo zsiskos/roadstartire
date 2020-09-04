@@ -29,35 +29,6 @@ def update_cart_time_metadata(sender, instance, *args, **kwargs):
 
       if instance.status == Cart.Status.FULFILLED and instance.ordered_at is None:
         instance.ordered_at = timezone.now()
-      
-      if instance.status == Cart.Status.FULFILLED:
-        email = instance.user.email
-        order = instance
-        order_detail = instance.cartdetail_set.all()
-        subject = f"Order # {instance.pk} has been shipped"
-        message = f"This is an email confirmation to let you know that your order (# {instance.pk}) totalling ${instance.get_total()} has been shipped. Thank you for your business!"
-        html_message = loader.render_to_string(
-          'email/invoice_email.html',
-          { 'order': order,
-            'user': instance.user,
-            'order_detail': order_detail
-          })
-        msg = EmailMultiAlternatives(
-          subject, 
-          message, 
-          'settings.EMAIL_HOST_USER', 
-          [email]
-        )
-        msg.attach_alternative(html_message, "text/html")
-        msg.mixed_subtype = 'related'
-        f = 'static/images/road-star-logo.png'
-        fp = open(os.path.join(os.path.dirname(__file__), f), 'rb')
-        msg_img = MIMEImage(fp.read())
-        fp.close()
-        msg_img.add_header('Content-ID', '<{}>'.format(f))
-        msg.attach(msg_img)
-        print(msg_img.get_filename())
-        msg.send()
     # ─────────────────────────────────────────────────────────────────
     # ... --> CURRENT
     elif instance.status == Cart.Status.CURRENT:
@@ -68,16 +39,34 @@ def update_cart_time_metadata(sender, instance, *args, **kwargs):
 @receiver(post_save, sender=Cart)
 def send_order_fulfilled_email(sender, instance, *args, **kwargs):
   if instance.status_tracker.has_changed('status') and instance.status == Cart.Status.FULFILLED:
+    order = instance.ordershipping
+    cart_details = order.cart.cartdetail_set.all()
+    #Info needed to send user email
     email = instance.user.email
-    subject = f"Your order (# {instance.ordershipping.pk}) has been fulfilled"
-    message = f"This is an email confirmation to let you know that your order (# {instance.ordershipping.pk}) totalling ${instance.get_total()} has been successfully fulfilled. Thank you for your business!"
-    send_mail(
+    subject = f"ORDER INVOICE"
+    message = f"Your order has been shipped and an invoice will be provided on delivery. Please log into your account to view details."
+    html_message = loader.render_to_string(
+      'email/invoice_email.html',
+      { 'order': order,
+        'user': instance.user,
+        'cart_details': cart_details
+      })
+    msg = EmailMultiAlternatives(
       subject, 
       message, 
       'settings.EMAIL_HOST_USER', 
-      [email], 
-      fail_silently=False
+      [email]
     )
+    msg.attach_alternative(html_message, "text/html")
+    msg.mixed_subtype = 'related'
+    f = 'static/images/road-star-logo.png'
+    fp = open(os.path.join(os.path.dirname(__file__), f), 'rb')
+    msg_img = MIMEImage(fp.read())
+    fp.close()
+    msg_img.add_header('Content-ID', '<{}>'.format(f))
+    msg.attach(msg_img)
+    print(msg_img.get_filename())
+    msg.send()
 
 # When an order is placed, create a OrderShipping object that saves the user's current shipping info defined on their profile
 @receiver(post_save, sender=Cart)
@@ -94,7 +83,8 @@ def create_order_shipping(sender, instance, *args, **kwargs):
         'province_iso': instance.user.province_iso,
         'city': instance.user.city,
         'address': instance.user.address,
+        'address_2': instance.user.address_2,
         'postal_code': instance.user.postal_code,
-        'hst_number': instance.user.hst_number,
+        'gst_number': instance.user.gst_number,
       }
     )

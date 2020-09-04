@@ -10,16 +10,20 @@
 
 .form-grid {
   display: grid;
-  grid-template-columns: max-content max-content;
+  grid-template-columns: 25% minmax(25px, 300px);
   row-gap: 1rem;
   column-gap: 1rem;
   align-items: center;
   padding: 0;
 }
 
-.grid-label {
+.form-grid label {
   text-align: right;
   font-weight: 500;
+}
+
+.field-error {
+  grid-column: 1 / span 2;
 }
 
 .form-control {
@@ -40,7 +44,8 @@
   transition: all .1s ease-out
 }
 
-.form-grid button {
+.form-grid button, 
+#btn-save {
   grid-column-start: 2;
   margin: 0;
   border: none;
@@ -53,4 +58,15 @@
 
 .container-errors {
   margin-top: 1rem;
+}
+
+/* WHEN SCREEN GETS SMALL */
+@media (max-width: 850px){
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: .5rem;
+  }
+
 }

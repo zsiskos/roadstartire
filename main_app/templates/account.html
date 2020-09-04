@@ -14,8 +14,8 @@
         <p class="account-data">{{ user.company_name }}</p>
       </div>
       <div class="account-details" >
-        <p class="account-label">HST #:</p>
-        <p class="account-data">{{ user.hst_number }}</p>
+        <p class="account-label">GST/HST #:</p>
+        <p class="account-data">{{ user.gst_number }}</p>
       </div>
       <div class="account-details" >
         <p class="account-label">First Name:</p>
@@ -39,6 +39,12 @@
         <p class="account-label">Address: </p>
         <p class="account-data">{{ user.address }}</p>
       </div>
+      {% if user.address_2 %}
+        <div class="account-details">
+          <p class="account-label">Address Line 2: </p>
+          <p class="account-data">{{ user.address_2 }}</p>
+        </div>
+      {% endif %}
       <div class="account-details" >
         <p class="account-label">City:</p>
         <p class="account-data"> {{ user.city }}</p>

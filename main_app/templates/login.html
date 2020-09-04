@@ -13,25 +13,24 @@
     {% endif %}
     <div class="container-info login">
       <div class="container-left">
-        <form id="login-form" method="post" action="{% url 'login' %}">
+        <form class="form-signin form-grid" id="login-form" method="post" action="{% url 'login' %}">
           {% csrf_token %}
-          <div class="login-input">
-            <label for="id_username">Email:</label>
-            <input type="text" name="username" required="" id="username" />
-          </div>
-          <div class="login-input">
-            <label for="id_password">Password:</label>
-            <input type="password" name="password" required="" id="id_password"/>
-          </div>
-          <a href="#" class="account-btn" onClick="document.forms['login-form'].submit();"/><i class="fas fa-sign-in-alt"></i>Log In</a>
+            <label class="grid-label" for="id_username">Email</label>
+            <input class="form-control" type="text" name="username" required="" id="username" />
+            <label class="grid-label"  for="id_password">Password</label>
+            <input class="form-control" type="password" name="password" required="" id="id_password"/>
+            <button class="order-btn-filled" type="submit">Log In</button> 
+            <a class="account-btn forgot-password" href="{% url 'password_reset' %}">Forgot password?</a>
         </form>
-        <a class="account-btn" href="{% url 'password_reset' %}">Forgot password?</a>
       </div>
       <div class="container-right">
         <h2>Don't have an account yet?</h2> 
         <p>Sign up to have a personalized member account.</p>
+        <br/>
         <a href="{% url 'signup' %}" class="order-btn" alt="sign up button">Sign up</a>
       </div>
     </div>
 </div>
 {% endblock %}
+<!-- 
+<a href="#" class="account-btn" onClick="document.forms['login-form'].submit();"/><i class="fas fa-sign-in-alt"></i>Log In</a> -->
