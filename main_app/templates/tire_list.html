@@ -5,13 +5,15 @@
 <div class="container-main">
   <h2>Tires</h2>
 
-  <form class="" method="get" action="{% url 'tire_list' %}">
-    <input name="width" id="id_q" type="text" class="form-control" placeholder="width" />
-    <input name="rim_size" id="id_q" type="text" class="form-control" placeholder="rim size" />
-    <input name="aspect_ratio" id="id_q" type="text" class="form-control" placeholder="aspect raio" />
-    <input name="brand" id="id_q" type="text" class="form-control" placeholder="brand" />
-    <input name="season" id="id_q" type="text" class="form-control" placeholder="season" />
-    <button type="submit">Search</button>
+  <form class="form-grid" method="get" action="{% url 'tire_list' %}">
+    <div class="form-grid-span">
+      <input name="width" id="id_q" type="text" class="form-control tire-size-input" placeholder="width"/>
+      <input name="rim_size" id="id_q" type="text" class="form-control tire-size-input" placeholder="rim size"/>
+      <input name="aspect_ratio" id="id_q" type="text" class="form-control tire-size-input" placeholder="aspect ratio"/>
+    </div>
+    <input name="brand" id="id_q" type="text" class="form-control tire-detail-input" placeholder="brand" />
+    <input name="season" id="id_q" type="text" class="form-control tire-detail-input season-input" placeholder="season" />
+    <button class="order-btn-filled" type="submit" style="grid-column-start: 1;">Search</button>
   </form>
 
   {% if page_obj.number %}
@@ -79,6 +81,7 @@
           <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px; border-radius: 8px;"/>
         </div>
         <div class="item-tire">
+          <h4>{{ tire.brand }}</h4>
           <a class="tire-btn" href="{% url 'tire_detail' tire.id %}"><h2>{{ tire.name }}</h2></a>
           <p><span class="cart-label">Size:</span> {{tire.width}} / {{tire.aspect_ratio}} / {{tire.rim_size}}</p>
           <p><span class="cart-label">Category:</span> {{tire.season}}</p>
