@@ -17,6 +17,31 @@ class TimeStampMixin(models.Model):
 
 # ────────────────────────────────────────────────────────────────────────────────
 
+class Tread(models.Model):
+  name = models.CharField(max_length=30)
+
+  def __str__(self):
+    return self.name
+
+  def get_image_count(self):
+    return self.image_set.all().count()
+  get_image_count.short_description = 'Total number of images'
+
+  class Meta:
+    verbose_name = 'Tread Category'
+    verbose_name_plural = 'Tread Categories'
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class Image(models.Model):
+  tread = models.ForeignKey(Tread, on_delete=models.CASCADE, verbose_name = 'Tread Category')
+  url = models.CharField(max_length=200, blank=True, verbose_name='Tire photo URL')
+
+  def __str__(self):
+    return f'Image ({self.id}) for {self.tread}'
+
+# ────────────────────────────────────────────────────────────────────────────────
+
 class Cart(TimeStampMixin):
   class Status(models.IntegerChoices):
     CURRENT = 1
@@ -112,12 +137,16 @@ class Cart(TimeStampMixin):
     return self.user.full_name
   get_owner.short_description = 'Full name'
     
+  # def get_item_count(self):
+  #   cart = Cart.objects.get(id=self.id)
+  #   count = 0
+  #   for cartDetail in cart.cartdetail_set.all():
+  #     count += cartDetail.quantity
+  #   return count
+  # get_item_count.short_description = 'Number of items'
+
   def get_item_count(self):
-    cart = Cart.objects.get(id=self.id)
-    count = 0
-    for cartDetail in cart.cartdetail_set.all():
-      count += cartDetail.quantity
-    return count
+    return self.image_set.all().count()
   get_item_count.short_description = 'Number of items'
 
   status_tracker = FieldTracker(fields=['status'])
@@ -153,7 +182,7 @@ class Tire(models.Model):
   
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Sale Price ($)')
-  image = models.CharField(max_length=200, blank=True, verbose_name='Tire photo URL')
+  tread = models.ForeignKey(Tread, null=True, blank=True, on_delete=models.CASCADE, verbose_name = 'Tread Category')
   current_quantity = models.PositiveIntegerField(default=0)
   sold = models.PositiveIntegerField(default=0)
 

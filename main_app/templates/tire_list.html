@@ -18,7 +18,7 @@
     <div class="container-order">
       <div class="container-item">
         <div class="image-tire">
-          <img src='{{tire.image}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px; border-radius: 8px;"/>
+          <img src='{{tire.tread.image_set.first.url}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px; border-radius: 8px;"/>
         </div>
         <div class="item-tire">
           <a class="tire-btn" href="{% url 'tire_detail' tire.id %}"><h2>{{ tire.name }}</h2></a>

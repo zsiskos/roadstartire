@@ -1,10 +1,12 @@
 from django.contrib import admin
-from .models import Cart, Tire, CartDetail, OrderShipping
+from .models import Cart, Tire, CartDetail, OrderShipping, Tread, Image
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ngettext
 from django.utils import timezone
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 # ────────────────────────────────────────────────────────────────────────────────
 # list_display - Controls which fields are displayed on the change list page
@@ -113,6 +115,31 @@ class CartDetailInline(admin.TabularInline):
   )
 
   autocomplete_fields = ['tire']
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class ImageInline(admin.StackedInline):
+  model = Image
+  # can_delete = False
+  extra = 0 # Set to 0 to hide the form when there is no OrderShipping
+  show_change_link = True
+
+  # readonly_fields = (
+  # )
+
+  # fieldsets = (
+  #   (None, {
+  #     'fields': (
+  #       'first_name', 
+  #       'last_name',
+  #       'company_name',
+  #       'business_phone',
+  #       'country_iso', 'province_iso',
+  #       'city', 'address','address_2', 'postal_code',
+  #       'gst_number',
+  #     )
+  #   }),
+  # )
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -296,6 +323,7 @@ class TireAdmin(admin.ModelAdmin):
     'load_speed',
     'price',
     'sale_price',
+    'tread',
     'current_quantity',
     'sold',
     'get_total_quantity',
@@ -319,7 +347,6 @@ class TireAdmin(admin.ModelAdmin):
         'name',
         'brand',
         'year',
-        'image',
         (
         'width',
         'aspect_ratio',
@@ -327,6 +354,7 @@ class TireAdmin(admin.ModelAdmin):
         'season',
         'pattern',
         'load_speed',
+        'tread',
         ),
         'price',
         'sale_price',
@@ -342,6 +370,8 @@ class TireAdmin(admin.ModelAdmin):
   )
 
   readonly_fields = ('get_total_quantity',)
+
+  autocomplete_fields = ['tread']
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -401,8 +431,68 @@ class OrderShippingAdmin(admin.ModelAdmin):
 
 # ────────────────────────────────────────────────────────────────────────────────
 
+class TreadAdmin(admin.ModelAdmin):
+  list_display = (
+    'name',
+    'get_image_count',
+  )
+
+  search_fields = (
+    'name',
+  )
+
+  readonly_fields = (
+    'get_image_count',
+  )
+
+  inlines = (ImageInline,)
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class ImageAdmin(admin.ModelAdmin):
+  list_display = (
+    'id',
+    'get_image_display',
+    'url',
+    'tread',
+  )
+
+  list_display_links = (
+    'id',
+    'get_image_display',
+    'url',
+
+  )
+
+  list_filter = (
+    'tread',
+  )
+
+  search_fields = (
+    'tread',
+  )
+
+  readonly_fields = (
+    'get_image_display',
+  )
+
+  autocomplete_fields = ['tread']
+
+  def get_image_display(self, obj):
+    return format_html('<img src="{url}" width={width} height={height} />'.format(
+      url = obj.url,
+      width = 100, # hardcoded thumbnail dimensions
+      height = 100,
+      )
+    )
+  get_image_display.short_description = 'Thumbnail'
+
+# ────────────────────────────────────────────────────────────────────────────────
+
 # Register your models here
 admin.site.register(CartDetail, CartDetailAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Tire, TireAdmin)
 admin.site.register(OrderShipping, OrderShippingAdmin)
+admin.site.register(Tread, TreadAdmin)
+admin.site.register(Image, ImageAdmin)
