@@ -261,6 +261,9 @@ def email_invoice(req, order_id):
 
 @login_required(login_url='/login')
 def tire_list(req):
+  if 'order_by' in req.GET:
+    order = req.GET['order_by']
+
   if req.method == 'POST':
     tire = Tire.objects.get(pk=req.POST["id"])
     if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
@@ -284,28 +287,61 @@ def tire_list(req):
     instance.quantity = int(req.POST["quantity"]) + quantityToCarry
     instance.save()
 
-  if 'width' in req.GET:
-    width = req.GET['width']
-    rim_size = req.GET['rim_size']
-    aspect_ratio = req.GET['aspect_ratio']
-    brand = req.GET['brand']
-    season = req.GET['season']
-    if not ((width or brand) or season):
-      results = Tire.objects.all()
-    else:
-      results = Tire.objects.filter(
+  if 'quick_search' in req.GET:
+    quick_search = req.GET['quick_search']
+    cleaned_query = re.sub('\D', '', quick_search)
+    width = cleaned_query[:3]
+    aspect_ratio = cleaned_query[3:5]
+    rim_size = cleaned_query[-2:]
+    result = Tire.objects.filter(
         width__icontains=width
       ).filter(
+        aspect_ratio__icontains=aspect_ratio
+      ).filter(
         rim_size__icontains=rim_size
+      )
+    if not quick_search:
+      results = Tire.objects.all().order_by('price')
+      if 'order_by' in req.GET:
+        results = Tire.objects.all().order_by(order)
+    else:
+      results = result.order_by('price')
+      if 'order_by' in req.GET:
+        results = result.order_by(order)
+        
+    paginator = Paginator(results, 20) # x objects per page and y number of orphans
+    page_number = req.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(req, 'tire_list.html', {'results' : results, 'page_obj' : page_obj})
+
+  if 'width' in req.GET:
+    width = req.GET['width']
+    aspect_ratio = req.GET['aspect_ratio']
+    rim_size = req.GET['rim_size']
+    brand = req.GET['brand']
+    season = req.GET['season']
+    result = Tire.objects.filter(
+        width__icontains=width
       ).filter(
         aspect_ratio__icontains=aspect_ratio
+      ).filter(
+        rim_size__icontains=rim_size
       ).filter(
         brand__icontains=brand
       ).filter(
         season__icontains=season
       )
+    if not ((width or brand) or season):
+      results = Tire.objects.all().order_by('price')
+      if 'order_by' in req.GET:
+        results = Tire.objects.all().order_by(order)
+    else:
+      results = result.order_by('price')
+      if 'order_by' in req.GET:
+        results = result.order_by(order)
 
-    paginator = Paginator(results, 5) # x objects per page and y number of orphans
+    paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
