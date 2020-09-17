@@ -15,6 +15,7 @@
   column-gap: 1rem;
   align-items: center;
   padding: 0;
+  margin-top: 1rem;
 }
 
 .form-grid label {
@@ -26,7 +27,7 @@
   width: 28%;
 }
 
-.season-input {
+.tire-detail-input {
   max-width: 225px;
 }
 
@@ -69,11 +70,11 @@
 }
 
 /* WHEN SCREEN GETS SMALL */
-@media (max-width: 800px){
+@media (max-width: 450px){
   .form-grid {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     row-gap: .5rem;
   }
 
@@ -84,12 +85,19 @@
   }
 
   .tire-size-input {
+    width: 100%;
     min-width: 150px;
     margin-bottom: .5rem;
   }
 
   .tire-detail-input {
-    width: 100%;
-    max-width: 345px;
+    max-width: 100%;
   }
+
+  .sort-detail {
+    flex-direction: row;
+    margin-top: 1rem;
+    align-items: end;
+  }
+
 }
