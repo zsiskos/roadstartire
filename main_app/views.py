@@ -308,7 +308,7 @@ def tire_list(req):
       results = result.order_by('price')
       if 'order_by' in req.GET:
         results = result.order_by(order)
-        
+
     paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -319,7 +319,6 @@ def tire_list(req):
     width = req.GET['width']
     aspect_ratio = req.GET['aspect_ratio']
     rim_size = req.GET['rim_size']
-    brand = req.GET['brand']
     season = req.GET['season']
     result = Tire.objects.filter(
         width__icontains=width
@@ -328,11 +327,9 @@ def tire_list(req):
       ).filter(
         rim_size__icontains=rim_size
       ).filter(
-        brand__icontains=brand
-      ).filter(
         season__icontains=season
       )
-    if not ((width or brand) or season):
+    if not ((width or aspect_ratio) or season):
       results = Tire.objects.all().order_by('price')
       if 'order_by' in req.GET:
         results = Tire.objects.all().order_by(order)
