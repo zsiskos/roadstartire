@@ -22,31 +22,33 @@ def home(req):
   return render(req, 'home.html')
 
 def signup(req):
-    if req.method == 'POST':
-      form = CustomUserCreationForm(req.POST)
-      if form.is_valid():
-        user = form.save() # Add the user to the database
-        #Info needed to send user email
-        email = user.email
-        subject = f"Thank you for registering with Road Star Tires Wholesale."
-        message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111"
-        send_mail(
-          subject, 
-          message, 
-          'settings.EMAIL_HOST_USER', 
-          [email], 
-          fail_silently=False
-        )
-        #Info needed to send admin email
-        mail_admins(
-          f"New signup: {user.company_name}",
-          f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) and verify this new user.",
-          fail_silently=False
-        )
-        return redirect('confirmation')
-    else:
-      form = CustomUserCreationForm()
-    return render(req, 'signup.html', {'form': form}) # redirect to signup page
+  if req.user.is_authenticated:
+    return redirect('tire_list')
+  if req.method == 'POST':
+    form = CustomUserCreationForm(req.POST)
+    if form.is_valid():
+      user = form.save() # Add the user to the database
+      #Info needed to send user email
+      email = user.email
+      subject = f"Thank you for registering with Road Star Tires Wholesale."
+      message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111"
+      send_mail(
+        subject, 
+        message, 
+        'settings.EMAIL_HOST_USER', 
+        [email], 
+        fail_silently=False
+      )
+      #Info needed to send admin email
+      mail_admins(
+        f"New signup: {user.company_name}",
+        f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) and verify this new user.",
+        fail_silently=False
+      )
+      return redirect('confirmation')
+  else:
+    form = CustomUserCreationForm()
+  return render(req, 'signup.html', {'form': form}) # redirect to signup page
 
 def confirmation(req):
   return render(req, 'confirmation.html')
@@ -231,7 +233,7 @@ def email_invoice(req, order_id):
   cart_details = order.cart.cartdetail_set.all()
   #Info needed to send user email
   email = req.user.email
-  subject = f"ORDER SHIPPED"
+  subject = f"ORDER INVOICE"
   message = f"Your order has been shipped and an invoice will be provided on delivery. Please log into your account to view details."
   html_message = loader.render_to_string(
     'email/invoice_email.html',
@@ -259,6 +261,9 @@ def email_invoice(req, order_id):
 
 @login_required(login_url='/login')
 def tire_list(req):
+  if 'order_by' in req.GET:
+    order = req.GET['order_by']
+
   if req.method == 'POST':
     tire = Tire.objects.get(pk=req.POST["id"])
     if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
@@ -282,28 +287,58 @@ def tire_list(req):
     instance.quantity = int(req.POST["quantity"]) + quantityToCarry
     instance.save()
 
-  if 'width' in req.GET:
-    width = req.GET['width']
-    rim_size = req.GET['rim_size']
-    aspect_ratio = req.GET['aspect_ratio']
-    brand = req.GET['brand']
-    season = req.GET['season']
-    if not ((width or brand) or season):
-      results = Tire.objects.all()
-    else:
-      results = Tire.objects.filter(
+  if 'quick_search' in req.GET:
+    quick_search = req.GET['quick_search']
+    cleaned_query = re.sub('\D', '', quick_search)
+    width = cleaned_query[:3]
+    aspect_ratio = cleaned_query[3:5]
+    rim_size = cleaned_query[-2:]
+    result = Tire.objects.filter(
         width__icontains=width
-      ).filter(
-        rim_size__icontains=rim_size
       ).filter(
         aspect_ratio__icontains=aspect_ratio
       ).filter(
-        brand__icontains=brand
+        rim_size__icontains=rim_size
+      )
+    if not quick_search:
+      results = Tire.objects.all().order_by('price')
+      if 'order_by' in req.GET:
+        results = Tire.objects.all().order_by(order)
+    else:
+      results = result.order_by('price')
+      if 'order_by' in req.GET:
+        results = result.order_by(order)
+
+    paginator = Paginator(results, 20) # x objects per page and y number of orphans
+    page_number = req.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(req, 'tire_list.html', {'results' : results, 'page_obj' : page_obj})
+
+  if 'width' in req.GET:
+    width = req.GET['width']
+    aspect_ratio = req.GET['aspect_ratio']
+    rim_size = req.GET['rim_size']
+    season = req.GET['season']
+    result = Tire.objects.filter(
+        width__icontains=width
+      ).filter(
+        aspect_ratio__icontains=aspect_ratio
+      ).filter(
+        rim_size__icontains=rim_size
       ).filter(
         season__icontains=season
       )
+    if not ((width or aspect_ratio) or season):
+      results = Tire.objects.all().order_by('price')
+      if 'order_by' in req.GET:
+        results = Tire.objects.all().order_by(order)
+    else:
+      results = result.order_by('price')
+      if 'order_by' in req.GET:
+        results = result.order_by(order)
 
-    paginator = Paginator(results, 5) # x objects per page and y number of orphans
+    paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

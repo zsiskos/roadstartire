@@ -7,7 +7,22 @@
   <div class="container-form" >
     <form id="account-save" action="." method="POST" class="form-signin form-grid"> 
       {% csrf_token %}
-      {{ form }}
+      {% for field in form %}
+      <div class="fieldWrapper">
+        {{ field.label_tag }}
+      </div>
+      <div>
+        {{ field }}
+      </div>
+      {% if field.errors %}
+        <div class="form-grid-span">
+          {{ field.errors }}
+        </div>
+      {% endif %}
+      {% if field.help_text %}
+        <div class="form-grid-span">{{ field.help_text|safe }}</div>
+      {% endif %}
+    {% endfor %}
       <a href="#" class="order-btn-filled" id="btn-save" alt="save button">Save</a>
       <div class="popup" id="popup-edit-confirm" style="display: none">
         <div class="popup-copy">

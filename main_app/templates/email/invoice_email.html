@@ -115,8 +115,8 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>Tax ({{order.tax_percent_applied.normalize}}%):</td>
-          <td>${{ order.get_tax_amount }}</td>
+          <td>Tax ({{order.cart.tax_percent_applied.normalize}}%):</td>
+          <td>${{ order.cart.get_tax_amount }}</td>
         </tr>
         <tfoot>
           <tr>
@@ -127,11 +127,11 @@
             <td></td>
             <td></td>
             <td>Total:</td>
-            <td>${{ order.get_total }}</td>
+            <td>${{ order.cart.get_total }}</td>
           </tr>
         </tfoot>
       </table>
-    <p>GST/HST # {{ order.gst_number }}</p>
+    <p>GST/HST # {{ order.cart.gst_number }}</p>
     <p>WARRANTY 60,0000 KM (as it was shown and agreed with customer)</p>
     </div>
   </body>

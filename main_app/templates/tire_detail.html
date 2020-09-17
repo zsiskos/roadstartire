@@ -3,8 +3,8 @@
 {% load humanize %}
 {% block content %}
 <div class="container-main">
-  <h4>{{ tire.brand }}</h4>
-  <h2>{{ tire.name }}</h2>
+  <!-- <h4>{{ tire.brand }}</h4> -->
+  <h2>{{ tire.get_name }}</h2>
   <div class="container-info">
     <div class="container-item">
       <!-- {% for image in tire.tread.image_set.all %}
@@ -16,13 +16,14 @@
         <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 200px; border-radius: 8px;"/>
       </div>
       <div class="item-tire">
-        <p><span class="cart-label">Year:</span> {{ tire.year }}</p>
+        <!-- <p><span class="cart-label">Year:</span> {{ tire.year }}</p> -->
+        <p><span class="cart-label">brand:</span> {{ tire.brand }}</p>
         <p><span class="cart-label">Width:</span> {{ tire.width }}</p>
         <p><span class="cart-label">Aspect Ratio:</span> {{ tire.aspect_ratio }}</p>
         <p><span class="cart-label">Rim Size:</span> {{ tire.rim_size }}</p>
         <p><span class="cart-label">Type:</span> {{ tire.type }}</p>
         <p><span class="cart-label">Pattern:</span> {{ tire.pattern }}</p>
-        <p><span class="cart-label">Speed:</span> {{ tire.speed }}</p>
+        <p><span class="cart-label">Load/Speed:</span> {{ tire.speed }}</p>
       </div>
     </div>
     <div class="container-item">

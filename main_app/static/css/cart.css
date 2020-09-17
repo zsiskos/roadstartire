@@ -38,6 +38,7 @@
 /* LAYOUT */
 .container-order {
   display: flex;
+  row-gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
   margin: .5rem 0;
