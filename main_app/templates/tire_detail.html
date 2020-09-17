@@ -7,6 +7,11 @@
   <h2>{{ tire.name }}</h2>
   <div class="container-info">
     <div class="container-item">
+      <!-- {% for image in tire.tread.image_set.all %}
+        <div class="image-tire">
+          <img src='{{ image.url }}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 200px; border-radius: 8px;"/>
+        </div>
+      {% endfor %} -->
       <div class="image-tire">
         <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 200px; border-radius: 8px;"/>
       </div>

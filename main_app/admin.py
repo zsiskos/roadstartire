@@ -121,24 +121,20 @@ class ImageInline(admin.StackedInline):
   model = Image
   # can_delete = False
   extra = 0 # Set to 0 to hide the form when there is no OrderShipping
-  show_change_link = True
+  # show_change_link = True
 
-  # readonly_fields = (
-  # )
+  readonly_fields = (
+    'get_image_display',
+  )
 
-  # fieldsets = (
-  #   (None, {
-  #     'fields': (
-  #       'first_name', 
-  #       'last_name',
-  #       'company_name',
-  #       'business_phone',
-  #       'country_iso', 'province_iso',
-  #       'city', 'address','address_2', 'postal_code',
-  #       'gst_number',
-  #     )
-  #   }),
-  # )
+  def get_image_display(self, obj):
+    return format_html('<img src="{url}" width={width} height={height} />'.format(
+      url = obj.url,
+      width = 100, # hardcoded thumbnail dimensions
+      height = 100,
+      )
+    )
+  get_image_display.short_description = 'Thumbnail'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -460,7 +456,6 @@ class ImageAdmin(admin.ModelAdmin):
     'id',
     'get_image_display',
     'url',
-
   )
 
   list_filter = (
@@ -470,6 +465,27 @@ class ImageAdmin(admin.ModelAdmin):
   search_fields = (
     'tread',
   )
+
+  # Dynamic fieldsets
+  def get_fieldsets(self, request, obj=None):
+    if obj: # Change view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'get_image_display',
+            'url',
+          )
+        }),
+      )
+    else: # Add view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'url',
+          )
+        }),
+      )
+    return fieldsets
 
   readonly_fields = (
     'get_image_display',
