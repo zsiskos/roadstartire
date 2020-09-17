@@ -140,16 +140,16 @@ class Cart(TimeStampMixin):
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Tire(models.Model):
-  name = models.CharField(max_length=30)
+  name = models.CharField(max_length=30) # remove
   brand = models.CharField(max_length=30)
   year = models.CharField(max_length=30)
 
   width = models.CharField(max_length=30, blank=True)
   aspect_ratio = models.CharField(max_length=30, blank=True)
   rim_size = models.CharField(max_length=30, blank=True)
-  season = models.CharField(max_length=30, blank=True)
+  season = models.CharField(max_length=30, blank=True) #change to 'type'
   pattern = models.CharField(max_length=30, blank=True)
-  load = models.CharField(max_length=30, blank=True)
+  load = models.CharField(max_length=30, blank=True) #change to load_speed
   
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Sale Price ($)')
@@ -159,6 +159,9 @@ class Tire(models.Model):
 
   def __str__(self):
     return self.name
+
+  def get_name(self):
+    return f'{self.brand} {self.width}/{self.aspect_ratio}{self.rim_size} {self.pattern} {self.load}'
 
   def get_total_quantity(self):
     return self.current_quantity + self.sold
