@@ -169,14 +169,13 @@ class Cart(TimeStampMixin):
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Tire(models.Model):
-  name = models.CharField(max_length=30) # remove
   brand = models.CharField(max_length=30)
-  year = models.CharField(max_length=30)
+  year = models.CharField(max_length=30, blank=True)
 
   width = models.CharField(max_length=30, blank=True)
   aspect_ratio = models.CharField(max_length=30, blank=True)
   rim_size = models.CharField(max_length=30, blank=True)
-  tire_type = models.CharField(max_length=30, blank=True)
+  tire_type = models.CharField(max_length=30, blank=True, verbose_name='Type')
   pattern = models.CharField(max_length=30, blank=True)
   load_speed = models.CharField(max_length=30, blank=True, verbose_name='Load Index/Speed Rating')
   
@@ -185,12 +184,14 @@ class Tire(models.Model):
   tread = models.ForeignKey(Tread, null=True, blank=True, on_delete=models.CASCADE, verbose_name = 'Tread Category')
   current_quantity = models.PositiveIntegerField(default=0)
   sold = models.PositiveIntegerField(default=0)
+  
+  @property
+  def name(self):
+    return f'{self.brand} {self.width}/{self.aspect_ratio}{self.rim_size} {self.pattern} {self.load_speed}'
 
   def __str__(self):
     return self.name
 
-  def get_name(self):
-    return f'{self.brand} {self.width}/{self.aspect_ratio}{self.rim_size} {self.pattern} {self.load_speed}'
 
   def get_total_quantity(self):
     return self.current_quantity + self.sold
