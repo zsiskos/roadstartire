@@ -313,7 +313,7 @@ class TireAdmin(admin.ModelAdmin):
     'width',
     'aspect_ratio',
     'rim_size',
-    'season',
+    'tire_type',
     'pattern',
     'load_speed',
     'price',
@@ -327,7 +327,7 @@ class TireAdmin(admin.ModelAdmin):
   list_filter = (
     'brand',
     'year',
-    'season',
+    'tire_type',
   )
 
   search_fields = (
@@ -346,7 +346,7 @@ class TireAdmin(admin.ModelAdmin):
         'width',
         'aspect_ratio',
         'rim_size',
-        'season',
+        'tire_type',
         'pattern',
         'load_speed',
         'tread',

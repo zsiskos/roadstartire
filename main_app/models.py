@@ -176,7 +176,7 @@ class Tire(models.Model):
   width = models.CharField(max_length=30, blank=True)
   aspect_ratio = models.CharField(max_length=30, blank=True)
   rim_size = models.CharField(max_length=30, blank=True)
-  season = models.CharField(max_length=30, blank=True) #change to 'type'
+  tire_type = models.CharField(max_length=30, blank=True)
   pattern = models.CharField(max_length=30, blank=True)
   load_speed = models.CharField(max_length=30, blank=True, verbose_name='Load Index/Speed Rating')
   
