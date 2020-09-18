@@ -356,13 +356,13 @@ class TireAdmin(admin.ModelAdmin):
             'brand',
             'year',
             (
-            'width',
-            'aspect_ratio',
-            'rim_size',
-            'tire_type',
-            'pattern',
-            'load_speed',
-            'tread',
+              'width',
+              'aspect_ratio',
+              'rim_size',
+              'tire_type',
+              'pattern',
+              'load_speed',
+              'tread',
             ),
             'price',
             'sale_price',
@@ -384,13 +384,13 @@ class TireAdmin(admin.ModelAdmin):
             'brand',
             'year',
             (
-            'width',
-            'aspect_ratio',
-            'rim_size',
-            'tire_type',
-            'pattern',
-            'load_speed',
-            'tread',
+              'width',
+              'aspect_ratio',
+              'rim_size',
+              'tire_type',
+              'pattern',
+              'load_speed',
+              'tread',
             ),
             'price',
             'sale_price',
@@ -405,13 +405,6 @@ class TireAdmin(admin.ModelAdmin):
         }),
       )
     return fieldsets
-
-#  # Dynamic readonly
-#   def get_readonly_fields(self, request, obj=None):
-#     if obj:
-#       return ('get_total_quantity',) # Existing object
-#     else:
-#       return ('name', 'get_total_quantity',) # Creating an object
 
   readonly_fields = ('name', 'get_total_quantity',)
 
