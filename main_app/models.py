@@ -146,7 +146,7 @@ class Cart(TimeStampMixin):
   # get_item_count.short_description = 'Number of items'
 
   def get_item_count(self):
-    return self.image_set.all().count()
+    return self.cartdetail_set.all().count()
   get_item_count.short_description = 'Number of items'
 
   status_tracker = FieldTracker(fields=['status'])
