@@ -178,7 +178,7 @@ class Tire(models.Model):
   rim_size = models.CharField(max_length=30, blank=True)
   season = models.CharField(max_length=30, blank=True) #change to 'type'
   pattern = models.CharField(max_length=30, blank=True)
-  load_speed = models.CharField(max_length=30, blank=True, verbose_name='Load Index / Speed Rating')
+  load_speed = models.CharField(max_length=30, blank=True, verbose_name='Load Index/Speed Rating')
   
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Sale Price ($)')
@@ -190,7 +190,7 @@ class Tire(models.Model):
     return self.name
 
   def get_name(self):
-    return f'{self.brand} {self.width}/{self.aspect_ratio}{self.rim_size} {self.pattern} {self.load}'
+    return f'{self.brand} {self.width}/{self.aspect_ratio}{self.rim_size} {self.pattern} {self.load_speed}'
 
   def get_total_quantity(self):
     return self.current_quantity + self.sold
