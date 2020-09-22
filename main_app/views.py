@@ -319,7 +319,7 @@ def tire_list(req):
     width = req.GET['width']
     aspect_ratio = req.GET['aspect_ratio']
     rim_size = req.GET['rim_size']
-    season = req.GET['season']
+    tire_type = req.GET['tire_type']
     result = Tire.objects.filter(
         width__icontains=width
       ).filter(
@@ -327,9 +327,9 @@ def tire_list(req):
       ).filter(
         rim_size__icontains=rim_size
       ).filter(
-        season__icontains=season
+        tire_type__icontains=tire_type
       )
-    if not ((width or aspect_ratio) or season):
+    if not ((width or aspect_ratio) or tire_type):
       results = Tire.objects.all().order_by('price')
       if 'order_by' in req.GET:
         results = Tire.objects.all().order_by(order)
