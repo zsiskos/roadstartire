@@ -307,64 +307,106 @@ class CartAdmin(admin.ModelAdmin):
 
 class TireAdmin(admin.ModelAdmin):
   list_display = (
+    'id',
     'name',
     'brand',
     'year',
     'width',
     'aspect_ratio',
     'rim_size',
-    'season',
+    'tire_type',
     'pattern',
     'load_speed',
+    'tread',
     'price',
     'sale_price',
-    'tread',
     'current_quantity',
     'sold',
     'get_total_quantity',
   )
 
+  list_display_links = (
+    'id',
+    'name',
+  )
+
   list_filter = (
     'brand',
     'year',
-    'season',
+    'tire_type',
+    'tread',
   )
 
   search_fields = (
-    'name',
     'brand',
     'year',
+    'width',
+    'aspect_ratio',
+    'rim_size',
+    'load_speed',
   )
 
-  fieldsets = (
-    (None, {
-      'fields': (
-        'name',
-        'brand',
-        'year',
-        (
-        'width',
-        'aspect_ratio',
-        'rim_size',
-        'season',
-        'pattern',
-        'load_speed',
-        'tread',
-        ),
-        'price',
-        'sale_price',
+  # Dynamic fieldsets
+  def get_fieldsets(self, request, obj=None):
+    if obj: # Change view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'name',
+            'brand',
+            'year',
+            (
+              'width',
+              'aspect_ratio',
+              'rim_size',
+              'tire_type',
+              'pattern',
+              'load_speed',
+              'tread',
+            ),
+            'price',
+            'sale_price',
+          )
+        }),
+        ('Inventory', {
+          'fields': (
+            'current_quantity',
+            'sold',
+            'get_total_quantity',
+          )
+        }),
       )
-    }),
-    ('Inventory', {
-      'fields': (
-        'current_quantity',
-        'sold',
-        'get_total_quantity',
+    else: # Add view
+      fieldsets = (
+        (None, {
+          'fields': (
+            # 'name',
+            'brand',
+            'year',
+            (
+              'width',
+              'aspect_ratio',
+              'rim_size',
+              'tire_type',
+              'pattern',
+              'load_speed',
+              'tread',
+            ),
+            'price',
+            'sale_price',
+          )
+        }),
+        ('Inventory', {
+          'fields': (
+            'current_quantity',
+            'sold',
+            'get_total_quantity',
+          )
+        }),
       )
-    }),
-  )
+    return fieldsets
 
-  readonly_fields = ('get_total_quantity',)
+  readonly_fields = ('name', 'get_total_quantity',)
 
   autocomplete_fields = ['tread']
 

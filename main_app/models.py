@@ -146,7 +146,7 @@ class Cart(TimeStampMixin):
   # get_item_count.short_description = 'Number of items'
 
   def get_item_count(self):
-    return self.image_set.all().count()
+    return self.cartdetail_set.all().count()
   get_item_count.short_description = 'Number of items'
 
   status_tracker = FieldTracker(fields=['status'])
@@ -169,28 +169,29 @@ class Cart(TimeStampMixin):
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Tire(models.Model):
-  name = models.CharField(max_length=30) # remove
   brand = models.CharField(max_length=30)
-  year = models.CharField(max_length=30)
+  year = models.CharField(max_length=30, blank=True)
 
   width = models.CharField(max_length=30, blank=True)
   aspect_ratio = models.CharField(max_length=30, blank=True)
   rim_size = models.CharField(max_length=30, blank=True)
-  season = models.CharField(max_length=30, blank=True) #change to 'type'
+  tire_type = models.CharField(max_length=30, blank=True, verbose_name='Type')
   pattern = models.CharField(max_length=30, blank=True)
-  load_speed = models.CharField(max_length=30, blank=True, verbose_name='Load Index / Speed Rating')
+  load_speed = models.CharField(max_length=30, blank=True, verbose_name='Load Index/Speed Rating')
   
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Sale Price ($)')
   tread = models.ForeignKey(Tread, null=True, blank=True, on_delete=models.CASCADE, verbose_name = 'Tread Category')
   current_quantity = models.PositiveIntegerField(default=0)
   sold = models.PositiveIntegerField(default=0)
+  
+  @property
+  def name(self):
+    return f'{self.brand} {self.width}/{self.aspect_ratio}{self.rim_size} {self.pattern} {self.load_speed}'
 
   def __str__(self):
     return self.name
 
-  def get_name(self):
-    return f'{self.brand} {self.width}/{self.aspect_ratio}{self.rim_size} {self.pattern} {self.load}'
 
   def get_total_quantity(self):
     return self.current_quantity + self.sold
