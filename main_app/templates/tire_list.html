@@ -109,16 +109,9 @@
         </div>  
       </div>
       <div class="container-qty">
-        {% if page_obj.num %}
-        <form id="qty-update" method='POST' action="{% url 'tire_list' %}?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{page_obj.num}}">
-        {% else %}
-        <form id="qty-update" method='POST' action="{% url 'tire_list' %}?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}">
-        {% endif %}
-          {% csrf_token %}
-          Quantity  <input type="number" value="1" min="1" name="quantity"/>
-          <input type="hidden" value="{{ tire.id }}" name="id"/>
-          <p><a class="order-btn-filled" href="#"/><input id="submit-btn" type="submit" name="submit" value="ADD TO CART"/></a></p>
-        </form>
+        {% csrf_token %}
+        <input class="order-btn-filled" type="number" value="1" min="1" name="quantity"/>
+        <button class="add-to-order" data-id="{{ tire.id }}">Add to cart</button>
         <br/>
         <p><span class="cart-label">Availability:</span>
           {% if tire.current_quantity > 20 %}
