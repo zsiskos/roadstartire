@@ -18,6 +18,8 @@ urlpatterns = [
   path('tires/', views.tire_list, name='tire_list'), # Tire search page
   path('tires/<int:tire_id>', views.tire_detail, name='tire_detail'),
 
+  path('add-to-cart/', views.add_to_cart, name='add_to_cart'), # Add tire to cart
+
   path('cart/', views.cart_detail, name='cart_detail'),
   path('cart/remove/<int:item_id>', views.remove_tire, name='remove_tire'), # Removes tire (CartDetail) from the cart
   path('cart/<int:cart_id>/order', views.cart_order, name='cart_order'), # Updates status of cart from CURRENT -> IN_PROGRESS and emails client and admin

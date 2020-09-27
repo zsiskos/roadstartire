@@ -8,6 +8,7 @@ from django.core.mail import send_mail, mail_admins, EmailMultiAlternatives
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.forms import formset_factory, modelformset_factory
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.generic import ListView
@@ -289,30 +290,6 @@ def tire_list(req):
   if 'order_by' in req.GET:
     order = req.GET['order_by']
 
-  if req.method == 'POST':
-    tire = Tire.objects.get(pk=req.POST["id"])
-    if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
-      # If for some reason there is more than one current cart, use the most recent one
-      cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
-    else:
-      cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
-
-    form = CartDetailCreationForm(
-      initial = {
-        'cart': cart,
-        'tire': tire,
-      }
-    )
-
-    instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
-    if not created:
-      quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
-    else:
-      quantityToCarry = instance.quantity - 1 # Created cart, no value to carry over
-    instance.quantity = int(req.POST["quantity"]) + quantityToCarry
-    instance.save()
-    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
-
   if 'quick_search' in req.GET:
     if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
       cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
@@ -414,3 +391,33 @@ def tire_detail(req, tire_id):
     )
   return render(req, 'tire_detail.html', {'cart': cart, 'tire': tire, 'form': form})
 
+@login_required(login_url='/login')
+@api_view(['POST'])
+def add_to_cart(req):
+  print('DID IT WORK 1')
+  tire = Tire.objects.get(pk=req.POST["id"])
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+    # If for some reason there is more than one current cart, use the most recent one
+    cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
+  else:
+    cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
+
+  print('DID IT WORK 2')
+
+  form = CartDetailCreationForm(
+    initial = {
+      'cart': cart,
+      'tire': tire,
+    }
+  )
+
+  instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+  if not created:
+    quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
+  else:
+    quantityToCarry = instance.quantity - 1 # Created cart, no value to carry over
+  instance.quantity = int(req.POST["quantity"]) + quantityToCarry
+  instance.save()
+  # cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+
+  return JsonResponse(200)
