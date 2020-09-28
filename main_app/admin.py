@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Cart, Tire, CartDetail, OrderShipping, Tread, Image
+from .models import Cart, Tire, CartDetail, OrderShipping, Tread, Image, Product, Stock
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ngettext
 from django.utils import timezone
 from django.utils.html import format_html
+from django.forms.models import BaseInlineFormSet
 
 # ────────────────────────────────────────────────────────────────────────────────
 # list_display - Controls which fields are displayed on the change list page
@@ -61,7 +62,7 @@ class CartDetailAdmin(admin.ModelAdmin):
   list_display = (
     'id',
     'cart',
-    'tire',
+    'product',
     'price_each',
     'quantity',
     'get_subtotal',
@@ -80,7 +81,7 @@ class CartDetailAdmin(admin.ModelAdmin):
     (None, {
       'fields': (
         'cart',
-        'tire',
+        'product',
         'price_each', # Should not be able to edit price directly
         'quantity',
         'created_at',
@@ -92,11 +93,11 @@ class CartDetailAdmin(admin.ModelAdmin):
   # Dynamic readonly
   def get_readonly_fields(self, request, obj=None):
     if obj: # Change view
-      return ('cart', 'tire', 'price_each', 'created_at', 'updated_at',)
+      return ('cart', 'product', 'price_each', 'created_at', 'updated_at',)
     else: # Add view
       return ('price_each', 'created_at', 'updated_at',)
 
-  autocomplete_fields = ['tire']
+  autocomplete_fields = ['product',]
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -110,10 +111,19 @@ class CartDetailInline(admin.TabularInline):
     'price_each',
     'get_subtotal',
     'created_at',
-    'updated_at'
+    'updated_at',
   )
 
-  autocomplete_fields = ['tire']
+  fields = (
+    'product',
+    'quantity',
+    'price_each',
+    'get_subtotal',
+    'created_at',
+    'updated_at',
+  )
+
+  autocomplete_fields = ['product']
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -226,6 +236,35 @@ class CartAdmin(admin.ModelAdmin):
     'closed_at',
   )
 
+  def get_readonly_fields(self, request, obj=None):
+    if obj: # Change view
+      return (
+        'user',
+        'get_order_number',
+        'get_item_count', 
+        'get_subtotal',
+        'get_discount_amount',
+        'get_tax_amount',
+        'get_total',
+        'created_at',
+        'updated_at',
+        'ordered_at',
+        'closed_at',
+      )
+    else: # Add view
+      return (
+        'get_order_number',
+        'get_item_count', 
+        'get_subtotal',
+        'get_discount_amount',
+        'get_tax_amount',
+        'get_total',
+        'created_at',
+        'updated_at',
+        'ordered_at',
+        'closed_at',
+      )
+
   # Dynamic inlines
   def get_inlines(self, request, obj):
     if obj is None: # Add view
@@ -308,6 +347,7 @@ class CartAdmin(admin.ModelAdmin):
 class TireAdmin(admin.ModelAdmin):
   list_display = (
     'id',
+    'product_id',
     'name',
     'brand',
     'year',
@@ -320,13 +360,11 @@ class TireAdmin(admin.ModelAdmin):
     'tread',
     'price',
     'sale_price',
-    'current_quantity',
-    'sold',
-    'get_total_quantity',
   )
 
   list_display_links = (
     'id',
+    'product_id',
     'name',
   )
 
@@ -352,6 +390,8 @@ class TireAdmin(admin.ModelAdmin):
       fieldsets = (
         (None, {
           'fields': (
+            'date_effective',
+            'product',
             'name',
             'brand',
             'year',
@@ -368,18 +408,13 @@ class TireAdmin(admin.ModelAdmin):
             'sale_price',
           )
         }),
-        ('Inventory', {
-          'fields': (
-            'current_quantity',
-            'sold',
-            'get_total_quantity',
-          )
-        }),
       )
     else: # Add view
       fieldsets = (
         (None, {
           'fields': (
+            'date_effective',
+            'product',
             # 'name',
             'brand',
             'year',
@@ -396,19 +431,23 @@ class TireAdmin(admin.ModelAdmin):
             'sale_price',
           )
         }),
-        ('Inventory', {
-          'fields': (
-            'current_quantity',
-            'sold',
-            'get_total_quantity',
-          )
-        }),
       )
     return fieldsets
 
-  readonly_fields = ('name', 'get_total_quantity',)
+  readonly_fields = ('name',)
 
-  autocomplete_fields = ['tread']
+  autocomplete_fields = [ 'product', 'tread']
+
+  def save_model(self, request, obj, form, change):
+    obj.id = None
+    super().save_model(request, obj, form, change)
+ 
+  # def get_queryset(self, request):
+  #   qs = super().get_queryset(request)
+  #   return qs.order_by('product').distinct('product') # Only show the most recent version of a particular product
+
+  def has_add_permission(self, request, obj=None):
+    return False
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -546,6 +585,151 @@ class ImageAdmin(admin.ModelAdmin):
 
 # ────────────────────────────────────────────────────────────────────────────────
 
+class TireBaseInlineFormset(BaseInlineFormSet): 
+  def get_queryset(self) :
+    qs = super(TireBaseInlineFormset, self).get_queryset()
+    return qs.order_by('-id')[:1]
+
+class TireInline(admin.StackedInline):
+  model = Tire
+  can_delete = False
+  extra = 1
+  max_num = 1
+  show_change_link = True
+  formset = TireBaseInlineFormset
+  
+  fieldsets = (
+    (None, {
+      'fields': (
+        'brand',
+        'year',
+        'width',
+        'aspect_ratio',
+        'rim_size',
+        'tire_type',
+        'pattern',
+        'load_speed',
+        'tread',
+        'price',
+        'sale_price',
+      )
+    }),
+  )
+
+  readonly_fields = (
+    'name',
+  )
+
+  autocomplete_fields = (
+    'tread',
+  )
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class StockInline(admin.TabularInline):
+  model = Stock
+  can_delete = True
+  extra = 1
+  # show_change_link = True
+
+  readonly_fields = (   
+    'created_at',
+    'updated_at',)
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class ProductAdmin(admin.ModelAdmin):
+  list_display = (
+    'id',
+    'name',
+    'sold_quantity',
+    'decrease_quantity',
+    'current_quantity',
+    'is_archived'
+  )
+
+  list_display_links = (
+    'id',
+    'name',
+  )
+
+  list_filter = (
+    'is_archived',
+  )
+
+  search_fields = (
+    'id',
+  )
+
+  readonly_fields = (
+    'id',
+    'name', 
+    'sold_online_quantity',
+    'sold_offline_quantity',
+    'sold_quantity',
+    'lost_quantity',
+    'other_quantity',
+    'decrease_quantity',
+    'current_quantity',
+    'total_quantity',
+  )
+
+  # Dynamic fieldsets
+  def get_fieldsets(self, request, obj=None):
+    if obj: # Change view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'id',
+            'name',
+            ('sold_online_quantity', 'sold_offline_quantity',),
+            ('lost_quantity', 'other_quantity',),
+            'current_quantity',
+            'total_quantity',
+            'is_archived',
+          )
+        }),
+      )
+    else: # Add view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'is_archived',
+          )
+        }),
+      )
+    return fieldsets
+
+  inlines = (StockInline, TireInline)
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class StockAdmin(admin.ModelAdmin):
+  list_display = (
+    'product',
+    'quantity_change_type',
+    'quantity_change_value',
+    'created_at',
+    'updated_at',
+  )
+
+  list_filter = (
+    'product',
+    'quantity_change_type',
+    'created_at',
+    'updated_at',
+  )
+
+  list_editable = (
+    'quantity_change_type',
+  )
+
+  readonly_fields = (   
+    'created_at',
+    'updated_at',)
+
+# ────────────────────────────────────────────────────────────────────────────────
+
 # Register your models here
 admin.site.register(CartDetail, CartDetailAdmin)
 admin.site.register(Cart, CartAdmin)
@@ -553,3 +737,5 @@ admin.site.register(Tire, TireAdmin)
 admin.site.register(OrderShipping, OrderShippingAdmin)
 admin.site.register(Tread, TreadAdmin)
 admin.site.register(Image, ImageAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Stock, StockAdmin)

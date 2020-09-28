@@ -5,6 +5,8 @@ from django.db.models import Q
 from model_utils import FieldTracker
 from django.urls import reverse
 from decimal import Decimal
+from django.utils.timezone import now
+from django.db.models import Sum
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -14,6 +16,130 @@ class TimeStampMixin(models.Model):
 
   class Meta:
     abstract = True
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+class Product(models.Model):
+  is_archived_help_text = """
+    When marked as archived ✔, customers will be unable to view and order this product
+  """
+  is_archived = models.BooleanField(default=False, verbose_name='Archived', help_text=is_archived_help_text)
+
+  @property
+  def name(self):
+    return self.tire_set.order_by('id').last().name 
+
+  @property
+  def sold_online_quantity(self):
+    sold_online_quantity = 0
+    qs = self.cartdetail_set.filter(Q(cart__status=Cart.Status.IN_PROGRESS) | Q(cart__status=Cart.Status.FULFILLED))
+    if qs:
+      return qs.aggregate(sold_online_quantity=Sum('quantity'))['sold_online_quantity']
+    return sold_online_quantity
+  sold_online_quantity.fget.short_description = '💰 Sold Online'
+
+  @property
+  def sold_offline_quantity(self):
+    sold_offline_quantity = 0
+    qs = self.stock_set.all().filter(quantity_change_type=Stock.SOLD)
+    if qs:
+      return qs.aggregate(sold_offline_quantity=Sum('quantity_change_value'))['sold_offline_quantity']
+    return sold_offline_quantity
+  sold_offline_quantity.fget.short_description = '💰 Sold Offline'
+
+  @property
+  def sold_quantity(self):
+    sold_offline_quantity = 0
+    sold_online_qs = self.cartdetail_set.filter(Q(cart__status=Cart.Status.IN_PROGRESS) | Q(cart__status=Cart.Status.FULFILLED))
+    sold_offline_qs = self.stock_set.all().filter(quantity_change_type=Stock.SOLD)
+    if sold_offline_qs:
+      sold_offline_quantity = sold_offline_qs.aggregate(sold_offline_quantity=Sum('quantity_change_value'))['sold_offline_quantity']
+    if sold_online_qs:
+      return sold_online_qs.aggregate(sold_quantity=Sum('quantity') + sold_offline_quantity)['sold_quantity']
+    return sold_offline_quantity
+  sold_quantity.fget.short_description = '💰 Sold'
+
+  @property
+  def lost_quantity(self):
+    lost_quantity = 0
+    lost_qs = self.stock_set.filter(quantity_change_type=Stock.LOST)
+    if lost_qs:
+      lost_quantity = lost_qs.aggregate(lost_quantity=Sum('quantity_change_value'))['lost_quantity']
+    return lost_quantity
+  lost_quantity.fget.short_description = '🤷‍♂️ Lost'
+
+  @property
+  def other_quantity(self):
+    other_quantity = 0
+    other_qs = self.stock_set.filter(quantity_change_type=Stock.OTHER)
+    if other_qs:
+      other_quantity = other_qs.aggregate(other_quantity=Sum('quantity_change_value'))['other_quantity']
+    return other_quantity
+  other_quantity.fget.short_description = '❓ Other'
+
+  @property
+  def decrease_quantity(self):
+    decrease = 0
+    decrease_qs = self.stock_set.filter(Q(quantity_change_type=Stock.LOST) | Q(quantity_change_type=Stock.OTHER) )
+    if decrease_qs:
+      decrease_quantity = decrease_qs.aggregate(decrease_quantity=Sum('quantity_change_value'))['decrease_quantity']
+    return decrease_quantity
+  decrease_quantity.fget.short_description = '🤷‍♂️ Lost/Other'
+
+  @property
+  def current_quantity(self):
+    current_quantity = 0
+    qs = self.stock_set.filter(quantity_change_type=Stock.RECEIVED)
+    if qs:
+      current_quantity =  qs.aggregate(current_quantity=Sum('quantity_change_value') - self.sold_quantity - self.lost_quantity - self.other_quantity)['current_quantity']
+    return current_quantity
+  current_quantity.fget.short_description = 'Current Stock'
+
+  @property
+  def total_quantity(self):
+    total_quantity = 0
+    qs = self.stock_set.filter(quantity_change_type=Stock.RECEIVED)
+    if qs:
+      total_quantity = qs.aggregate(total_quantity=Sum('quantity_change_value'))['total_quantity']
+    return total_quantity
+  total_quantity.fget.short_description = 'Total'
+
+  def __str__(self):
+    return self.name
+
+  def get_current(self):
+    return self.tire_set.order_by('id').last()
+# ────────────────────────────────────────────────────────────────────────────────
+
+class Stock(TimeStampMixin):
+  RECEIVED = 'stock received'
+  SOLD = 'sold'
+  LOST = 'lost'
+  OTHER = 'other'
+
+  CHANGE_TYPE_CHOICES = [
+    ('➕ Increase stock', (
+        (RECEIVED, '🚚 Stock received'),
+      )
+    ),
+    ('➖ Decrease stock', (
+        (SOLD, '💰 ‍Sold'),
+        (LOST, '🤷‍♂️ Lost'),
+        (OTHER, '❓ Other'),
+      )
+    ),
+  ]
+
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  quantity_change_type = models.CharField(max_length=30, choices=CHANGE_TYPE_CHOICES, default=RECEIVED, verbose_name='Increase/Decrease Stock')
+  quantity_change_value = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], verbose_name='Quantity')
+
+  def __str__(self):
+    return f'{self.quantity_change_value} {self.quantity_change_type}'
+
+  class Meta:
+    verbose_name = 'Stock'
+    verbose_name_plural = 'Stock'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -117,7 +243,7 @@ class Cart(TimeStampMixin):
     cart = Cart.objects.get(pk=self.pk)
     subtotal = Decimal('0.00') # Need to use Decimal type so that 0 is displayed as 0.00
     for cartDetail in self.cartdetail_set.all():
-      subtotal += cartDetail.quantity * cartDetail.tire.price
+      subtotal += cartDetail.quantity * 30
     return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
 
@@ -137,14 +263,6 @@ class Cart(TimeStampMixin):
     return self.user.full_name
   get_owner.short_description = 'Full name'
     
-  # def get_item_count(self):
-  #   cart = Cart.objects.get(id=self.id)
-  #   count = 0
-  #   for cartDetail in cart.cartdetail_set.all():
-  #     count += cartDetail.quantity
-  #   return count
-  # get_item_count.short_description = 'Number of items'
-
   def get_item_count(self):
     return self.cartdetail_set.all().count()
   get_item_count.short_description = 'Number of items'
@@ -169,6 +287,8 @@ class Cart(TimeStampMixin):
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Tire(models.Model):
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  date_effective = models.DateTimeField(default=now, blank=True, verbose_name='Date Effective')
   brand = models.CharField(max_length=30)
   year = models.CharField(max_length=30, blank=True)
 
@@ -182,24 +302,21 @@ class Tire(models.Model):
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Sale Price ($)')
   tread = models.ForeignKey(Tread, null=True, blank=True, on_delete=models.CASCADE, verbose_name = 'Tread Category')
-  current_quantity = models.PositiveIntegerField(default=0)
-  sold = models.PositiveIntegerField(default=0)
   
   @property
   def name(self):
     return f'{self.brand} {self.width}/{self.aspect_ratio}{self.rim_size} {self.pattern} {self.load_speed}'
 
+  @property
+  def product_number(self):
+    return self.product.id
+
   def __str__(self):
     return self.name
 
-
-  def get_total_quantity(self):
-    return self.current_quantity + self.sold
-  get_total_quantity.short_description = 'Total'
-
   # When a Tire instance is saved, update the price_each on Cart_Detail objects that reference that tire
   def save(self, *args, **kwargs):
-    cartDetails = self.cartdetail_set.filter(cart__status=0)
+    cartDetails = self.product.cartdetail_set.filter(cart__status=0)
     for cd in cartDetails:
       cd.price_each = self.price
       cd.save()
@@ -212,27 +329,27 @@ class Tire(models.Model):
 
 class CartDetail(TimeStampMixin):
   cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-  tire = models.ForeignKey(Tire, on_delete=models.CASCADE)
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
   quantity = models.PositiveIntegerField(default=1)
   price_each = models.DecimalField(max_digits=7, decimal_places=2, blank=True, verbose_name='Price per item ($)')
   
   def __str__(self):
-    return f'{self.cart} –  {self.tire} - QTY: {self.quantity}'
+    return f'{self.cart} –  {self.product.get_current().id} - QTY: {self.quantity}'
 
   def get_subtotal(self):
-    return self.quantity * self.tire.price
+    return self.quantity * self.product.get_current().price
   get_subtotal.short_description = 'Subtotal ($)'
 
   class Meta:
     verbose_name = 'Cart Item'
     constraints = [
-      models.UniqueConstraint(fields=['cart', 'tire'], name='unique_tire_per_cart')
+      models.UniqueConstraint(fields=['cart', 'product'], name='unique_product_per_cart')
     ]
 
   # When saving for the first time, use the Tire's price
   def save(self, *args, **kwargs):
     if not self.price_each:
-      self.price_each = self.tire.price
+      self.price_each = self.product.get_current().price
     super(CartDetail, self).save(*args, **kwargs)
     if self.quantity == 0:
       self.delete()
@@ -283,7 +400,7 @@ class OrderShipping(models.Model):
   gst_number = models.CharField(validators=[MinLengthValidator(15)], max_length=15, blank=True, verbose_name='GST/HST #')
 
   def __str__(self):
-    return f'Order # {self.pk}'
+    return f'Order #{self.pk}'
 
   class Meta:
     verbose_name = 'Shipping Info'
