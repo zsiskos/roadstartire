@@ -1,23 +1,41 @@
-document.querySelectorAll('.add-to-cart').forEach(button => {
-  button.addEventListener('click', e => {
-    console.log(e.target);
-  
-    const itemId = e.target.dataset.id;
-    const quantity = e.target.previousElementSibling.value;
+window.onload = function() {
+  const buttons = Array.from(document.querySelectorAll('.add-to-order'));
 
-    // Start animation
-    e.target.classList.add('added');
+  buttons.forEach(button => {
+    button.addEventListener('click', e => {
 
-    // Make request to add to cart
-    fetch(`${window.location.origin}/add-to-cart/?id=${itemId}&quantity=${quantity}`, {
-      "headers": {
-        "accept": "application/json",
-        "content-type": "application/json",
-      },
-      "body": "csrfmiddlewaretoken=xuc39aPfpOSO20vGhkYWuunVmSKQFn4PP5UGy45fgZClS40mxiCUZy1rHkezlZf3&quantity=1&id=12&submit=ADD+TO+CART",
-      "method": "POST",
-      "mode": "cors",
-      "credentials": "include"
+      const itemId = e.target.dataset.id;
+      const csrfToken = e.target.dataset.csrf;
+      const quantity = e.target.previousElementSibling.lastElementChild.value;
+      const body = {
+        "id": itemId,
+        "quantity": quantity,
+      }
+
+      // Make request to add to cart
+      fetch(`${window.location.origin}/add-to-cart/`, {
+        "headers": {
+          "X-CSRFToken": csrfToken,
+          "accept": "application/json",
+          "content-type": "application/json",
+        },
+        "body": JSON.stringify(body),
+        "method": "POST",
+        "mode": "cors",
+        "credentials": "include"
+      }).then(data => {
+        const done = e.target.querySelector('.pre-text-done');
+        done.style.transform = "translate(0px)";
+        setTimeout(()=>{
+          done.style.transform = "translate(-110%) skew(-40deg)";
+        },1200);
+        console.log('Success:', data);
+        setTimeout(()=>{
+          location.reload()
+        }, 1300);
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
     });
   });
-});
+}
