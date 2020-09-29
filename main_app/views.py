@@ -8,6 +8,7 @@ from django.core.mail import send_mail, mail_admins, EmailMultiAlternatives
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.forms import formset_factory, modelformset_factory
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.generic import ListView
@@ -19,7 +20,11 @@ from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
 
 def home(req):
-  return render(req, 'home.html')
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+  else: 
+    cart = None
+  return render(req, 'home.html', {'cart': cart})
 
 def signup(req):
   if req.user.is_authenticated:
@@ -74,15 +79,23 @@ def logout(req):
 
 @login_required(login_url='/login')
 def account(req):
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+  else: 
+    cart = None
   user = req.user
   orders = OrderShipping.objects.filter(cart__user_id=req.user.id).exclude(Q(cart__status=Cart.Status.ABANDONED) | Q(cart__status=Cart.Status.CURRENT)).order_by('-cart__ordered_at')
   paginator = Paginator(orders, 5, 3) # x objects per page and y number of orphans
   page_number = req.GET.get('page')
   page_obj = paginator.get_page(page_number)
-  return render(req, 'account.html', {'user': user, 'orders': orders, 'page_obj': page_obj}) 
+  return render(req, 'account.html', {'cart': cart, 'user': user, 'orders': orders, 'page_obj': page_obj}) 
 
 @login_required(login_url='/login')
 def custom_user_edit(req):
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+  else: 
+    cart = None
   user = req.user
   form = CustomUserChangeForm(instance=user) #initiates form with user info
   if req.method == 'POST': # will only show validation errors on POST, not GET
@@ -111,7 +124,7 @@ def custom_user_edit(req):
         fail_silently=False
       )
       return redirect('account')
-  return render(req, 'custom_user_edit_form.html', {'form': form})
+  return render(req, 'custom_user_edit_form.html', {'form': form, 'cart': cart})
 
 # THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
 # def custom_user_edit(request):
@@ -133,7 +146,11 @@ def custom_user_edit(req):
 #   return render(request, 'custom_user_edit_form.html', context)
 
 def contact(req):
-  return render(req, 'contact.html')
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+  else: 
+    cart = None
+  return render(req, 'contact.html', {'cart': cart})
 
 def services(req):
   return render(req, 'services.html')
@@ -197,9 +214,13 @@ def remove_tire(req, item_id):
 
 @login_required(login_url='/login')
 def order_detail(req, order_id):
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+  else: 
+    cart = None
   order = OrderShipping.objects.get(id=order_id)
   cart_details = order.cart.cartdetail_set.all()
-  return render(req, 'order_detail.html', { 'order': order, 'cart_details': cart_details })
+  return render(req, 'order_detail.html', {'cart': cart, 'order': order, 'cart_details': cart_details })
 
 def order_cancel(req, order_id):
   order = OrderShipping.objects.get(pk=order_id)
@@ -261,33 +282,19 @@ def email_invoice(req, order_id):
 
 @login_required(login_url='/login')
 def tire_list(req):
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+  else: 
+    cart = None
+
   if 'order_by' in req.GET:
     order = req.GET['order_by']
 
-  if req.method == 'POST':
-    tire = Tire.objects.get(pk=req.POST["id"])
-    if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
-      # If for some reason there is more than one current cart, use the most recent one
-      cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
-    else:
-      cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
-
-    form = CartDetailCreationForm(
-      initial = {
-        'cart': cart,
-        'tire': tire,
-      }
-    )
-
-    instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
-    if not created:
-      quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
-    else:
-      quantityToCarry = instance.quantity - 1 # Created cart, no value to carry over
-    instance.quantity = int(req.POST["quantity"]) + quantityToCarry
-    instance.save()
-
   if 'quick_search' in req.GET:
+    if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+      cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+    else: 
+      cart = None
     quick_search = req.GET['quick_search']
     cleaned_query = re.sub('\D', '', quick_search)
     width = cleaned_query[:3]
@@ -313,9 +320,13 @@ def tire_list(req):
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(req, 'tire_list.html', {'results' : results, 'page_obj' : page_obj})
+    return render(req, 'tire_list.html', {'cart': cart, 'results' : results, 'page_obj' : page_obj})
 
   if 'width' in req.GET:
+    if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+      cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+    else: 
+      cart = None
     width = req.GET['width']
     aspect_ratio = req.GET['aspect_ratio']
     rim_size = req.GET['rim_size']
@@ -342,8 +353,8 @@ def tire_list(req):
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(req, 'tire_list.html', {'results' : results, 'page_obj' : page_obj})
-  return render(req, 'tire_list.html')
+    return render(req, 'tire_list.html', {'cart' : cart, 'results' : results, 'page_obj' : page_obj})
+  return render(req, 'tire_list.html', {'cart': cart})
 
 def tire_detail(req, tire_id):
   # Grab a reference to the current cart, and if it doesn't exist, then create one
@@ -378,5 +389,35 @@ def tire_detail(req, tire_id):
         'tire': tire,
       }
     )
-  return render(req, 'tire_detail.html', {'tire': tire, 'form': form})
+  return render(req, 'tire_detail.html', {'cart': cart, 'tire': tire, 'form': form})
 
+@login_required(login_url='/login')
+@api_view(['POST'])
+def add_to_cart(req):
+  print('DID IT WORK 1')
+  tire = Tire.objects.get(pk=req.POST["id"])
+  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+    # If for some reason there is more than one current cart, use the most recent one
+    cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
+  else:
+    cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
+
+  print('DID IT WORK 2')
+
+  form = CartDetailCreationForm(
+    initial = {
+      'cart': cart,
+      'tire': tire,
+    }
+  )
+
+  instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+  if not created:
+    quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
+  else:
+    quantityToCarry = instance.quantity - 1 # Created cart, no value to carry over
+  instance.quantity = int(req.POST["quantity"]) + quantityToCarry
+  instance.save()
+  # cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+
+  return JsonResponse(200)
