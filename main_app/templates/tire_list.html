@@ -108,13 +108,28 @@
           <h2>${{tire.price}}</h2>
         </div>  
       </div>
-      <div class="container-qty">
-        {% csrf_token %}
-        <input class="order-btn-filled" type="number" value="1" min="1" name="quantity"/>
-        <button class="add-to-order" data-id="{{ tire.id }}">Add to cart</button>
-        <br/>
+      <div class="tire-container-qty">
+        <div class="tire-quantity-input-div">
+          <span>Quantity</span>
+          <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>
+        </div>  
+        <button class="add-to-order" data-id="{{ tire.id }}" data-csrf="{{csrf_token}}">
+          <div class="pre-text">
+            <i class="fas fa-cart-plus"></i>
+              ADD TO CART
+          </div>
+
+          <div class="pre-text-done">
+            <div class="post-text">
+              <i class="fas fa-check"></i>
+              ADDED
+            </div>
+          </div>
+        </button>
         <p><span class="cart-label">Availability:</span>
-          {% if tire.current_quantity > 20 %}
+          {% if tire.current_quantity > 2 %}
+            Call for availability
+          {% elif tire.current_quantity > 20 %}
             In stock
           {% else %}
             Low stock

@@ -15,7 +15,7 @@ from django.views.generic import ListView
 from email.mime.image import MIMEImage
 from main_app.forms import CartDetailCreationForm
 from .models import Tire, Cart, CartDetail, OrderShipping
-import re, os
+import re, os, json
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
 
@@ -392,17 +392,16 @@ def tire_detail(req, tire_id):
   return render(req, 'tire_detail.html', {'cart': cart, 'tire': tire, 'form': form})
 
 @login_required(login_url='/login')
-@api_view(['POST'])
+# @api_view(['POST'])
 def add_to_cart(req):
-  print('DID IT WORK 1')
-  tire = Tire.objects.get(pk=req.POST["id"])
+  body = json.loads(req.body)
+
+  tire = Tire.objects.get(pk=body["id"])
   if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     # If for some reason there is more than one current cart, use the most recent one
     cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
   else:
     cart = Cart.objects.create(user=req.user, status=Cart.Status.CURRENT) # Create a current cart if it does not exist
-
-  print('DID IT WORK 2')
 
   form = CartDetailCreationForm(
     initial = {
@@ -416,8 +415,8 @@ def add_to_cart(req):
     quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
   else:
     quantityToCarry = instance.quantity - 1 # Created cart, no value to carry over
-  instance.quantity = int(req.POST["quantity"]) + quantityToCarry
+  instance.quantity = int(body["quantity"]) + quantityToCarry
   instance.save()
   # cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
 
-  return JsonResponse(200)
+  return JsonResponse({})
