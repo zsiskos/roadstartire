@@ -20,11 +20,16 @@ from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
 
 def home(req):
-  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
-    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
-  else: 
-    cart = None
-  return render(req, 'home.html', {'cart': cart})
+  user_authenticated = req.user.is_authenticated
+  if (user_authenticated):
+    if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+      cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+    else: 
+      cart = None
+    return render(req, 'home.html', {'cart': cart})
+  else:
+    return render(req, 'home.html')
+
 
 def signup(req):
   if req.user.is_authenticated:
@@ -35,7 +40,7 @@ def signup(req):
       user = form.save() # Add the user to the database
       #Info needed to send user email
       email = user.email
-      subject = f"Thank you for registering with Road Star Tires Wholesale."
+      subject = f"Thank you for registering with Road Star Tire Wholesale."
       message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111"
       send_mail(
         subject, 
@@ -146,11 +151,15 @@ def custom_user_edit(req):
 #   return render(request, 'custom_user_edit_form.html', context)
 
 def contact(req):
-  if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
-    cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
-  else: 
-    cart = None
-  return render(req, 'contact.html', {'cart': cart})
+  user_authenticated = req.user.is_authenticated
+  if (user_authenticated):
+    if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
+      cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
+    else: 
+      cart = None
+    return render(req, 'contact.html', {'cart': cart})
+  else:
+    return render(req, 'contact.html')
 
 def services(req):
   return render(req, 'services.html')
