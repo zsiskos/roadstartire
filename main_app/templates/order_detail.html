@@ -21,8 +21,8 @@
         <p>Address Line 2: {{ order.address_2 }}</p>
       {% endif %}
       <p>City: {{ order.city }}</p>
-      <p>Province: {{ ordershipping.province_iso }}</p>
-      <p>Postal Code: {{ ordershipping.postal_code }}</p>
+      <p>Province: {{ order.province_iso }}</p>
+      <p>Postal Code: {{ order.postal_code }}</p>
     </div>
 
     <div class="container-cart-headers">
@@ -34,9 +34,9 @@
     
     {% for item in cart_details %}
     <div class="container-cart-info">
-      <a class="tire-btn" href="{% url 'tire_detail' item.tire.pk %}"><p>{{ item.tire.name }} </p></a>
+      <a class="tire-btn" href="{% url 'tire_detail' item.get_relevant_tire.pk %}"><p>{{ item.get_relevant_tire.name }} </p></a>
       <p class="qty-col">{{ item.quantity }}</p>
-      <p class='total-col'>${{ item.price_each|intcomma }}</p>
+      <p class='total-col'>${{ item.get_relevant_tire.price|intcomma }}</p>
       <p class="total-col">${{ item.get_subtotal|intcomma }}</p>
     </div>
     {% endfor %}

@@ -33,7 +33,7 @@
       </div>  
     </div>
     <div class="container-qty">
-      <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
+      <form id="add-tire" method="post" action="{% url 'tire_detail' tire.id %}">
         {% csrf_token %}
         {{ form.as_p }}
         <a href="#" onClick="document.forms['add-tire'].submit();" class="order-btn-filled">Add to Cart</a>

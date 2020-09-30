@@ -7,6 +7,7 @@ from django.urls import reverse
 from decimal import Decimal
 from django.utils.timezone import now
 from django.db.models import Sum
+import datetime
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -79,7 +80,7 @@ class Product(models.Model):
 
   @property
   def decrease_quantity(self):
-    decrease = 0
+    decrease_quantity = 0
     decrease_qs = self.stock_set.filter(Q(quantity_change_type=Stock.LOST) | Q(quantity_change_type=Stock.OTHER) )
     if decrease_qs:
       decrease_quantity = decrease_qs.aggregate(decrease_quantity=Sum('quantity_change_value'))['decrease_quantity']
@@ -109,6 +110,7 @@ class Product(models.Model):
 
   def get_current(self):
     return self.tire_set.order_by('id').last()
+    
 # ────────────────────────────────────────────────────────────────────────────────
 
 class Stock(TimeStampMixin):
@@ -243,7 +245,7 @@ class Cart(TimeStampMixin):
     cart = Cart.objects.get(pk=self.pk)
     subtotal = Decimal('0.00') # Need to use Decimal type so that 0 is displayed as 0.00
     for cartDetail in self.cartdetail_set.all():
-      subtotal += cartDetail.quantity * 30
+      subtotal += cartDetail.quantity * cartDetail.get_relevant_tire().price
     return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
 
@@ -316,14 +318,19 @@ class Tire(models.Model):
 
   # When a Tire instance is saved, update the price_each on Cart_Detail objects that reference that tire
   def save(self, *args, **kwargs):
-    cartDetails = self.product.cartdetail_set.filter(cart__status=0)
+    cartDetails = self.product.cartdetail_set.filter(cart__status=Cart.Status.CURRENT)
     for cd in cartDetails:
-      cd.price_each = self.price
+      cd.date_relevant = now()
       cd.save()
     super(Tire, self).save(*args, **kwargs)
 
   def get_absolute_url(self):
     return reverse('tire_detail', args=[str(self.id)])
+
+  def get_updated_tire(self):
+    today = datetime.datetime.today()
+    qs = Tire.objects.filter(Q(product=self.product) & Q(date_effective__lte=today)).order_by('date_effective')
+    return qs.last()
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -332,18 +339,19 @@ class CartDetail(TimeStampMixin):
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
   quantity = models.PositiveIntegerField(default=1)
   price_each = models.DecimalField(max_digits=7, decimal_places=2, blank=True, verbose_name='Price per item ($)')
+  date_relevant = models.DateTimeField(default=now, blank=True, verbose_name='Date Relevant')
   
   def __str__(self):
-    return f'{self.cart} –  {self.product.get_current().id} - QTY: {self.quantity}'
+    return f'{self.cart} – {self.product.get_current().id} - QTY: {self.quantity}'
 
   def get_subtotal(self):
-    return self.quantity * self.product.get_current().price
+    return self.quantity * self.get_relevant_tire().price
   get_subtotal.short_description = 'Subtotal ($)'
 
   class Meta:
     verbose_name = 'Cart Item'
     constraints = [
-      models.UniqueConstraint(fields=['cart', 'product'], name='unique_product_per_cart')
+      models.UniqueConstraint(fields=['cart', 'product'], name='unique_product_per_cart'),
     ]
 
   # When saving for the first time, use the Tire's price
@@ -353,6 +361,16 @@ class CartDetail(TimeStampMixin):
     super(CartDetail, self).save(*args, **kwargs)
     if self.quantity == 0:
       self.delete()
+
+  def get_relevant_tire(self):
+    qs = self.product.tire_set.filter(date_effective__lte=self.date_relevant).order_by('date_effective')
+    return qs.last()
+
+  @property
+  def price(self):
+    return self.get_relevant_tire().price
+  price.fget.short_description = 'Price ($)'
+
 
 # ────────────────────────────────────────────────────────────────────────────────
 

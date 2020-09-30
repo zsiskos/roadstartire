@@ -279,7 +279,7 @@ def tire_list(req):
       }
     )
 
-    instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+    instance, created = CartDetail.objects.get_or_create(cart=cart, product=tire.product)
     if not created:
       quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
     else:
@@ -350,6 +350,7 @@ def tire_detail(req, tire_id):
   # If the tire exists in the cart already, then just add the inputted quantity to the current quantity
   # If it doesn't exist in the cart, create a new instance
   tire = Tire.objects.get(pk=tire_id)
+  updated_tire = tire.get_updated_tire()
   if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     # If for some reason there is more than one current cart, use the most recent one
     cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
@@ -359,7 +360,7 @@ def tire_detail(req, tire_id):
   if req.method == 'POST':
     # Get the instance if it exists or create one if if doesn't
     # Returns a tuple of (object, created), where created is a boolean specifying whether an object was created
-    instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+    instance, created = CartDetail.objects.get_or_create(cart=cart, product=updated_tire.product)
     if not created:
       quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
     else:
@@ -378,5 +379,5 @@ def tire_detail(req, tire_id):
         'tire': tire,
       }
     )
-  return render(req, 'tire_detail.html', {'tire': tire, 'form': form})
+  return render(req, 'tire_detail.html', {'tire': updated_tire, 'form': form})
 

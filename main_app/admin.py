@@ -7,6 +7,7 @@ from django.utils.translation import ngettext
 from django.utils import timezone
 from django.utils.html import format_html
 from django.forms.models import BaseInlineFormSet
+import datetime
 
 # ────────────────────────────────────────────────────────────────────────────────
 # list_display - Controls which fields are displayed on the change list page
@@ -86,6 +87,7 @@ class CartDetailAdmin(admin.ModelAdmin):
         'quantity',
         'created_at',
         'updated_at',
+        'date_relevant',
       )
     }),
   )
@@ -108,7 +110,7 @@ class CartDetailInline(admin.TabularInline):
   show_change_link = True
 
   readonly_fields = (
-    'price_each',
+    'price',
     'get_subtotal',
     'created_at',
     'updated_at',
@@ -117,7 +119,7 @@ class CartDetailInline(admin.TabularInline):
   fields = (
     'product',
     'quantity',
-    'price_each',
+    'price',
     'get_subtotal',
     'created_at',
     'updated_at',
@@ -439,7 +441,9 @@ class TireAdmin(admin.ModelAdmin):
   autocomplete_fields = [ 'product', 'tread']
 
   def save_model(self, request, obj, form, change):
+    today = datetime.datetime.today()
     obj.id = None
+    obj.date_effective = today
     super().save_model(request, obj, form, change)
  
   # def get_queryset(self, request):

@@ -10,15 +10,17 @@
     <div class="container-order">
       <div class="container-item">
         <div class="image-tire">
-          <img src='{{cart_detail.tire.tread.image_set.first.url}}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px; border-radius: 8px;"/>
+          <img src='{{ cart_detail.get_relevant_tire.tread.image_set.first.url }}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px; border-radius: 8px;"/>
         </div>
         <div class="item-tire">
-          <h4>{{ cart_detail.tire.brand }}</h4>
-          <a class="tire-btn" href="{% url 'tire_detail' cart_detail.tire.pk %}"><h2>{{ cart_detail.tire.name }}</h2></a>
-          <p><span class="cart-label">Size:</span> {{cart_detail.tire.width}} / {{cart_detail.tire.aspect_ratio}} / {{cart_detail.tire.rim_size}}</p>
-          <p><span class="cart-label">Type:</span> {{cart_detail.tire.tire_type}}</p>
-          <p><span class="cart-label">Pattern:</span> {{cart_detail.tire.pattern}}</p>
-          <p><span class="cart-label">Load/Speed:</span> {{cart_detail.tire.load_speed}}</p>
+          <h4>{{ cart_detail.get_relevant_tire.brand }}</h4>
+          <a class="tire-btn" href="{% url 'tire_detail' cart_detail.get_relevant_tire.id %}">
+            <h2>{{ cart_detail.get_relevant_tire.name }}</h2>
+          </a>
+          <p><span class="cart-label">Size:</span> {{ cart_detail.get_relevant_tire.width }} / {{ cart_detail.get_relevant_tire.aspect_ratio }} / {{ cart_detail.get_relevant_tire.rim_size }}</p>
+          <p><span class="cart-label">Type:</span> {{ cart_detail.get_relevant_tire.tire_type }}</p>
+          <p><span class="cart-label">Pattern:</span> {{ cart_detail.get_relevant_tire.pattern }}</p>
+          <p><span class="cart-label">Load/Speed:</span> {{ cart_detail.pruct.get_relevant_tire.load_speed }}</p>
         </div>
       </div>
       <div class="container-cart-qty">
@@ -37,7 +39,7 @@
       <div class="container-price">
         <div>
           <p><span class="cart-label">Price</span></p>
-          <p>${{ cart_detail.price_each|intcomma }}</p>
+          <p>${{ cart_detail.get_relevant_tire.price|intcomma }}</p>
         </div>
         <div>
           <p><span class="cart-label">Total</span></p>
