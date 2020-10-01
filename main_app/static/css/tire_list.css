@@ -1,10 +1,12 @@
 .tire-container-qty {
-  width: 200px;
+  width: 170px;
   display: inline-table;
+  padding-left: 12px;
+  text-align: end;
 }
 
 .tire-quantity-input-div {
-  font-size: 25px;
+  font-size: 15px;
   margin-bottom: 5px;
 }
 .tire-quantity-input {
@@ -18,7 +20,7 @@
   justify-content:center;
   align-items:center;
   padding:0.5em 1em 0.5em 1em;
-  border-radius:12px;
+  border-radius:6px;
   border:none;
   font-size:1.5em;
   position: relative;
@@ -45,8 +47,10 @@
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size: 15px;
-  font-family: 'Quicksand', sans-serif;
+  letter-spacing: 2.1px;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
 }
 
 .fa-cart-plus {
@@ -71,6 +75,10 @@
   font-size: 15px;
   background:rgba(30, 38, 126, 0);
   color: rgb(250, 148, 53);
+  letter-spacing: 2.1px;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
 }
 
 .fa-check {

@@ -107,7 +107,7 @@
           <h2>${{tire.price}}</h2>
         </div>  
       </div>
-      <div class="tire-container-qty">
+      <div class="container-qty">
         <div class="tire-quantity-input-div">
           <span>Quantity</span>
           <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>
@@ -126,9 +126,7 @@
           </div>
         </button>
         <p><span class="cart-label">Availability:</span>
-          {% if tire.current_quantity > 2 %}
-            Call for availability
-          {% elif tire.current_quantity > 20 %}
+          {% if tire.current_quantity > 20 %}
             In stock
           {% else %}
             Low stock
