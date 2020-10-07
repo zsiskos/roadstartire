@@ -8,6 +8,10 @@ from django.utils import timezone
 from django.utils.html import format_html
 from django.forms.models import BaseInlineFormSet
 import datetime
+from copy import deepcopy
+from django.db.models import Q
+import os
+import environ
 
 # ────────────────────────────────────────────────────────────────────────────────
 # list_display - Controls which fields are displayed on the change list page
@@ -87,7 +91,6 @@ class CartDetailAdmin(admin.ModelAdmin):
         'quantity',
         'created_at',
         'updated_at',
-        'date_relevant',
       )
     }),
   )
@@ -132,21 +135,33 @@ class CartDetailInline(admin.TabularInline):
 class ImageInline(admin.StackedInline):
   model = Image
   # can_delete = False
-  extra = 0 # Set to 0 to hide the form when there is no OrderShipping
+  extra = 1
   # show_change_link = True
+
+  # Dynamic fieldsets
+  def get_fieldsets(self, request, obj=None):
+    if obj: # Change view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'get_image_display',
+            'url',
+          )
+        }),
+      )
+    else: # Add view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'url',
+          )
+        }),
+      )
+    return fieldsets
 
   readonly_fields = (
     'get_image_display',
   )
-
-  def get_image_display(self, obj):
-    return format_html('<img src="{url}" width={width} height={height} />'.format(
-      url = obj.url,
-      width = 100, # hardcoded thumbnail dimensions
-      height = 100,
-      )
-    )
-  get_image_display.short_description = 'Thumbnail'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -155,7 +170,7 @@ class CartAdmin(admin.ModelAdmin):
     'id',
     'get_order_number',
     'user',
-    'get_owner',
+    'get_full_name',
     'created_at',
     'status',
     'get_item_count',
@@ -344,13 +359,20 @@ class CartAdmin(admin.ModelAdmin):
     #   kwargs['choices'] += (('ready', 'Ready for deployment'),)
     return super().formfield_for_choice_field(db_field, request, **kwargs)
 
+  def get_total(self, obj):
+    return format_html("<b style='color: red'>{}</b>", obj.get_total())
+  get_total.short_description = format_html("<b style='color: red';>{}</b>", 'Total ($)')
+
+
 # ────────────────────────────────────────────────────────────────────────────────
 
 class TireAdmin(admin.ModelAdmin):
   list_display = (
     'id',
-    'product_id',
-    'name',
+    'product_num',
+    'product',
+    'price',
+    'sale_price',
     'brand',
     'year',
     'width',
@@ -358,16 +380,15 @@ class TireAdmin(admin.ModelAdmin):
     'rim_size',
     'tire_type',
     'pattern',
-    'load_speed',
     'tread',
-    'price',
-    'sale_price',
+    'load_speed',
+    # 'is_effective', # Hide until fully implemented
   )
 
   list_display_links = (
     'id',
-    'product_id',
-    'name',
+    'product_num',
+    'product',
   )
 
   list_filter = (
@@ -378,12 +399,15 @@ class TireAdmin(admin.ModelAdmin):
   )
 
   search_fields = (
+    'product__id',
     'brand',
     'year',
     'width',
     'aspect_ratio',
     'rim_size',
     'load_speed',
+    'pattern',
+    'tread__name',
   )
 
   # Dynamic fieldsets
@@ -392,22 +416,24 @@ class TireAdmin(admin.ModelAdmin):
       fieldsets = (
         (None, {
           'fields': (
-            'date_effective',
+            'product_num',
             'product',
-            'name',
-            'brand',
-            'year',
-            (
-              'width',
-              'aspect_ratio',
-              'rim_size',
-              'tire_type',
-              'pattern',
-              'load_speed',
-              'tread',
-            ),
+            'get_image_display',
             'price',
             'sale_price',
+            'brand',
+            'year',
+            'width',
+            'aspect_ratio',
+            'rim_size',
+            'tire_type',
+            ('pattern', 'tread',),
+            'load_speed',
+            # 'updated_to', # Hide in production
+            # 'inherits_from', # Hide in production
+            # 'date_effective', # Hide until fully implemented
+            # 'get_date_effective_delta', # Hide until fully implemented
+            # 'is_effective', # Hide until fully implemented
           )
         }),
       )
@@ -415,50 +441,164 @@ class TireAdmin(admin.ModelAdmin):
       fieldsets = (
         (None, {
           'fields': (
-            'date_effective',
             'product',
-            # 'name',
-            'brand',
-            'year',
-            (
-              'width',
-              'aspect_ratio',
-              'rim_size',
-              'tire_type',
-              'pattern',
-              'load_speed',
-              'tread',
-            ),
             'price',
             'sale_price',
+            'brand',
+            'year',
+            'width',
+            'aspect_ratio',
+            'rim_size',
+            'tire_type',
+            ('pattern', 'tread',),
+            'load_speed',
           )
         }),
       )
     return fieldsets
 
-  readonly_fields = ('name',)
+  # Dynamic readonly
+  def get_readonly_fields(self, request, obj=None):
+    if obj: # Change view
+      if obj.updated_to:
+        return (
+        'product_num',
+        'product',
+        'name',
+        'updated_to',
+        'inherits_from',
+        'sold_online_quantity',
+        'sold_offline_quantity',
+        'sold_quantity',
+        'lost_quantity',
+        'other_quantity',
+        'decrease_quantity',
+        'current_quantity',
+        'total_quantity',
+        'get_image_display',
+        'get_date_effective_delta',
+        'is_effective',
+        'price',
+        'sale_price',
+        'brand',
+        'year',
+        'width',
+        'aspect_ratio',
+        'rim_size',
+        'tire_type',
+        'pattern',
+        'tread',
+        'load_speed',
+      )
+      return (
+        'product_num',
+        'product',
+        'name',
+        'updated_to',
+        'inherits_from',
+        'sold_online_quantity',
+        'sold_offline_quantity',
+        'sold_quantity',
+        'lost_quantity',
+        'other_quantity',
+        'decrease_quantity',
+        'current_quantity',
+        'total_quantity',
+        'get_image_display',
+        'get_date_effective_delta',
+        'is_effective',
+      )
+      return (
+        'product_num',
+        'product',
+        'name',
+        'updated_to',
+        'inherits_from',
+        'sold_online_quantity',
+        'sold_offline_quantity',
+        'sold_quantity',
+        'lost_quantity',
+        'other_quantity',
+        'decrease_quantity',
+        'current_quantity',
+        'total_quantity',
+        'get_image_display',
+        'get_date_effective_delta',
+        'is_effective',
+      )
+    else: # Add view
+      return ()
 
-  autocomplete_fields = [ 'product', 'tread']
+  autocomplete_fields = (
+    'product',
+    'tread',
+  )
 
   def save_model(self, request, obj, form, change):
-    today = datetime.datetime.today()
-    obj.id = None
-    obj.date_effective = today
+    if change:
+      old_obj = deepcopy(obj)
+      obj.id = None # Set to None so that new row is inserted
+      obj.inherits_from = old_obj
+      obj.date_effective = timezone.now() # Default to current time for now until can find a way to filter the tire_list queryset proprerly
+      obj.save()
     super().save_model(request, obj, form, change)
- 
-  # def get_queryset(self, request):
-  #   qs = super().get_queryset(request)
-  #   return qs.order_by('product').distinct('product') # Only show the most recent version of a particular product
+    
+  save_as = False
 
   def has_add_permission(self, request, obj=None):
-    return False
+    return False # Tires should be added from the Product Add view
+
+  # Product objects should not exist without tires
+  def has_delete_permission(self, request, obj=None):
+    print(os.environ['DEBUG_VALUE'])
+    if os.environ['DEBUG_VALUE'] == 'True':
+      return False
+    return True
+
+  def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+    extra_context = extra_context or {}
+    extra_context['show_save_and_continue'] = False
+    extra_context['show_save'] = True
+    return super(TireAdmin, self).changeform_view(request, object_id, extra_context=extra_context)
+
+  # Lists most recent version (regardless of its effective date)
+  # def get_queryset(self, request):
+  #   qs = super(TireAdmin, self).get_queryset(request)
+  #   return qs.filter(updated_to=None)
+
+  # Lists most recent viable version (only allows for 2 queued tire versions and then breaks afterwards...)
+  # TODO: Allow filter to check beyond two versions deep from the most recently added tire
+  # def get_queryset(self, request):
+  #   qs = super(TireAdmin, self).get_queryset(request)
+  #   return qs.filter (
+  #     (Q(updated_to=None) & Q(date_effective__lte=timezone.now())) | 
+  #     (Q(updated_to__updated_to=None) & Q(updated_to__date_effective__gte=timezone.now()))
+  #   )
+
+  # Prepopulate the date_effective field with the current time
+  # TODO: Presents the current time but doesn't allow user to enter a different time in the form
+  # def get_form(self, request, obj=None, **kwargs):
+  #   form = super(TireAdmin, self).get_form(request, obj, **kwargs)
+  #   if obj:
+  #     obj.date_effective = timezone.now()
+  #   return form
+
+  def get_image_display(self, obj):
+    if obj.tread:
+      return obj.tread.image_set.first().get_image_display()
+    return format_html("<img style='border: 1px solid lightgray; border-radius: 8px' width={width} height={height}/>".format(
+        width = 100, # hardcoded thumbnail dimensions
+        height = 100,
+        )
+      )
+  get_image_display.short_description = 'Thumbnail'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
 class OrderShippingAdmin(admin.ModelAdmin):
   list_display = (
-    '__str__',
-    'cart',
+    'order_number',
+    # 'cart',
     'first_name',
     'last_name',
     'company_name',
@@ -473,7 +613,8 @@ class OrderShippingAdmin(admin.ModelAdmin):
   )
 
   list_filter = (
-  
+    'province_iso',
+    'city',
   )
 
   search_fields = (
@@ -481,6 +622,7 @@ class OrderShippingAdmin(admin.ModelAdmin):
     'cart__pk',
     'first_name',
     'last_name',
+    'city',
   )
 
   fieldsets = (
@@ -578,21 +720,19 @@ class ImageAdmin(admin.ModelAdmin):
 
   autocomplete_fields = ['tread']
 
-  def get_image_display(self, obj):
-    return format_html('<img src="{url}" width={width} height={height} />'.format(
-      url = obj.url,
-      width = 100, # hardcoded thumbnail dimensions
-      height = 100,
-      )
-    )
-  get_image_display.short_description = 'Thumbnail'
-
 # ────────────────────────────────────────────────────────────────────────────────
 
 class TireBaseInlineFormset(BaseInlineFormSet): 
   def get_queryset(self) :
     qs = super(TireBaseInlineFormset, self).get_queryset()
-    return qs.order_by('-id')[:1]
+    return qs.order_by('-id')[:1] # Inline should show the most recently added tire
+    # return qs.filter(updated_to=None) # Inline should show the most recently added tire
+
+  def save_existing(self, form, instance, commit=True):
+    old_instance = deepcopy(instance)
+    instance.id = None # Set id to None to save as new
+    instance.inherits_from = old_instance
+    return form.save(commit=commit)
 
 class TireInline(admin.StackedInline):
   model = Tire
@@ -605,23 +745,25 @@ class TireInline(admin.StackedInline):
   fieldsets = (
     (None, {
       'fields': (
+        'price',
+        'sale_price',
         'brand',
         'year',
         'width',
         'aspect_ratio',
         'rim_size',
         'tire_type',
-        'pattern',
+        ('pattern', 'tread',),
         'load_speed',
-        'tread',
-        'price',
-        'sale_price',
+        # 'date_effective', # Hide until fully implemented
+        # 'get_date_effective_delta', # Hide until fully implemented
       )
     }),
   )
 
   readonly_fields = (
     'name',
+    'get_date_effective_delta',
   )
 
   autocomplete_fields = (
@@ -646,10 +788,20 @@ class ProductAdmin(admin.ModelAdmin):
   list_display = (
     'id',
     'name',
-    'sold_quantity',
-    'decrease_quantity',
-    'current_quantity',
-    'is_archived'
+    'price',
+    'sale_price',
+    'brand',
+    'year',
+    'width',
+    'aspect_ratio',
+    'rim_size',
+    'tire_type',
+    'pattern',
+    'tread',
+    'load_speed',
+    # 'sold_quantity',
+    # 'decrease_quantity',
+    # 'current_quantity',
   )
 
   list_display_links = (
@@ -663,19 +815,30 @@ class ProductAdmin(admin.ModelAdmin):
 
   search_fields = (
     'id',
+    'tire__brand',
+    'tire__year',
+    'tire__width',
+    'tire__aspect_ratio',
+    'tire__rim_size',
+    'tire__tire_type',
+    'tire__pattern',
+    'tire__tread__name',
+    'tire__load_speed',
   )
 
   readonly_fields = (
     'id',
-    'name', 
+    'name',
     'sold_online_quantity',
     'sold_offline_quantity',
     'sold_quantity',
-    'lost_quantity',
-    'other_quantity',
-    'decrease_quantity',
+    'shrink_quantity',
+    # 'lost_quantity',
+    # 'other_quantity',
+    # 'decrease_quantity',
     'current_quantity',
     'total_quantity',
+    'get_image_display',
   )
 
   # Dynamic fieldsets
@@ -686,11 +849,14 @@ class ProductAdmin(admin.ModelAdmin):
           'fields': (
             'id',
             'name',
-            ('sold_online_quantity', 'sold_offline_quantity',),
-            ('lost_quantity', 'other_quantity',),
+            'get_image_display',
+            'sold_online_quantity', 
+            'sold_offline_quantity',
+            'shrink_quantity',
+            # ('lost_quantity', 'other_quantity',),
             'current_quantity',
             'total_quantity',
-            'is_archived',
+            # 'is_archived', # Hide until fully implemented
           )
         }),
       )
@@ -698,13 +864,36 @@ class ProductAdmin(admin.ModelAdmin):
       fieldsets = (
         (None, {
           'fields': (
-            'is_archived',
+            # 'is_archived', # Hide until fully implemented
           )
         }),
       )
     return fieldsets
 
   inlines = (StockInline, TireInline)
+
+  def get_queryset(self, request):
+    qs = super(ProductAdmin, self).get_queryset(request)
+    return qs.filter( # Need this filter so to remove duplicate rows when sorting on calculated fields)
+      (Q(tire__updated_to=None) & Q(tire__date_effective__lte=timezone.now())) | 
+      (Q(tire__updated_to__updated_to=None) & Q(tire__updated_to__date_effective__gte=timezone.now()))
+      )
+
+  def get_image_display(self, obj):
+    if obj.get_current().tread:
+      return obj.get_current().tread.image_set.first().get_image_display()
+    return format_html("<img style='border: 1px solid lightgray; border-radius: 8px' width={width} height={height}/>".format(
+        width = 100, # hardcoded thumbnail dimensions
+        height = 100,
+        )
+      )
+  get_image_display.short_description = 'Thumbnail'
+
+  # Product should never be deleted -> Use archive feature instead
+  def has_delete_permission(self, request, obj=None):
+    if os.environ['DEBUG_VALUE'] == 'True':
+      return False
+    return True
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -718,7 +907,6 @@ class StockAdmin(admin.ModelAdmin):
   )
 
   list_filter = (
-    'product',
     'quantity_change_type',
     'created_at',
     'updated_at',
@@ -727,19 +915,68 @@ class StockAdmin(admin.ModelAdmin):
   list_editable = (
     'quantity_change_type',
   )
+  
+  autocomplete_fields = (
+    'product',
+  )
 
-  readonly_fields = (   
-    'created_at',
-    'updated_at',)
+  search_fields = (
+    'product__id',
+  )
+
+  # Dynamic fieldsets
+  def get_fieldsets(self, request, obj=None):
+    if obj: # Change view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'product',
+            'quantity_change_type',
+            'quantity_change_value',
+            'created_at',
+            'updated_at',
+          )
+        }),
+      )
+    else: # Add view
+      fieldsets = (
+        (None, {
+          'fields': (
+            'product',
+            'quantity_change_type',
+            'quantity_change_value',
+          )
+        }),
+      )
+    return fieldsets
+
+  # Dynamic readonly
+  def get_readonly_fields(self, request, obj=None):
+    if obj: # Change view
+      return (
+        'product',
+        'created_at',
+        'updated_at',
+      )
+    else: # Add view
+      return (
+        'created_at',
+        'updated_at',
+      )
 
 # ────────────────────────────────────────────────────────────────────────────────
 
 # Register your models here
-admin.site.register(CartDetail, CartDetailAdmin)
 admin.site.register(Cart, CartAdmin)
-admin.site.register(Tire, TireAdmin)
 admin.site.register(OrderShipping, OrderShippingAdmin)
 admin.site.register(Tread, TreadAdmin)
-admin.site.register(Image, ImageAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Stock, StockAdmin)
+
+# Hide these models in production
+if os.environ['DEBUG_VALUE'] == 'True':
+  admin.site.register(CartDetail, CartDetailAdmin)
+if os.environ['DEBUG_VALUE'] == 'True':
+  admin.site.register(Tire, TireAdmin)
+if os.environ['DEBUG_VALUE'] == 'True':
+  admin.site.register(Image, ImageAdmin)

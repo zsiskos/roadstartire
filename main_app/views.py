@@ -17,6 +17,7 @@ from .models import Tire, Cart, CartDetail, OrderShipping
 import re, os
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
+from django.utils import timezone
 
 def home(req):
   return render(req, 'home.html')
@@ -330,7 +331,11 @@ def tire_list(req):
         tire_type__icontains=tire_type
       )
     if not ((width or aspect_ratio) or tire_type):
-      results = Tire.objects.all().order_by('price')
+      # results = Tire.objects.all().order_by('price')
+      results = Tire.objects.filter(
+        (Q(updated_to=None) & Q(date_effective__lte=timezone.now())) | 
+        (Q(updated_to__updated_to=None) & Q(updated_to__date_effective__gte=timezone.now()))
+      ).order_by('price')
       if 'order_by' in req.GET:
         results = Tire.objects.all().order_by(order)
     else:
