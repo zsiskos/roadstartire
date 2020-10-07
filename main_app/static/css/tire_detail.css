@@ -1,20 +1,24 @@
-.tire-container-qty {
-  width: 170px;
-  display: inline-table;
-  padding-left: 12px;
-  text-align: end;
+
+.tire-price {
+  text-align: left;
+  margin-top: 1.5em;
 }
 
-.tire-quantity-input-div {
-  font-size: 15px;
-  margin-bottom: 5px;
-}
-.tire-quantity-input {
-  width: 80px;
-  right: 0;
+#add-tire {
+  margin-top: 1.5em;
 }
 
-.add-to-order {
+.low-stock {
+  text-align: left;
+  color: #e44e44
+}
+
+.in-stock {
+  text-align: left;
+  color: #008000
+}
+
+#add-tire .order-btn-filled {
   color: linen;
   display:inline-block;
   justify-content:center;
@@ -27,13 +31,14 @@
   background:rgb(250, 148, 53);
   cursor:pointer;
   height:1.5em;
+  margin-top: 0.5em;
   width:8em;
   overflow:hidden;
   transition:transform 0.1s;
   z-index:1;
 }
 
-.add-to-order:hover {
+#add-tire .order-btn-filled:hover {
   transform:scale(1.05);
   color: rgb(30, 38, 126);
 }
