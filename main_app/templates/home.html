@@ -3,17 +3,38 @@
 
 {% block content %}
 <div class="container-home" id="hero-main">
-  <h1 class="hero-title">We know tires.</h1>
-  <p class="hero-copy">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro natus sit adipisci earum eius doloremque reprehenderit dolor perspiciatis soluta!</p>
+  <h1 class="hero-title">We know tires</h1>
+<!--   <p class="hero-copy">
+    Roadstar Tire Wholesale, a Pure Consumer tire company, has a focus on the High Value tire market and is constantly engaged in the development of innovative products to address the most specific mobility needs of the final consumer, such as Specialty and Super Specialty tires.
+  </p> -->
+  <div class="hero-intro-container">
+    <p class="hero-intro">
+      With over 50 years in the automotive industry, currently our tires are sold in over 20 Countries throughout the world
+    </p>
+  </div>
+<!--   <p class="hero-copy">
+    Roadstar Tire's amazing growth is the result of deep understanding of the needs of our customers and our sincere commitment to honesty, personal contact, and simultaneously providing exceptional quality and value in our automotive products.
+  </p> -->
 </div>
 <div class="container-home" id="hero-quality">
-  <h1 class="hero-title">Amazing selection.</h1>
-  <h1 class="hero-title">Reliable service.</h1>
+  <div class="quality-tires">
+    <h1 class="hero-title">Amazing selection</h1>
+    <h1 class="hero-title">Reliable quality</h1>
+    <h1 class="hero-title">Competitive prices</h1>
+  </div>
+  <!-- <h4 class="hero-title">
+    Miller tires are designed and engineered by ex-Continental engineers to assure the top quality standards and durability.
+  </h4>
+  <h4 class="hero-title">
+    Miller tires have been designed, manufactured and tested to meet the highest tire standards.The tires meet DOT, ECE, JIS , CCC , GCC INMTRO, ISO 9001 , , QS9000 and Q1 certifications ensuring safety, ultimate performance, driving comfort and unsurpassed quality.
+  </h4> -->
 </div>
 <div class="container-action">
   <div class="container-home" id="hero-contact">
-    <a href="{% url 'contact' %}" class="contact-btn"><h1>Contact us</h1></a>
-    <p>for quotes, availability and customer support</p>
+    <h2 class="hero-title">
+      for quotes, availability and customer support
+    </h2>
+    <a href="{% url 'contact' %}" class="order-btn" id="contact-us">Contact us</a>
   </div>
   <div class="container-home" id='hero-signup'>
     <div>
