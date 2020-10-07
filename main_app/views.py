@@ -286,7 +286,6 @@ def email_invoice(req, order_id):
   fp.close()
   msg_img.add_header('Content-ID', '<{}>'.format(f))
   msg.attach(msg_img)
-  print(msg_img.get_filename())
   msg.send()
   return redirect('account')
 
@@ -331,7 +330,6 @@ def tire_list(req):
     paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    print(paginator.count)
     return render(req, 'tire_list.html', {'cart': cart, 'results' : results, 'page_obj' : page_obj})
 
   if 'width' in req.GET:
@@ -369,7 +367,6 @@ def tire_list(req):
     paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    print(paginator.count)
 
     return render(req, 'tire_list.html', {'cart' : cart, 'results' : results, 'page_obj' : page_obj, 'paginator': paginator})
   return render(req, 'tire_list.html', {'cart': cart})
