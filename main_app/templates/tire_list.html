@@ -21,17 +21,132 @@
     <button class="order-btn-filled" type="submit" style="grid-column-start: 1; grid-row-start: 2;">Quick Search</button>
   </form>
 
-  <div class="form-grid-span sort-detail">
-    Sort by: 
-    <a class="account-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&order_by=width"><i class="fas fa-sort-down"></i>Width</a>
-    <a class="account-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&order_by=price"><i class="fas fa-sort-down"></i>Price</a>
+  
+  {% if paginator.count == 0 %}
+  <div>
+    <br>
+    <h1>The search contains no results.</h1>
+    <p>Try searching for something else instead.</p>
   </div>
-
+  {% else %}
   <div class="form-grid-span">
     {% if page_obj.number %}
-    <div class="container-pagination">
-      <!-- 'Previous' button -->
-      {% if page_obj.has_previous %}
+      <div class="form-grid-span sort-detail">
+        Sort by: 
+        <a class="account-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&order_by=width"><i class="fas fa-sort-down"></i>Width</a>
+        <a class="account-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&order_by=price"><i class="fas fa-sort-down"></i>Price</a>
+      </div>
+      <div class="container-pagination">
+        <!-- 'Previous' button -->
+        {% if page_obj.has_previous %}
+            <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+          {% else %}
+            <a class="page-btn-inactive"><i class="fas fa-arrow-left"></i></a>
+          {% endif %}
+          <!-- First page -->
+            <a href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">
+              {% if page_obj.number == 1 %}
+                <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">1</a>
+              {% else %}
+                <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">1</a>
+              {% endif %}
+            </a>
+          {% if page_obj.number > 5 %}
+            <span>...</span>
+          {% endif %}
+          {% if num == page_obj.number|add:'5' %}
+            <span>...</span>
+          {% endif %}
+          <!-- Middle pages always display 7 pages at most -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if num != 1 and num != page_obj.paginator.num_pages %}
+              {% if page_obj.number == num %}
+                <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+              {% elif num < 9 and num > page_obj.number|add:'-4' %}
+                <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+              {% elif num > page_obj.paginator.num_pages|add:'-8' and page_obj.number > page_obj.paginator.num_pages|add:'-5' %}
+                <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+              {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+                <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.number < page_obj.paginator.num_pages|add:'-4' %}
+            <span>...</span>
+          {% endif %}
+          <!-- Last page -->
+          {% if page_obj.paginator.num_pages != 1 %}
+          <a class='page-num' href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">
+            {% if page_obj.number == page_obj.paginator.num_pages %}
+              <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+            {% else %}
+              <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+            {% endif %}
+          </a>
+          {% endif %}
+          <!-- 'Next' button -->
+          {% if page_obj.has_next %}
+            <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+          {% else %}
+            <a class="page-btn-inactive"><i class="fas fa-arrow-right"></i></a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% for tire in page_obj %}
+      <div class="container-order">
+        <div class="container-item">
+          <div class="image-tire">
+            <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px; border-radius: 8px;"/>
+          </div>
+          <div class="item-tire">
+            <a class="tire-btn" href="{% url 'tire_detail' tire.get_updated_tire.id %}"><h2>{{ tire.name }}</h2></a>
+            <p><span class="cart-label">Size:</span> {{tire.width}}/{{tire.aspect_ratio}}{{tire.rim_size}}</p>
+            <p><span class="cart-label">Type:</span> {{tire.tire_type}}</p>
+            <p><span class="cart-label">Pattern:</span> {{tire.pattern}}</p>
+            <p><span class="cart-label">Load/Speed:</span> {{tire.load_speed}}</p>
+          </div>
+        </div>
+        <div class="container-item">
+          <div>
+            <span class="cart-label">Price</span>
+            <h2>${{tire.price}}</h2>
+          </div>  
+        </div>
+        <div class="container-qty">
+          <div class="tire-quantity-input-div">
+            <span>Quantity</span>
+            <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>
+          </div>  
+          <button class="add-to-order" data-id="{{ tire.id }}" data-csrf="{{csrf_token}}">
+            <div class="pre-text">
+              <i class="fas fa-cart-plus"></i>
+                ADD TO CART
+            </div>
+
+            <div class="pre-text-done">
+              <div class="post-text">
+                <i class="fas fa-check"></i>
+                ADDED
+              </div>
+            </div>
+          </button>
+          <p><span class="cart-label">Availability:</span>
+            {% if tire.product.current_quantity < 20 %}
+              Low stock
+            {% else %}
+              In stock
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+
+    {% if page_obj.number %}
+      <div class="container-pagination">
+        <!-- 'Previous' button -->
+        {% if page_obj.has_previous %}
           <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
         {% else %}
           <a class="page-btn-inactive"><i class="fas fa-arrow-left"></i></a>
