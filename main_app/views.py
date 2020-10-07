@@ -331,7 +331,7 @@ def tire_list(req):
     paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
+    print(paginator.count)
     return render(req, 'tire_list.html', {'cart': cart, 'results' : results, 'page_obj' : page_obj})
 
   if 'width' in req.GET:
@@ -369,8 +369,9 @@ def tire_list(req):
     paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    print(paginator.count)
 
-    return render(req, 'tire_list.html', {'cart' : cart, 'results' : results, 'page_obj' : page_obj})
+    return render(req, 'tire_list.html', {'cart' : cart, 'results' : results, 'page_obj' : page_obj, 'paginator': paginator})
   return render(req, 'tire_list.html', {'cart': cart})
 
 def tire_detail(req, tire_id):
