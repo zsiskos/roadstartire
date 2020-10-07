@@ -426,7 +426,7 @@ def add_to_cart(req):
     }
   )
 
-  instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+  instance, created = CartDetail.objects.get_or_create(cart=cart, product=tire.product)
   if not created:
     quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
   else:
