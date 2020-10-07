@@ -96,49 +96,50 @@
 
     {% for tire in page_obj %}
       <div class="container-order">
-        <div class="container-item">
-          <div class="image-tire">
-            <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' style="border: 1px solid lightgray; margin-right: .75rem; height: 150px; border-radius: 8px;"/>
-          </div>
+        <div class="list-tire-details">
+          <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' class="thumbnail-image-small"/>
           <div class="item-tire">
-            <a class="tire-btn" href="{% url 'tire_detail' tire.get_updated_tire.id %}"><h2>{{ tire.name }}</h2></a>
+            <a class="tire-btn" href="{% url 'tire_detail' tire.get_updated_tire.id %}">
+              <h2>{{ tire.name }}</h2>
+            </a>
             <p><span class="cart-label">Size:</span> {{tire.width}}/{{tire.aspect_ratio}}{{tire.rim_size}}</p>
             <p><span class="cart-label">Type:</span> {{tire.tire_type}}</p>
             <p><span class="cart-label">Pattern:</span> {{tire.pattern}}</p>
             <p><span class="cart-label">Load/Speed:</span> {{tire.load_speed}}</p>
           </div>
         </div>
-        <div class="container-item">
-          <div>
-            <span class="cart-label">Price</span>
-            <h2>${{tire.price}}</h2>
-          </div>  
-        </div>
         <div class="container-qty">
+          <div class="container-item">
+            <h2>${{ tire.price }}</h2>
+          </div>
           <div class="tire-quantity-input-div">
-            <span>Quantity</span>
+            <span class="cart-label">Quantity</span>
             <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>
-          </div>  
-          <button class="add-to-order order-btn-filled" data-id="{{ tire.id }}" data-csrf="{{csrf_token}}">
+          </div>
+          <div class="stock">
+            {% if tire.product.current_quantity < 20 %}
+            <p class="low-stock">
+              Limited stock
+            </p>
+            {% else %}
+            <p class="in-stock">
+              In stock
+            </p>
+            {% endif %}
+          </div>
+          <button class="add-to-order order-btn-filled" data-id="{{ tire.id }}" data-csrf="{{ csrf_token }}">
             <div class="pre-text">
               <i class="fas fa-cart-plus"></i>
-                ADD TO CART
+              Add to cart
             </div>
-
+  
             <div class="pre-text-done">
               <div class="post-text">
                 <i class="fas fa-check"></i>
-                ADDED
+                Added
               </div>
             </div>
           </button>
-          <p><span class="cart-label">Availability:</span>
-            {% if tire.product.current_quantity < 20 %}
-              Low stock
-            {% else %}
-              In stock
-            {% endif %}
-          </p>
         </div>
       </div>
     {% endfor %}
