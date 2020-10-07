@@ -95,7 +95,6 @@ def update_updated_to(sender, instance, *args, **kwargs):
   if instance.inherits_from: # If beyond the first Tire version
     Tire.objects.all().filter(id=instance.inherits_from.id).update(updated_to=instance)
 
-# Update in the TireAdmin save_model instead
 @receiver(post_save, sender=Tire)
 def update_date_effective(sender, instance, *args, **kwargs):
   if not instance.date_effective_tracker.has_changed('date_effective'):
