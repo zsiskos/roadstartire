@@ -1,8 +1,8 @@
 window.onload = function() {
   const buttons = Array.from(document.querySelectorAll('.add-to-order'));
 
-  buttons.forEach(button => {
-    button.addEventListener('click', e => {
+  buttons.forEach(b => {
+    b.addEventListener('click', e => {
 
       const itemId = e.target.dataset.id;
       const csrfToken = e.target.dataset.csrf;

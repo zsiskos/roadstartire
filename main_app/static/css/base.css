@@ -122,6 +122,9 @@ footer .account-btn {
   .container-info {
     padding: 1em 1em;
   }
+  .container-qty {
+    text-align: center;
+  }
 }
 
 /* NAV BAR */
