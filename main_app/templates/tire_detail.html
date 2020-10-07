@@ -58,6 +58,15 @@
           </div>
         </a>
       </form>
+      <br/>
+      <br/>
+      <p><span class="cart-label">Availability:</span> 
+        {% if tire.product.current_quantity < 20 %}
+          Low stock
+        {% else %}
+          In stock
+        {% endif %}
+      </p>
       </div>
     </div>
   </div>  

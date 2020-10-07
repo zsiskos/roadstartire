@@ -18,6 +18,7 @@ from .models import Tire, Cart, CartDetail, OrderShipping
 import re, os, json
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
+from django.utils import timezone
 
 def home(req):
   user_authenticated = req.user.is_authenticated
@@ -310,6 +311,8 @@ def tire_list(req):
     aspect_ratio = cleaned_query[3:5]
     rim_size = cleaned_query[-2:]
     result = Tire.objects.filter(
+        updated_to=None
+      ).filter(
         width__icontains=width
       ).filter(
         aspect_ratio__icontains=aspect_ratio
@@ -317,9 +320,9 @@ def tire_list(req):
         rim_size__icontains=rim_size
       )
     if not quick_search:
-      results = Tire.objects.all().order_by('price')
+      results = Tire.objects.filter(updated_to=None).order_by('price')
       if 'order_by' in req.GET:
-        results = Tire.objects.all().order_by(order)
+        results = Tire.objects.filter(updated_to=None).order_by(order)
     else:
       results = result.order_by('price')
       if 'order_by' in req.GET:
@@ -342,6 +345,8 @@ def tire_list(req):
     brand = req.GET['brand']
     tire_type = req.GET['tire_type']
     result = Tire.objects.filter(
+        updated_to=None
+      ).filter(
         width__icontains=width
       ).filter(
         aspect_ratio__icontains=aspect_ratio
@@ -353,9 +358,9 @@ def tire_list(req):
         tire_type__icontains=tire_type
       )
     if not (width or aspect_ratio or tire_type or brand or rim_size):
-      results = Tire.objects.all().order_by('price')
+      results = Tire.objects.filter(updated_to=None).order_by('price')
       if 'order_by' in req.GET:
-        results = Tire.objects.all().order_by(order)
+        results = result.order_by(order)
     else:
       results = result.order_by('price')
       if 'order_by' in req.GET:
@@ -373,6 +378,7 @@ def tire_detail(req, tire_id):
   # If the tire exists in the cart already, then just add the inputted quantity to the current quantity
   # If it doesn't exist in the cart, create a new instance
   tire = Tire.objects.get(pk=tire_id)
+  updated_tire = tire.get_updated_tire()
   if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     # If for some reason there is more than one current cart, use the most recent one
     cart = Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT).order_by('ordered_at').last()
@@ -382,7 +388,7 @@ def tire_detail(req, tire_id):
   if req.method == 'POST':
     # Get the instance if it exists or create one if if doesn't
     # Returns a tuple of (object, created), where created is a boolean specifying whether an object was created
-    instance, created = CartDetail.objects.get_or_create(cart=cart, tire=tire)
+    instance, created = CartDetail.objects.get_or_create(cart=cart, product=updated_tire.product)
     if not created:
       quantityToCarry = instance.quantity # Existing cart, therefore cache the quantity to carry over
     else:
@@ -401,7 +407,7 @@ def tire_detail(req, tire_id):
         'tire': tire,
       }
     )
-  return render(req, 'tire_detail.html', {'cart': cart, 'tire': tire, 'form': form})
+  return render(req, 'tire_detail.html', {'cart': cart, 'tire': updated_tire, 'form': form})
 
 @login_required(login_url='/login')
 # @api_view(['POST'])

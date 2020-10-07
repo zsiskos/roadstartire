@@ -5,7 +5,8 @@ from django.dispatch import receiver
 from django.template import loader
 from django.utils import timezone
 from email.mime.image import MIMEImage
-from .models import CartDetail, Cart, OrderShipping
+from .models import CartDetail, Cart, OrderShipping, Tire
+from django.utils import timezone
 
 # After a CartDetail is deleted, if the Cart no longer has CartDetail objects associated with it (ie. the Cart is now empty), mark the Cart as 'ABANDONED'
 @receiver(post_delete, sender=CartDetail)
@@ -88,3 +89,14 @@ def create_order_shipping(sender, instance, *args, **kwargs):
         'gst_number': instance.user.gst_number,
       }
     )
+
+@receiver(post_save, sender=Tire)
+def update_updated_to(sender, instance, *args, **kwargs):
+  if instance.inherits_from: # If beyond the first Tire version
+    Tire.objects.all().filter(id=instance.inherits_from.id).update(updated_to=instance)
+
+# Update in the TireAdmin save_model instead
+# @receiver(post_save, sender=Tire)
+# def update_date_effective(sender, instance, *args, **kwargs):
+#   if not instance.date_effective_tracker.has_changed('date_effective'):
+#     Tire.objects.all().filter(pk=instance.pk).update(date_effective = timezone.now())

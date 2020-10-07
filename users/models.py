@@ -105,8 +105,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
   class Meta:
     # Change model name in admin interface
-    verbose_name = 'User'
-    verbose_name_plural = 'Users'
+    verbose_name = '👤 User'
+    verbose_name_plural = '👤 Users'
 
   # A string describing the name of the field on the user model that is used as the unique identifier
   USERNAME_FIELD = 'email'
