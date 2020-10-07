@@ -26,17 +26,37 @@
         <p><span class="cart-label">Load/Speed:</span> {{ tire.load_speed }}</p>
       </div>
     </div>
-    <div class="container-item">
-      <div>
-        <span class="cart-label">Price</span>
-        <h2>${{tire.price|intcomma}}</h2>
-      </div>  
-    </div>
     <div class="container-qty">
-      <form id="add-tire" method="post" action="{% url 'tire_detail' tire.id %}">
+      <div class="tire-price">
+        <h2>${{tire.price|intcomma}}</h2>
+      </div>
+      <p class="stock">
+        {% if tire.current_quantity < 20 %}
+        <p class="low-stock">
+          Limited stock
+        </p>
+        {% else %}
+        <p class="in-stock">
+          In stock
+        </p>
+        {% endif %}
+      </p>
+      <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <a href="#" onClick="document.forms['add-tire'].submit();" class="order-btn-filled">Add to Cart</a>
+        <a href="#" class="order-btn-filled">
+          <div class="pre-text">
+            <i class="fas fa-cart-plus"></i>
+              ADD TO CART
+          </div>
+
+          <div class="pre-text-done">
+            <div class="post-text">
+              <i class="fas fa-check"></i>
+              ADDED
+            </div>
+          </div>
+        </a>
       </form>
       <br/>
       <br/>

@@ -25,10 +25,14 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/login_signup.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/forms.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/tire_list.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/tire_detail.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/pagination.css' %}">
   <script src="https://kit.fontawesome.com/7344249496.js" crossorigin="anonymous"></script>
   <!-- moment.js – For converting UTC to local time -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" type="text/javascript"></script>
+  <script src="{% static 'js/tire_list.js' %}"></script>
+  <script src="{% static 'js/tire_detail.js' %}"></script>
   <title>Roadstar Tire</title>
 </head>
 <body>
@@ -41,7 +45,7 @@
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
     <nav>
       <!-- Navbar links -->
-      <ul>
+      <ul class=nav-bar>
         <!-- DO NOT INCLUDE IN PRODUCTION -->
         {% if user.is_authenticated %}
         <li><a class="account-btn" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a></li>
@@ -50,7 +54,20 @@
         <li><a class="account-btn" id="nav-about" href={% url 'contact' %}></i>Contact Us</a></li>
         {% if user.is_authenticated %}
         <li><a class="account-btn" id="nav-logout" href="{% url 'account' %}">Account</a></li>
-        <li><a class="account-btn" id="nav-cart-detail" href={% url 'cart_detail' %}><i class="fas fa-shopping-cart"></i></a></li>
+        <!-- cart icon -->
+        <li class="cart-nav-class">
+          <a class="account-btn" id="nav-cart-detail" href={% url 'cart_detail' %}>
+            {% if cart %}
+            <div class="f-circle">
+              <h6 class="fa-alph">
+                {{ cart.get_item_count }}
+              </h6>
+            </div>
+            {% endif %}
+            <i class="fas fa-shopping-cart">
+            </i>
+          </a>
+        </li>
         {% else %}
         <li><a class="account-btn" id="nav-login" href={% url 'login' %}></i>Log in</a></li>
         <li><a class="account-btn" id="nav-signup" href={% url 'signup' %}></i>Sign Up</a></li>

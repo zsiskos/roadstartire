@@ -158,6 +158,10 @@ nav li {
   margin-left: 1em;
 }
 
+.nav-bar .account-btn {
+  margin-top: 0;
+}
+
 .nav-brand-link {
   color:var(--link-color-hover);
   text-decoration: none;
@@ -177,9 +181,30 @@ nav a {
   text-transform: uppercase;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
-  font-size: .8rem;
+  font-size: 0.9rem;
   transition: all 0.2s ease;
   letter-spacing: 2.1px;
+}
+
+/*cart icon when cart is full*/
+
+.fa-alph {
+  font-size: 1.1em;
+  font-family: Inter, sans-serif; /* your font family here! */
+  font-weight: bold;
+  color: var(--link-color-dark);
+  font-style: normal;   
+}
+.f-circle {
+  float: right;
+  text-align: center;
+  font-size: .5em;
+  font-family: Inter, sans-serif; /* your font family here! */
+  font-weight: 900;
+  display: block;
+  border: 2px solid var(--link-color-hover);
+  border-radius: 999px;
+  padding: 3px 5px;
 }
 
 /* Nav bar hamburger menu and functionality */

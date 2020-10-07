@@ -1,0 +1,87 @@
+.tire-container-qty {
+  width: 170px;
+  display: inline-table;
+  padding-left: 12px;
+  text-align: end;
+}
+
+.tire-quantity-input-div {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+.tire-quantity-input {
+  width: 80px;
+  right: 0;
+}
+
+.add-to-order {
+  color: linen;
+  display:inline-block;
+  justify-content:center;
+  align-items:center;
+  padding:0.5em 1em 0.5em 1em;
+  border-radius:6px;
+  border:none;
+  font-size:1.5em;
+  position: relative;
+  background:rgb(250, 148, 53);
+  cursor:pointer;
+  height:1.5em;
+  width:8em;
+  overflow:hidden;
+  transition:transform 0.1s;
+  z-index:1;
+}
+
+.add-to-order:hover {
+  transform:scale(1.05);
+  color: rgb(30, 38, 126);
+}
+
+.pre-text {
+  pointer-events: none;
+  color:inherit;
+  background:rgb(250, 148, 53);
+  height:100%;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  letter-spacing: 2.1px;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+}
+
+.fa-cart-plus {
+  pointer-events: none;
+}
+
+.pre-text-done {
+  background:rgba(30, 38, 126, 1);
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  transition:transform 0.3s ease;
+  transform:translate(-110%) skew(-40deg);
+}
+
+.post-text {
+  font-size: 15px;
+  background:rgba(30, 38, 126, 0);
+  color: rgb(250, 148, 53);
+  letter-spacing: 2.1px;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+}
+
+.fa-check {
+  color: rgb(250, 148, 53);
+  background:rgba(30, 38, 126, 0);
+}
