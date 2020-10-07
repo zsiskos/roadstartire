@@ -489,7 +489,7 @@ class CartDetail(TimeStampMixin):
       self.delete()
 
   def get_relevant_tire(self):
-    qs = self.product.tire_set.filter(date_effective__lte=self.date_relevant).order_by('date_effective')
+    qs = self.product.tire_set.filter(date_effective__lte=self.date_relevant).order_by('date_effective', 'id')
     return qs.last()
 
   def get_updated_tire(self):
