@@ -70,6 +70,8 @@
 .container-total {
   text-align: end;
   padding-right: .75em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .container-cart-headers,
