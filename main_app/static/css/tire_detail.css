@@ -2,6 +2,8 @@
 .tire-price {
   text-align: left;
   margin-top: 1.5em;
+  margin-bottom: .4em;
+  font-size: 2em;
 }
 
 #add-tire {
@@ -18,35 +20,41 @@
   color: #008000
 }
 
+#add-tire {
+  text-align: start;
+}
+
 #add-tire .order-btn-filled {
-  color: linen;
-  display:inline-block;
-  justify-content:center;
-  align-items:center;
-  padding:0.5em 1em 0.5em 1em;
-  border-radius:6px;
-  border:none;
-  font-size:1.5em;
+  /* color: linen; */
+  /* display:inline-block; */
+  /* justify-content:center; */
+  /* align-items:center; */
+  /* padding:0.5em 1em 0.5em 1em; */
+  /* border-radius:6px; */
+  /* border:none; */
+  /* font-size:1.5em; */
   position: relative;
-  background:rgb(250, 148, 53);
-  cursor:pointer;
-  height:1.5em;
-  margin-top: 0.5em;
-  width:8em;
-  overflow:hidden;
-  transition:transform 0.1s;
-  z-index:1;
+  /* background:rgb(250, 148, 53); */
+  /* cursor:pointer; */
+  /* height:1.5em; */
+  /* margin-top: 0.5em; */
+  /* width:8em; */
+  overflow: hidden;
+  /* transition: transform 0.1s; */
+  transition: all 0.2s ease;
+  z-index: 1;
+  width: 100%;
 }
 
 #add-tire .order-btn-filled:hover {
-  transform:scale(1.05);
-  color: rgb(30, 38, 126);
+  transform: scale(1.03);
+  /* color: rgb(30, 38, 126); */
 }
 
 .pre-text {
   pointer-events: none;
   color:inherit;
-  background:rgb(250, 148, 53);
+  background: none;
   height:100%;
   width:100%;
   display:flex;
@@ -60,6 +68,7 @@
 
 .fa-cart-plus {
   pointer-events: none;
+  margin-right: .6rem;
 }
 
 .pre-text-done {
@@ -79,7 +88,7 @@
 .post-text {
   font-size: 15px;
   background:rgba(30, 38, 126, 0);
-  color: rgb(250, 148, 53);
+  /* color: rgb(250, 148, 53); */
   letter-spacing: 2.1px;
   font-weight: bold;
   font-size: 12px;
@@ -88,5 +97,19 @@
 
 .fa-check {
   color: rgb(250, 148, 53);
-  background:rgba(30, 38, 126, 0);
+}
+
+.thumbnail-image-large {
+  border: 1px solid lightgray; 
+  margin-right: 2em;
+  height: 280px;
+  border-radius: 8px
+}
+
+#id_quantity.input {
+  width: 10px;
+}
+
+#add-tire label {
+  font-weight: 600;
 }

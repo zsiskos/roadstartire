@@ -550,7 +550,6 @@ class TireAdmin(admin.ModelAdmin):
 
   # Product objects should not exist without tires
   def has_delete_permission(self, request, obj=None):
-    print(os.environ['DEBUG_VALUE'])
     if os.environ['DEBUG_VALUE'] == 'True':
       return True
     return False
