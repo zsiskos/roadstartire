@@ -539,7 +539,7 @@ class TireAdmin(admin.ModelAdmin):
       old_obj = deepcopy(obj)
       obj.id = None # Set to None so that new row is inserted
       obj.inherits_from = old_obj
-      obj.date_effective = timezone.now() # Default to current time for now until can find a way to filter the tire_list queryset proprerly
+      # obj.date_effective = timezone.now() # Default to current time for now until can find a way to filter the tire_list queryset proprerly
       obj.save()
     super().save_model(request, obj, form, change)
     
