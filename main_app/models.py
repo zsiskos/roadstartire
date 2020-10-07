@@ -449,8 +449,8 @@ class Tire(models.Model):
         )
 
   class Meta:
-    verbose_name = '📜 Tire History'
-    verbose_name_plural = '📜 Tire History'
+    verbose_name = '📜 Tire Details'
+    verbose_name_plural = '📜 Tire Details'
 
 from string import Template
 class DeltaTemplate(Template):

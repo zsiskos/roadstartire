@@ -552,8 +552,8 @@ class TireAdmin(admin.ModelAdmin):
   def has_delete_permission(self, request, obj=None):
     print(os.environ['DEBUG_VALUE'])
     if os.environ['DEBUG_VALUE'] == 'True':
-      return False
-    return True
+      return True
+    return False
 
   def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
     extra_context = extra_context or {}
@@ -892,8 +892,8 @@ class ProductAdmin(admin.ModelAdmin):
   # Product should never be deleted -> Use archive feature instead
   def has_delete_permission(self, request, obj=None):
     if os.environ['DEBUG_VALUE'] == 'True':
-      return False
-    return True
+      return True
+    return False
 
 # ────────────────────────────────────────────────────────────────────────────────
 

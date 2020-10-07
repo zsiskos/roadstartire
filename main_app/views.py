@@ -311,6 +311,8 @@ def tire_list(req):
     aspect_ratio = cleaned_query[3:5]
     rim_size = cleaned_query[-2:]
     result = Tire.objects.filter(
+        updated_to=None
+      ).filter(
         width__icontains=width
       ).filter(
         aspect_ratio__icontains=aspect_ratio
@@ -318,9 +320,9 @@ def tire_list(req):
         rim_size__icontains=rim_size
       )
     if not quick_search:
-      results = Tire.objects.all().order_by('price')
+      results = Tire.objects.filter(updated_to=None).order_by('price')
       if 'order_by' in req.GET:
-        results = Tire.objects.all().order_by(order)
+        results = Tire.objects.filter(updated_to=None).order_by(order)
     else:
       results = result.order_by('price')
       if 'order_by' in req.GET:
@@ -343,6 +345,8 @@ def tire_list(req):
     brand = req.GET['brand']
     tire_type = req.GET['tire_type']
     result = Tire.objects.filter(
+        updated_to=None
+      ).filter(
         width__icontains=width
       ).filter(
         aspect_ratio__icontains=aspect_ratio
@@ -354,9 +358,9 @@ def tire_list(req):
         tire_type__icontains=tire_type
       )
     if not (width or aspect_ratio or tire_type or brand or rim_size):
-      results = Tire.objects.all().order_by('price')
+      results = Tire.objects.filter(updated_to=None).order_by('price')
       if 'order_by' in req.GET:
-        results = Tire.objects.all().order_by(order)
+        results = result.order_by(order)
     else:
       results = result.order_by('price')
       if 'order_by' in req.GET:
