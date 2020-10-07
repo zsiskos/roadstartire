@@ -429,11 +429,11 @@ class TireAdmin(admin.ModelAdmin):
             'tire_type',
             ('pattern', 'tread',),
             'load_speed',
-            # 'updated_to', # Hide in production
-            # 'inherits_from', # Hide in production
-            # 'date_effective', # Hide until fully implemented
-            # 'get_date_effective_delta', # Hide until fully implemented
-            # 'is_effective', # Hide until fully implemented
+            'updated_to', # Hide in production
+            'inherits_from', # Hide in production
+            'date_effective', # Hide until fully implemented
+            'get_date_effective_delta', # Hide until fully implemented
+            'is_effective', # Hide until fully implemented
           )
         }),
       )
