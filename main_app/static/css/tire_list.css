@@ -2,7 +2,10 @@
   min-width: 170px;
   display: inline-table;
   padding-left: 12px;
-  background: red;
+}
+
+.tire-list-price {
+  text-align: start;
 }
 
 .tire-quantity-input-div {
@@ -45,6 +48,7 @@
   border: 1px solid lightgray; 
   margin-right: 1em;
   height: 160px;
+  width: 160px;
   border-radius: 8px
 }
 
@@ -52,4 +56,8 @@
   display: flex;
   justify-content: space-between;
   align-items: start;
+}
+
+.no-search-results {
+  margin-top: 4em;
 }

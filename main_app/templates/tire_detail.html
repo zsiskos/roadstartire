@@ -6,9 +6,8 @@
   <h2>{{ tire.name }}</h2>
   <div class="container-info">
     <div class="container-item">
-      <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' class='thumbnail-image-large'/>
+      <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' class='tire-detail-thumbnail-image'/>
       <div class="item-tire">
-        <!-- <p><span class="cart-label">Year:</span> {{ tire.year }}</p> -->
         <p><span class="cart-label">Brand:</span> {{ tire.brand }}</p>
         <p><span class="cart-label">Width:</span> {{ tire.width }}</p>
         <p><span class="cart-label">Aspect Ratio:</span> {{ tire.aspect_ratio }}</p>

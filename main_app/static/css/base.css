@@ -126,9 +126,6 @@ footer .account-btn {
   .container-info {
     padding: 1em 1em;
   }
-  .container-qty {
-    text-align: center;
-  }
 }
 
 /* NAV BAR */
@@ -272,7 +269,7 @@ nav a {
 /* When screen gets larger than 850px */
 @media screen and (min-width: 850px) {
   main {
-    padding-top: 6.5rem;
+    padding-top: 5.96rem;
   }
 
   .nav-toggle-label {

@@ -99,11 +99,13 @@
   color: rgb(250, 148, 53);
 }
 
-.thumbnail-image-large {
+.tire-detail-thumbnail-image {
   border: 1px solid lightgray; 
-  margin-right: 2em;
+  margin-right: 1.2em;
   height: 280px;
-  border-radius: 8px
+  width: 280px;
+  border-radius: 8px;
+  transition: all .3s ease;
 }
 
 #id_quantity.input {
@@ -112,4 +114,26 @@
 
 #add-tire label {
   font-weight: 600;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────── */
+
+/* WHEN SCREEN GETS SMALL */
+@media screen and (max-width:740px){
+  .tire-detail-thumbnail-image {
+    height: 200px;
+    width: 200px;
+    transition: all .3s ease;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────── */
+
+/* WHEN SCREEN GETS REALLY SMALL */
+@media screen and (max-width: 500px) {
+  .tire-detail-thumbnail-image {
+    height: 175px;
+    width: 175px;
+    transition: all .3s ease;
+  }
 }
