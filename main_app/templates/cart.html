@@ -18,7 +18,7 @@
           <p><span class="cart-label">Size:</span> {{ cart_detail.get_relevant_tire.width }} / {{ cart_detail.get_relevant_tire.aspect_ratio }} / {{ cart_detail.get_relevant_tire.rim_size }}</p>
           <p><span class="cart-label">Type:</span> {{ cart_detail.get_relevant_tire.tire_type }}</p>
           <p><span class="cart-label">Pattern:</span> {{ cart_detail.get_relevant_tire.pattern }}</p>
-          <p><span class="cart-label">Load/Speed:</span> {{ cart_detail.pruct.get_relevant_tire.load_speed }}</p>
+          <p><span class="cart-label">Load/Speed:</span> {{ cart_detail.get_relevant_tire.load_speed }}</p>
         </div>
       </div>
 
@@ -37,7 +37,7 @@
         </div>
         <div class="cart-container-price">
           <p><span class="cart-label">Price</span></p>
-          <p>${{ cart_detail.get_relevant_tire.price|intcomma }}</p>
+          <p>${{ cart_detail.get_relevant_tire.relevant_price|intcomma }}</p>
         </div>
         <div class="cart-container-subtotal">
           <p><span class="cart-label">Subtotal</span></p>

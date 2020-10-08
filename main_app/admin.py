@@ -9,9 +9,10 @@ from django.utils.html import format_html
 from django.forms.models import BaseInlineFormSet
 import datetime
 from copy import deepcopy
-from django.db.models import Q
+from django.db.models import Q, F
 import os
 import environ
+from django.db.models import Case, When, DecimalField
 
 # ────────────────────────────────────────────────────────────────────────────────
 # list_display - Controls which fields are displayed on the change list page
@@ -373,6 +374,7 @@ class TireAdmin(admin.ModelAdmin):
     'product',
     'price',
     'sale_price',
+    'use_sale_price',
     'brand',
     'year',
     'width',
@@ -396,6 +398,7 @@ class TireAdmin(admin.ModelAdmin):
     'year',
     'tire_type',
     'tread',
+    'use_sale_price',
   )
 
   search_fields = (
@@ -421,6 +424,7 @@ class TireAdmin(admin.ModelAdmin):
             'get_image_display',
             'price',
             'sale_price',
+            'use_sale_price',
             'brand',
             'year',
             'width',
@@ -429,11 +433,11 @@ class TireAdmin(admin.ModelAdmin):
             'tire_type',
             ('pattern', 'tread',),
             'load_speed',
-            'updated_to', # Hide in production
-            'inherits_from', # Hide in production
-            'date_effective', # Hide until fully implemented
-            'get_date_effective_delta', # Hide until fully implemented
-            'is_effective', # Hide until fully implemented
+            # 'updated_to', # Hide in production
+            # 'inherits_from', # Hide in production
+            # 'date_effective', # Hide until fully implemented
+            # 'get_date_effective_delta', # Hide until fully implemented
+            # 'is_effective', # Hide until fully implemented
           )
         }),
       )
@@ -444,6 +448,7 @@ class TireAdmin(admin.ModelAdmin):
             'product',
             'price',
             'sale_price',
+            'use_sale_price',
             'brand',
             'year',
             'width',
@@ -480,6 +485,7 @@ class TireAdmin(admin.ModelAdmin):
         'is_effective',
         'price',
         'sale_price',
+        'relevant_price',
         'brand',
         'year',
         'width',
@@ -507,6 +513,7 @@ class TireAdmin(admin.ModelAdmin):
         'get_image_display',
         'get_date_effective_delta',
         'is_effective',
+        'relevant_price',
       )
       return (
         'product_num',
@@ -525,6 +532,7 @@ class TireAdmin(admin.ModelAdmin):
         'get_image_display',
         'get_date_effective_delta',
         'is_effective',
+        'relevant_price',
       )
     else: # Add view
       return ()
@@ -591,6 +599,22 @@ class TireAdmin(admin.ModelAdmin):
         )
       )
   get_image_display.short_description = 'Thumbnail'
+
+  # def get_queryset(self, request):
+  #   qs = super().get_queryset(request)
+  #   qs = qs.annotate(
+  #     _relevant_price=Case(
+  #       When(use_sale_price=True, then=F('sale_price')),
+  #         default=F('price'),
+  #         output_field=DecimalField()
+  #       )
+  #     )
+  #   return qs
+
+  # def relevant_price(self, obj):
+  #   return obj._relevant_price
+  # relevant_price.short_description = 'Relevant Price ($)'
+  # relevant_price.admin_order_field = '_relevant_price'
 
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -746,6 +770,7 @@ class TireInline(admin.StackedInline):
       'fields': (
         'price',
         'sale_price',
+        'use_sale_price',
         'brand',
         'year',
         'width',
