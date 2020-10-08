@@ -33,34 +33,28 @@
         {% if sort == 'width' %}
           <a class="account-btn" href="?{% url_replace request 'sort' '-width' %}"><i class="fas fa-sort-down"></i>Width</a>
         {% elif sort != 'width' %}
-          <a class="account-btn" href="?{% url_replace request 'sort' 'width' %}"><i class="fas fa-sort-down"></i>Width</a>
+          <a class="account-btn" href="?{% url_replace request 'sort' 'width' %}"><i class="fas fa-sort-up"></i>Width</a>
         {% endif %}
 
         {% if sort == 'price' %}
           <a class="account-btn" href="?{% url_replace request 'sort' '-price' %}"><i class="fas fa-sort-down"></i>Price</a>
         {% elif sort != 'price' %}
-          <a class="account-btn" href="?{% url_replace request 'sort' 'price' %}"><i class="fas fa-sort-down"></i>Price</a>
+          <a class="account-btn" href="?{% url_replace request 'sort' 'price' %}"><i class="fas fa-sort-up"></i>Price</a>
         {% endif %}
-        <!-- {$ if sort_width %}
-          {% if sort_price == 'asc' %}
-            <a class="account-btn" href="?{% url_replace request 'sort_price' 'desc' %}"><i class="fas fa-sort-down"></i>Price</a>
-          {% else %}
-            <a class="account-btn" href="?{% url_replace request 'sort_price' 'asc' %}"><i class="fas fa-sort-down"></i>Price</a>
-          {% endif %} -->
       </div>
       <div class="container-pagination">
         <!-- 'Previous' button -->
         {% if page_obj.has_previous %}
-            <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+            <a class="page-btn" href="?{% url_replace request 'page' '{{ page_obj.previous_page_number }}' %}"><i class="fas fa-arrow-left"></i></a>
           {% else %}
             <a class="page-btn-inactive"><i class="fas fa-arrow-left"></i></a>
           {% endif %}
           <!-- First page -->
-            <a href="{{request.get_full_path}}&page=1">
+            <a href="?{% url_replace request 'page' '1' %}">
               {% if page_obj.number == 1 %}
-                <a class="page-btn current-page-num" href="{{request.get_full_path}}&page=1">1</a>
+                <a class="page-btn current-page-num" href="?{% url_replace request 'page' '1' %}">1</a>
               {% else %}
-                <a class="page-btn" href="{{request.get_full_path}}&page=1">1</a>
+                <a class="page-btn" href="?{% url_replace request 'page' '1' %}">1</a>
               {% endif %}
             </a>
           {% if page_obj.number > 5 %}
@@ -73,13 +67,13 @@
           {% for num in page_obj.paginator.page_range %}
             {% if num != 1 and num != page_obj.paginator.num_pages %}
               {% if page_obj.number == num %}
-                <a class="page-btn current-page-num" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
+                <a class="page-btn current-page-num" href="?{% url_replace request 'page' num %}">{{ num }}</a>
               {% elif num < 9 and num > page_obj.number|add:'-4' %}
-                <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
+                <a class="page-btn" href="?{% url_replace request 'page' num %}">{{ num }}</a>
               {% elif num > page_obj.paginator.num_pages|add:'-8' and page_obj.number > page_obj.paginator.num_pages|add:'-5' %}
-                <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
+                <a class="page-btn" href="?{% url_replace request 'page' num %}">{{ num }}</a>
               {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
-                <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
+                <a class="page-btn" href="?{% url_replace request 'page' num %}">{{ num }}</a>
               {% endif %}
             {% endif %}
           {% endfor %}
@@ -88,17 +82,17 @@
           {% endif %}
           <!-- Last page -->
           {% if page_obj.paginator.num_pages != 1 %}
-          <a class='page-num' href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">
+          <a class='page-num' href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">
             {% if page_obj.number == page_obj.paginator.num_pages %}
-              <a class="page-btn current-page-num" href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+              <a class="page-btn current-page-num" href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
             {% else %}
-              <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+              <a class="page-btn" href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
             {% endif %}
           </a>
           {% endif %}
           <!-- 'Next' button -->
           {% if page_obj.has_next %}
-            <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+            <a class="page-btn" href="?{% url_replace request 'page' page_obj.next_page_number %}"><i class="fas fa-arrow-right"></i></a>
           {% else %}
             <a class="page-btn-inactive"><i class="fas fa-arrow-right"></i></a>
           {% endif %}
@@ -158,57 +152,57 @@
       <div class="container-pagination">
         <!-- 'Previous' button -->
         {% if page_obj.has_previous %}
-          <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
-        {% else %}
-          <a class="page-btn-inactive"><i class="fas fa-arrow-left"></i></a>
-        {% endif %}
-        <!-- First page -->
-          <a href="{{request.get_full_path}}&page=1">
-            {% if page_obj.number == 1 %}
-              <a class="page-btn current-page-num" href="{{request.get_full_path}}&page=1">1</a>
+            <a class="page-btn" href="?{% url_replace request 'page' '{{ page_obj.previous_page_number }}' %}"><i class="fas fa-arrow-left"></i></a>
+          {% else %}
+            <a class="page-btn-inactive"><i class="fas fa-arrow-left"></i></a>
+          {% endif %}
+          <!-- First page -->
+            <a href="?{% url_replace request 'page' '1' %}">
+              {% if page_obj.number == 1 %}
+                <a class="page-btn current-page-num" href="?{% url_replace request 'page' '1' %}">1</a>
+              {% else %}
+                <a class="page-btn" href="?{% url_replace request 'page' '1' %}">1</a>
+              {% endif %}
+            </a>
+          {% if page_obj.number > 5 %}
+            <span>...</span>
+          {% endif %}
+          {% if num == page_obj.number|add:'5' %}
+            <span>...</span>
+          {% endif %}
+          <!-- Middle pages always display 7 pages at most -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if num != 1 and num != page_obj.paginator.num_pages %}
+              {% if page_obj.number == num %}
+                <a class="page-btn current-page-num" href="?{% url_replace request 'page' num %}">{{ num }}</a>
+              {% elif num < 9 and num > page_obj.number|add:'-4' %}
+                <a class="page-btn" href="?{% url_replace request 'page' num %}">{{ num }}</a>
+              {% elif num > page_obj.paginator.num_pages|add:'-8' and page_obj.number > page_obj.paginator.num_pages|add:'-5' %}
+                <a class="page-btn" href="?{% url_replace request 'page' num %}">{{ num }}</a>
+              {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+                <a class="page-btn" href="?{% url_replace request 'page' num %}">{{ num }}</a>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.number < page_obj.paginator.num_pages|add:'-4' %}
+            <span>...</span>
+          {% endif %}
+          <!-- Last page -->
+          {% if page_obj.paginator.num_pages != 1 %}
+          <a class='page-num' href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">
+            {% if page_obj.number == page_obj.paginator.num_pages %}
+              <a class="page-btn current-page-num" href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
             {% else %}
-              <a class="page-btn" href="{{request.get_full_path}}&page=1">1</a>
+              <a class="page-btn" href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
             {% endif %}
           </a>
-        {% if page_obj.number > 5 %}
-          <span>...</span>
-        {% endif %}
-        {% if num == page_obj.number|add:'5' %}
-          <span>...</span>
-        {% endif %}
-        <!-- Middle pages always display 7 pages at most -->
-        {% for num in page_obj.paginator.page_range %}
-          {% if num != 1 and num != page_obj.paginator.num_pages %}
-            {% if page_obj.number == num %}
-              <a class="page-btn current-page-num" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
-            {% elif num < 9 and num > page_obj.number|add:'-4' %}
-              <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
-            {% elif num > page_obj.paginator.num_pages|add:'-8' and page_obj.number > page_obj.paginator.num_pages|add:'-5' %}
-              <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
-            {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
-              <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
-            {% endif %}
           {% endif %}
-        {% endfor %}
-        {% if page_obj.number < page_obj.paginator.num_pages|add:'-4' %}
-          <span>...</span>
-        {% endif %}
-        <!-- Last page -->
-        {% if page_obj.paginator.num_pages != 1 %}
-        <a class='page-num' href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">
-          {% if page_obj.number == page_obj.paginator.num_pages %}
-            <a class="page-btn current-page-num" href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+          <!-- 'Next' button -->
+          {% if page_obj.has_next %}
+            <a class="page-btn" href="?{% url_replace request 'page' page_obj.next_page_number %}"><i class="fas fa-arrow-right"></i></a>
           {% else %}
-            <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+            <a class="page-btn-inactive"><i class="fas fa-arrow-right"></i></a>
           {% endif %}
-        </a>
-        {% endif %}
-        <!-- 'Next' button -->
-        {% if page_obj.has_next %}
-          <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
-        {% else %}
-          <a class="page-btn-inactive"><i class="fas fa-arrow-right"></i></a>
-        {% endif %}
       </div>
     {% endif %}
   {% endif %}
