@@ -5,7 +5,7 @@
 <div class="container-main">
   <h1>Account Information</h1>
   <a class="account-btn" href="{% url 'custom_user_edit' %}"><i class="fas fa-edit"></i>Edit Profile</a>
-  <a class="account-btn" href="{% url 'password_change' %}"><i class="fas fa-edit"></i>Change Password</a>
+  <a class="account-btn" href="{% url 'password_change' %}"><i class="fas fa-key"></i>Change Password</a>
   <a class="account-btn" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Log Out</a>
   <div class="container-info">
     <div class="container-account-section">
@@ -79,32 +79,32 @@
   <!-- ───────────────────────────────────────────────────────────────── -->
   {% if orders.count %}
     {% for order in page_obj %}
-      <div class="container-account-order">
-        <div class="order-info">
-          <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ order.cart.ordered_at|date:'F j, Y' }}</p>
+        <div class="container-account-order">
+          <div class="order-info">
+            <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ order.cart.ordered_at|date:'F j, Y' }}</p>
+          </div>
+          <div class=container-num-status>
+            <p class="order-label order-num">Order # {{ order.id }}</p>
+            <p class="order-status"
+              {% if order.cart.status == order.cart.Status.IN_PROGRESS %} 
+                style="color: #1b66bb"
+              {% elif order.cart.status == order.cart.Status.CANCELLED  %}
+                style="color: #e44e44"
+              {% elif order.cart.status == order.cart.Status.FULFILLED  %}
+                style="color: #509553"
+              {% endif %}
+            >{{ order.cart.get_status_display }}
+            </p>
+          </div>
+          <p class="account-total"><span class="order-label">Total</span>${{ order.cart.get_total|intcomma }}</p>
+          <div class="separator"></div>
+          <div class="account-order-items">
+            {% for item in order.cart.cartdetail_set.all %}
+              <div>{{ item.get_relevant_tire.name }} x {{ item.quantity }}</div>
+            {% endfor %}
+          </div>
+          <a class="order-btn div-link" href="{% url 'order_detail' order.pk %}">View Order</a>
         </div>
-        <div class=container-num-status>
-          <a class="order-label order-num" href="{% url 'order_detail' order.pk %}">Order # {{ order.id }}</a>
-          <p class="order-status"
-            {% if order.cart.status == order.cart.Status.IN_PROGRESS %} 
-              style="color: #1b66bb"
-            {% elif order.cart.status == order.cart.Status.CANCELLED  %}
-              style="color: #e44e44"
-            {% elif order.cart.status == order.cart.Status.FULFILLED  %}
-              style="color: #509553"
-            {% endif %}
-          >{{ order.cart.get_status_display }}
-          </p>
-        </div>
-        <p class="account-total"><span class="order-label">Total</span>${{ order.cart.get_total|intcomma }}</p>
-        <div class="separator"></div>
-        <div class="account-order-items">
-          {% for item in order.cart.cartdetail_set.all %}
-            <div>{{ item.get_relevant_tire.name }} x {{ item.quantity }}</div>
-          {% endfor %}
-        </div>
-        <a class="order-btn" href="{% url 'order_detail' order.pk %}">View Order</a>
-      </div>
       {% endfor %}
     {% else %}
       <p>No orders to display</p>

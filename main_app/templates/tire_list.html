@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container-main">
-  <h2>Tires</h2>
+  <h1>Tires</h1>
 
   <form class="form-grid" method="get" action="{% url 'tire_list' %}">
     <div class="form-grid-span">
@@ -15,17 +15,16 @@
     <input name="tire_type" id="id_q" type="text" class="form-control tire-detail-input tire_type-input" placeholder="type" />
     <button class="order-btn-filled" type="submit" style="grid-column-start: 1;">Search</button>
   </form>
-
+  <br>
   <form class="form-grid" method="get" action="{% url 'tire_list' %}">
     <input name="quick_search" id="id_q" type="text" class="form-control quick-search-input" placeholder="ex: 215/55R/17"/>
     <button class="order-btn-filled" type="submit" style="grid-column-start: 1; grid-row-start: 2;">Quick Search</button>
   </form>
 
-  
+
   {% if paginator.count == 0 %}
-  <div>
-    <br>
-    <h1>The search contains no results.</h1>
+  <div class="no-search-results">
+    <h2>The search contains no results.</h2>
     <p>Try searching for something else instead.</p>
   </div>
   {% else %}
@@ -109,9 +108,7 @@
           </div>
         </div>
         <div class="container-qty">
-          <div class="container-item">
-            <h2>${{ tire.price }}</h2>
-          </div>
+          <h2 class="tire-list-price">${{ tire.price }}</h2>
           <div class="tire-quantity-input-div">
             <span class="cart-label">Quantity</span>
             <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>

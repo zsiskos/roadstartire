@@ -36,7 +36,7 @@ class Product(models.Model):
   @property
   def sold_online_quantity(self):
     sold_online_quantity = 0
-    qs = self.cartdetail_set.filter(Q(cart__status=Cart.Status.IN_PROGRESS) | Q(cart__status=Cart.Status.FULFILLED))
+    qs = self.cartdetail_set.filter(cart__status=Cart.Status.FULFILLED)
     if qs:
       return qs.aggregate(sold_online_quantity=Sum('quantity'))['sold_online_quantity']
     return sold_online_quantity
@@ -54,7 +54,7 @@ class Product(models.Model):
   @property
   def sold_quantity(self):
     sold_offline_quantity = 0
-    sold_online_qs = self.cartdetail_set.filter(Q(cart__status=Cart.Status.IN_PROGRESS) | Q(cart__status=Cart.Status.FULFILLED))
+    sold_online_qs = self.cartdetail_set.filter(cart__status=Cart.Status.FULFILLED)
     sold_offline_qs = self.stock_set.all().filter(quantity_change_type=Stock.SOLD)
     if sold_offline_qs:
       sold_offline_quantity = sold_offline_qs.aggregate(sold_offline_quantity=Sum('quantity_change_value'))['sold_offline_quantity']

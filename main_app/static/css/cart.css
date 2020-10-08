@@ -18,6 +18,8 @@
 }
 #qty-update input {
   width: 5.5rem;
+  text-align: start;
+  margin-top: .1em;
 }
 
 .cart-label {
@@ -38,7 +40,6 @@
 /* LAYOUT */
 .container-order {
   display: flex;
-  row-gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
   margin: .5rem 0;
@@ -52,14 +53,33 @@
 
 .container-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  text-align: start;
 }
 
-.container-price {
+.container-cart-tire-info {
   display: flex;
-  justify-content: space-between;
-  width: 250px;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  text-align: start;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.cart-container-price {
+  min-width: 60px;
+}
+
+.cart-container-subtotal {
+  min-width: 100px;
+}
+
+.cart-container-price, .cart-container-subtotal {
+  margin: .75em;
   text-align: end;
 }
 
@@ -86,7 +106,13 @@
 }
 
 .container-cart-qty {
-  text-align: inherit;
+  text-align: start;
+  min-width: 110px;
+  margin-left: 1em;
+}
+
+.container-cart-qty .cart-label {
+  margin-bottom: 100px;
 }
 
 .qty-col {
@@ -97,22 +123,72 @@
   justify-self: end;
 }
 
+.cart-icon-text-btn {
+  display: inline-block;
+  color: var(--link-color-dark);
+  font-weight: 600;
+  margin-top: .2rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.cart-icon-text-btn-btn:hover,
+.cart-icon-text-btn-btn:focus {
+  color: var(--link-color-hover);
+  transition: all 0.2s ease;
+}
+
+.fa-times {
+  margin-left: 2.5px;
+  margin-right: 6.5px;
+}
+
+.thumbnail-image-cart {
+  border: 1px solid lightgray; 
+  margin-right: .75em;
+  height: 120px;
+  width: 120px;
+  border-radius: 8px;
+  align-self: start;
+}
+
+.container-qty-price {
+  display: flex;
+  align-items: baseline;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────── */
+
 /* WHEN SCREEN GETS SMALL */
-@media screen and (max-width:730px){
+@media screen and (max-width:740px){
   .container-order {
     flex-direction: column;
     justify-content: center;
+    align-content: start;
+    transition: all .3s ease;
+  }
+  
+  .container-cart-tire-info, 
+  .cart-container-price,
+  .cart-container-subtotal {
+    min-width: 0;
   }
 
-  .container-item {
-    flex-direction: column;
+  .cart-container-price {
+    text-align: center;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────────────────────── */
 
 /* WHEN SCREEN GETS REALLY SMALL */
 @media screen and (max-width: 500px) {
   .container-cart-headers,
   .container-cart-info {  
     font-size: .65rem;
+  }
+
+  .container-order {
+    font-size: 85%;
   }
 }

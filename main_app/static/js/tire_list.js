@@ -6,7 +6,8 @@ window.onload = function() {
 
       const itemId = e.target.dataset.id;
       const csrfToken = e.target.dataset.csrf;
-      const quantity = e.target.previousElementSibling.lastElementChild.value;
+      const quantity = e.target.previousElementSibling.previousElementSibling.lastElementChild.value;
+      console.log(quantity)
       const body = {
         "id": itemId,
         "quantity": quantity,
