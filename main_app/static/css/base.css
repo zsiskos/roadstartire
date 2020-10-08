@@ -26,6 +26,8 @@ body {
   font-size: 1rem;
   color: var(--main-text-dark);
   background-color: var(--main-bg-color);
+  display: flex;
+  flex-direction: column;
 }
 
 /* TYPOGRAPHY */
@@ -47,7 +49,7 @@ p {
 }
 
 .footer-title {
-  font-weight: 800;
+  font-weight: bold;
 }
 
 .footer-year {
@@ -109,6 +111,7 @@ footer {
   padding: 1em 0;
   background-color: rgb(22, 29, 88);
   color: lightgrey;
+  margin-top: auto;
 }
 
 footer .account-btn {
