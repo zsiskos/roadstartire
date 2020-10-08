@@ -153,9 +153,6 @@ class Product(models.Model):
   def __str__(self):
     return self.name
 
-  # def get_current(self):
-  #   return self.tire_set.order_by('id').last()
-
   def get_current(self):
     qs = self.tire_set.filter(date_effective__lte=timezone.now()).order_by('id')
     return qs.last()
@@ -300,7 +297,7 @@ class Cart(TimeStampMixin):
   def get_subtotal(self):
     subtotal = Decimal('0.00') # Need to use Decimal type so that 0 is displayed as 0.00
     for cartDetail in self.cartdetail_set.all():
-      subtotal += cartDetail.quantity * cartDetail.get_relevant_tire().price
+      subtotal += cartDetail.quantity * cartDetail.get_relevant_tire().relevant_price
     return subtotal
   get_subtotal.short_description = 'Subtotal ($)'
 
@@ -309,7 +306,7 @@ class Cart(TimeStampMixin):
   get_discount_amount.short_description = 'Discount amount ($)'
 
   def get_tax_amount(self):
-    return round(self.get_subtotal() * self.tax_percent_applied / 100, 2)
+    return round((self.get_subtotal() - self.get_discount_amount()) * self.tax_percent_applied / 100, 2)
   get_tax_amount.short_description = 'Tax amount ($)'
   
   def get_total(self):
@@ -352,6 +349,10 @@ class Tire(models.Model):
     The date and time when these changes will come into effect
   """
 
+  use_sale_price_help_text = """
+    When checked ✔, will use the sale price instead of the regular price
+  """
+
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
   date_effective = models.DateTimeField(default=timezone.now, blank=True, verbose_name='Date Effective', help_text=date_effective_help_text)
   brand = models.CharField(max_length=30)
@@ -367,8 +368,11 @@ class Tire(models.Model):
   
   price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Price ($)')
   sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name='Sale Price ($)')
+  use_sale_price = models.BooleanField(default=False, verbose_name='On sale', help_text=use_sale_price_help_text)
 
   date_effective_tracker = FieldTracker(fields=['date_effective'])
+  updated_to = models.OneToOneField('self', null=True, blank=True, on_delete=models.CASCADE, related_name='updated_tire_set')
+  inherits_from = models.OneToOneField('self', null=True, blank=True, on_delete=models.CASCADE, related_name='inherits_tire_set')
   
   def product_num(self):
     return self.product.id
@@ -384,11 +388,18 @@ class Tire(models.Model):
   def product_number(self):
     return self.product.id
 
-  updated_to = models.OneToOneField('self', null=True, blank=True, on_delete=models.CASCADE, related_name='updated_tire_set')
-  inherits_from = models.OneToOneField('self', null=True, blank=True, on_delete=models.CASCADE, related_name='inherits_tire_set')
 
   def __str__(self):
     return self.name
+
+  def relevant_price(self):
+    if self.use_sale_price:
+      return self.sale_price
+    return self.price
+    # return self._relevant_price # Return annotated relevant price
+  relevant_price.short_description = 'Relevant Price ($)'
+  relevant_price.admin_order_field = '_relevant_price'
+  relevant_price = property(relevant_price)
 
   # When a Tire instance is saved, update the CartDetail.date_relevant objects that reference that tire
   def save(self, *args, **kwargs):
@@ -471,7 +482,7 @@ class CartDetail(TimeStampMixin):
     return f'{self.product.get_current()} - QTY: {self.quantity}'
 
   def get_subtotal(self):
-    return self.quantity * self.get_relevant_tire().price
+    return self.quantity * self.get_relevant_tire().relevant_price
   get_subtotal.short_description = 'Subtotal ($)'
 
   class Meta:
@@ -498,7 +509,7 @@ class CartDetail(TimeStampMixin):
 
   @property
   def price(self):
-    return self.get_relevant_tire().price
+    return self.get_relevant_tire().relevant_price
   price.fget.short_description = 'Price ($)'
 
 # ────────────────────────────────────────────────────────────────────────────────

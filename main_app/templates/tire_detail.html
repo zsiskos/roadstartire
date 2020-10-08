@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="container-qty">
-      <h2 class="tire-price">${{tire.price|intcomma}}</h2>
+      <h2 class="tire-price">${{tire.relevant_price|intcomma}}</h2>
       <div class="stock">
         {% if tire.product.current_quantity < 20 %}
         <p class="low-stock">
