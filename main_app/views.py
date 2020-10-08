@@ -291,6 +291,7 @@ def email_invoice(req, order_id):
 
 @login_required(login_url='/login')
 def tire_list(req):
+  
   if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
   else: 
