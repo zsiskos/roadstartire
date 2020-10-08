@@ -142,7 +142,7 @@ class CustomUserAdmin(UserAdmin):
   )
   ordering = ('date_joined',)
 
-  inlines = (CartInline,)
+  # inlines = (CartInline,)
 
   # Override changeform_view to handle IntegrityError when UniqueConstraint on user and status, where status = 1
   # This is because Django does not throw a ValidationError when using UnqieConstraint with condition(s)
