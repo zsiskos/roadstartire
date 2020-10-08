@@ -309,7 +309,7 @@ class Cart(TimeStampMixin):
   get_discount_amount.short_description = 'Discount amount ($)'
 
   def get_tax_amount(self):
-    return round(self.get_subtotal() * self.tax_percent_applied / 100, 2)
+    return round((self.get_subtotal() - self.get_discount_amount()) * self.tax_percent_applied / 100, 2)
   get_tax_amount.short_description = 'Tax amount ($)'
   
   def get_total(self):
