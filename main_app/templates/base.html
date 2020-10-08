@@ -32,7 +32,6 @@
   <!-- moment.js – For converting UTC to local time -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" type="text/javascript"></script>
   <script src="{% static 'js/tire_list.js' %}"></script>
-  <script src="{% static 'js/tire_detail.js' %}"></script>
   <title>Roadstar Tire</title>
 </head>
 <body>
@@ -57,7 +56,7 @@
         <!-- cart icon -->
         <li class="cart-nav-class">
           <a class="account-btn" id="nav-cart-detail" href={% url 'cart_detail' %}>
-            {% if cart %}
+            {% if cart and cart.get_item_count != 0 %}
             <div class="f-circle">
               <h6 class="fa-alph">
                 {{ cart.get_item_count }}
@@ -85,12 +84,13 @@
   </main>
   <footer>
     <p class="footer-title">ROADSTAR TIRE WHOLESALE &trade;&reg;</p>
-    <p class="footer-year">Established 2018</p>
     <a href="mailto:info@roadstartirewholesale.ca<">info@roadstartirewholesale.ca</a>
-    <p>(905) 660-3209</p>
-    <p>140 Doughton Road Unit 2</p>
-    <p>Concord, ON</p> 
-    <p>L4K 1R3</p>
+    <a href="tel:905-550-3209<">(905) 660-3209</a>
+    <p>
+      <a href="https://goo.gl/maps/p4pX3oUvRJKKcn1UA">
+        140 Doughton Road Unit 2, Concord, ON, L4K 1R3
+      </a>
+    </p>
   </footer>
 </body>
 </html>

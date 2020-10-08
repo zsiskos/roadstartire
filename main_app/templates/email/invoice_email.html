@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -78,14 +79,14 @@
         </tr>
         {% for item in cart_details %}
           <tr>
-            <td>{{ item.tire.width }}/{{ item.tire.aspect_ratio }}{{ item.tire.rim_size }}</td>
-            <td>{{ item.tire.brand }}</td>
-            <td>{{ item.tire.tire_type }}</td>
-            <td>{{ item.tire.pattern }}</td>
-            <td>{{ item.load_speed }}</td>
-            <td>${{ item.price_each }}</td>
+            <td>{{ item.get_relevant_tire.name }}</td>
+            <td>{{ item.get_relevant_tire.brand }}</td>
+            <td>{{ item.get_relevant_tire.tire_type }}</td>
+            <td>{{ item.get_relevant_tire.pattern }}</td>
+            <td>{{ item.get_relevant_tire.load_speed }}</td>
+            <td>${{ item.get_relevant_tire.price }}</td>
             <td>{{ item.quantity }}</td>
-            <td>$ {{ item.get_subtotal }}</td>
+            <td>$ {{ item.get_subtotal|intcomma }}</td>
           </tr>
         {% endfor %}
         <tr>
@@ -106,7 +107,7 @@
           <td></td>
           <td></td>
           <td>Sub-total:</td>
-          <td>${{ order.cart.get_subtotal }}</td>
+          <td>${{ order.cart.get_subtotal|intcomma }}</td>
         </tr>
         <tr>
           <td></td>
@@ -116,7 +117,7 @@
           <td></td>
           <td></td>
           <td>Tax ({{order.cart.tax_percent_applied.normalize}}%):</td>
-          <td>${{ order.cart.get_tax_amount }}</td>
+          <td>${{ order.cart.get_tax_amount|intcomma }}</td>
         </tr>
         <tfoot>
           <tr>
@@ -127,7 +128,7 @@
             <td></td>
             <td></td>
             <td>Total:</td>
-            <td>${{ order.cart.get_total }}</td>
+            <td>${{ order.cart.get_total|intcomma }}</td>
           </tr>
         </tfoot>
       </table>
