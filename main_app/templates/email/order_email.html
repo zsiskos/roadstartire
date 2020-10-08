@@ -1,8 +1,9 @@
+{% load humanize %}
 <div class="container-main">
 <p>Thank you for placing your order. Your order will be reviewed and shipped shortly. Here is a summary of your order below:</p>
 <h1>Order # {{ cart.ordershipping.pk }}</h1>
   <h3 style="font-weight: 800">Ordered: {{ cart.ordered_at }}</h3>
-  <h4 style="font-weight: 800">Shipped to:</h4>
+  <h4 style="font-weight: 800">Ship to:</h4>
   <p>Company Name: {{ cart.ordershipping.company_name }}</p>
   <p>Address: {{ cart.ordershipping.address }}</p>
   {% if cart.ordershipping.address_2 %}
@@ -21,10 +22,10 @@
     </tr>
     {% for item in cart_details %}
       <tr>
-        <td>{{ item.tire.name }}</td>
+        <td>{{ item.get_relevant_tire.name }}</td>
         <td>{{ item.quantity }}</td>
-        <td>${{ item.price_each }}</td>
-        <td>$ {{ item.get_subtotal }}</td>
+        <td>${{ item.get_relevant_tire.price|intcomma }}</td>
+        <td>$ {{ item.get_subtotal|intcomma }}</td>
       </tr>
     {% endfor %}
     <tr>
@@ -37,7 +38,7 @@
       <td></td>
       <td></td>
       <td>Items ({{ cart.get_item_count }}):</td>
-      <td>${{ cart.get_subtotal }}</td>
+      <td>${{ cart.get_subtotal|intcomma }}</td>
     </tr>
     <tr>
       <td></td>
@@ -49,14 +50,14 @@
       <td></td>
       <td></td>
       <td>Tax ({{ cart.tax_percent_applied.normalize }}%):</td>
-      <td>${{ cart.get_tax_amount }}</td>
+      <td>${{ cart.get_tax_amount|intcomma }}</td>
     </tr>
     <tfoot>
       <tr>
         <td></td>
         <td></td>
         <td>Total:</td>
-        <td>${{ cart.get_total }}</td>
+        <td>${{ cart.get_total|intcomma }}</td>
       </tr>
     </tfoot>
   </table>
