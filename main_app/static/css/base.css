@@ -95,10 +95,14 @@ main {
   flex-direction: column;
 }
 
-/* footer {
-  text-align: center;
-  padding: 1em 0;
-} */
+footer a {
+  text-decoration: none;
+  color: linen;
+}
+
+footer a:hover {
+  color: var(--accent-color-bright);
+}
 
 footer {
   text-align: center;

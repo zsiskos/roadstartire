@@ -82,6 +82,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     'timezone_field',
     'main_app',
+    'main_app.templatetags',
     'users',
     'django.contrib.admin',
     'django.contrib.auth',

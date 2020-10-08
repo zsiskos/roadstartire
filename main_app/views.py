@@ -291,19 +291,20 @@ def email_invoice(req, order_id):
 
 @login_required(login_url='/login')
 def tire_list(req):
+  
   if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
   else: 
     cart = None
 
-  if 'order_by' in req.GET:
-    order = req.GET['order_by']
+  sort = None
 
   if 'quick_search' in req.GET:
     if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
       cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
     else: 
       cart = None
+
     quick_search = req.GET['quick_search']
     cleaned_query = re.sub('\D', '', quick_search)
     width = cleaned_query[:3]
@@ -318,19 +319,22 @@ def tire_list(req):
       ).filter(
         rim_size__icontains=rim_size
       )
+
+    sort = req.GET.get('sort', '')
+
     if not quick_search:
       results = Tire.objects.filter(updated_to=None).order_by('price')
-      if 'order_by' in req.GET:
-        results = Tire.objects.filter(updated_to=None).order_by(order)
+      if sort:
+        results = result.filter(updated_to=None).order_by(sort)
     else:
       results = result.order_by('price')
-      if 'order_by' in req.GET:
-        results = result.order_by(order)
+      if sort:
+        results = result.filter(updated_to=None).order_by(sort)
 
     paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(req, 'tire_list.html', {'cart': cart, 'results' : results, 'page_obj' : page_obj})
+    return render(req, 'tire_list.html', {'sort': sort, 'cart': cart, 'results' : results, 'page_obj' : page_obj})
 
   if 'width' in req.GET:
     if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
@@ -355,20 +359,23 @@ def tire_list(req):
       ).filter(
         tire_type__icontains=tire_type
       )
+
+    sort = req.GET.get('sort', '')
+
     if not (width or aspect_ratio or tire_type or brand or rim_size):
       results = Tire.objects.filter(updated_to=None).order_by('price')
-      if 'order_by' in req.GET:
-        results = result.order_by(order)
+      if sort:
+        results = result.order_by(sort)
     else:
       results = result.order_by('price')
-      if 'order_by' in req.GET:
-        results = result.order_by(order)
+      if sort:
+        results = result.order_by(sort)
 
     paginator = Paginator(results, 20) # x objects per page and y number of orphans
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(req, 'tire_list.html', {'cart' : cart, 'results' : results, 'page_obj' : page_obj, 'paginator': paginator})
+    return render(req, 'tire_list.html', {'sort': sort, 'cart' : cart, 'results' : results, 'page_obj' : page_obj, 'paginator': paginator})
   return render(req, 'tire_list.html', {'cart': cart})
 
 def tire_detail(req, tire_id):

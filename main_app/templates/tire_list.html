@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tire_list_templates_extra %}
 
 {% block content %}
 <div class="container-main">
@@ -20,8 +21,6 @@
     <input name="quick_search" id="id_q" type="text" class="form-control quick-search-input" placeholder="ex: 215/55R/17"/>
     <button class="order-btn-filled" type="submit" style="grid-column-start: 1; grid-row-start: 2;">Quick Search</button>
   </form>
-
-
   {% if paginator.count == 0 %}
   <div class="no-search-results">
     <h2>The search contains no results.</h2>
@@ -31,23 +30,37 @@
   <div class="form-grid-span">
     {% if page_obj.number %}
       <div class="form-grid-span sort-detail">
-        Sort by: 
-        <a class="account-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&order_by=width"><i class="fas fa-sort-down"></i>Width</a>
-        <a class="account-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&order_by=price"><i class="fas fa-sort-down"></i>Price</a>
+        {% if sort == 'width' %}
+          <a class="account-btn" href="?{% url_replace request 'sort' '-width' %}"><i class="fas fa-sort-down"></i>Width</a>
+        {% elif sort != 'width' %}
+          <a class="account-btn" href="?{% url_replace request 'sort' 'width' %}"><i class="fas fa-sort-down"></i>Width</a>
+        {% endif %}
+
+        {% if sort == 'price' %}
+          <a class="account-btn" href="?{% url_replace request 'sort' '-price' %}"><i class="fas fa-sort-down"></i>Price</a>
+        {% elif sort != 'price' %}
+          <a class="account-btn" href="?{% url_replace request 'sort' 'price' %}"><i class="fas fa-sort-down"></i>Price</a>
+        {% endif %}
+        <!-- {$ if sort_width %}
+          {% if sort_price == 'asc' %}
+            <a class="account-btn" href="?{% url_replace request 'sort_price' 'desc' %}"><i class="fas fa-sort-down"></i>Price</a>
+          {% else %}
+            <a class="account-btn" href="?{% url_replace request 'sort_price' 'asc' %}"><i class="fas fa-sort-down"></i>Price</a>
+          {% endif %} -->
       </div>
       <div class="container-pagination">
         <!-- 'Previous' button -->
         {% if page_obj.has_previous %}
-            <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+            <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
           {% else %}
             <a class="page-btn-inactive"><i class="fas fa-arrow-left"></i></a>
           {% endif %}
           <!-- First page -->
-            <a href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">
+            <a href="{{request.get_full_path}}&page=1">
               {% if page_obj.number == 1 %}
-                <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">1</a>
+                <a class="page-btn current-page-num" href="{{request.get_full_path}}&page=1">1</a>
               {% else %}
-                <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">1</a>
+                <a class="page-btn" href="{{request.get_full_path}}&page=1">1</a>
               {% endif %}
             </a>
           {% if page_obj.number > 5 %}
@@ -60,13 +73,13 @@
           {% for num in page_obj.paginator.page_range %}
             {% if num != 1 and num != page_obj.paginator.num_pages %}
               {% if page_obj.number == num %}
-                <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+                <a class="page-btn current-page-num" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
               {% elif num < 9 and num > page_obj.number|add:'-4' %}
-                <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+                <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
               {% elif num > page_obj.paginator.num_pages|add:'-8' and page_obj.number > page_obj.paginator.num_pages|add:'-5' %}
-                <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+                <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
               {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
-                <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+                <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
               {% endif %}
             {% endif %}
           {% endfor %}
@@ -75,17 +88,17 @@
           {% endif %}
           <!-- Last page -->
           {% if page_obj.paginator.num_pages != 1 %}
-          <a class='page-num' href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">
+          <a class='page-num' href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">
             {% if page_obj.number == page_obj.paginator.num_pages %}
-              <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+              <a class="page-btn current-page-num" href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
             {% else %}
-              <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+              <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
             {% endif %}
           </a>
           {% endif %}
           <!-- 'Next' button -->
           {% if page_obj.has_next %}
-            <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+            <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
           {% else %}
             <a class="page-btn-inactive"><i class="fas fa-arrow-right"></i></a>
           {% endif %}
@@ -145,16 +158,16 @@
       <div class="container-pagination">
         <!-- 'Previous' button -->
         {% if page_obj.has_previous %}
-          <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+          <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
         {% else %}
           <a class="page-btn-inactive"><i class="fas fa-arrow-left"></i></a>
         {% endif %}
         <!-- First page -->
-          <a href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">
+          <a href="{{request.get_full_path}}&page=1">
             {% if page_obj.number == 1 %}
-              <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">1</a>
+              <a class="page-btn current-page-num" href="{{request.get_full_path}}&page=1">1</a>
             {% else %}
-              <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page=1">1</a>
+              <a class="page-btn" href="{{request.get_full_path}}&page=1">1</a>
             {% endif %}
           </a>
         {% if page_obj.number > 5 %}
@@ -167,13 +180,13 @@
         {% for num in page_obj.paginator.page_range %}
           {% if num != 1 and num != page_obj.paginator.num_pages %}
             {% if page_obj.number == num %}
-              <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+              <a class="page-btn current-page-num" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
             {% elif num < 9 and num > page_obj.number|add:'-4' %}
-              <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+              <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
             {% elif num > page_obj.paginator.num_pages|add:'-8' and page_obj.number > page_obj.paginator.num_pages|add:'-5' %}
-              <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+              <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
             {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
-              <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ num }}">{{ num }}</a>
+              <a class="page-btn" href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a>
             {% endif %}
           {% endif %}
         {% endfor %}
@@ -182,17 +195,17 @@
         {% endif %}
         <!-- Last page -->
         {% if page_obj.paginator.num_pages != 1 %}
-        <a class='page-num' href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">
+        <a class='page-num' href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">
           {% if page_obj.number == page_obj.paginator.num_pages %}
-            <a class="page-btn current-page-num" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+            <a class="page-btn current-page-num" href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
           {% else %}
-            <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+            <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
           {% endif %}
         </a>
         {% endif %}
         <!-- 'Next' button -->
         {% if page_obj.has_next %}
-          <a class="page-btn" href="?width={{width}}&rim_size={{rim_size}}&aspect_ratio={{aspect_ratio}}&tire_type={{tire_type}}&page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+          <a class="page-btn" href="{{request.get_full_path}}&page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
         {% else %}
           <a class="page-btn-inactive"><i class="fas fa-arrow-right"></i></a>
         {% endif %}
