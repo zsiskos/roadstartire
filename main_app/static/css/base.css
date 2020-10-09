@@ -62,7 +62,7 @@ p {
   h2 {
     font-size: 1.5rem;
     margin:  .05rem 0 .05rem 0;
-  }
+  } 
 }
 
 /* LAYOUT */
@@ -206,13 +206,11 @@ nav a {
   font-size: 1.2rem;
   color: var(--link-color-dark);
   margin-top: 1.2rem;
-  transition: all 0.2s ease;}
-
-.nav-cart-icon:hover {
-  color: var(--accent-color-bright);
+  transition: all 0.2s ease;
 }
 
 .cart-badge {
+  color: var(--link-color-dark);
   font-size: .75rem;
   font-weight: 750;
   background: var(--accent-color-bright);
@@ -226,9 +224,25 @@ nav a {
   transition: all 0.2s ease;
 }
 
+/* Hover anywhere raises the badge */
 .cart-link:hover .cart-badge {
   transform: translate(0, -3.6px);
-  background: var(--accent-color-bright);
+}
+
+/* Hover anywhere changes the cart icon color */
+.cart-link:hover .nav-cart-icon{
+  color: var(--link-color-hover);
+}
+
+@media (max-width: 900px){
+  .cart-badge {
+    position: absolute;
+    margin-left: -35px;
+  }
+
+  .nav-cart-icon {
+    margin-right: 25px;
+  }
 }
 
 /* Nav bar hamburger menu and functionality ––––––––––––––––––––––––––––––––– */
