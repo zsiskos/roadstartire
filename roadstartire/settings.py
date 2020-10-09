@@ -70,7 +70,6 @@ SECRET_KEY = 'hc=@aet_2rzy+54#hnyoz)nco%fq@s8#^s%u67!z4pflgi=zdl'
 DEBUG = os.environ['DEBUG_VALUE'] == 'True'
 
 ALLOWED_HOSTS = [
-    '*',
     'localhost',
     '127.0.0.1',
     'www.roadstartirewholesale.ca',
