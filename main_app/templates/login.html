@@ -20,7 +20,7 @@
             <label class="grid-label"  for="id_password">Password</label>
             <input class="form-control" type="password" name="password" required="" id="id_password"/>
             <button class="order-btn-filled" type="submit">Log In</button> 
-            <a class="account-btn forgot-password" href="{% url 'password_reset' %}">Forgot password?</a>
+            <a class="text-btn forgot-password" href="{% url 'password_reset' %}">Forgot password?</a>
         </form>
       </div>
       <div class="container-right">
@@ -33,4 +33,4 @@
 </div>
 {% endblock %}
 <!-- 
-<a href="#" class="account-btn" onClick="document.forms['login-form'].submit();"/><i class="fas fa-sign-in-alt"></i>Log In</a> -->
+<a href="#" class="text-btn" onClick="document.forms['login-form'].submit();"/><i class="fas fa-sign-in-alt"></i>Log In</a> -->

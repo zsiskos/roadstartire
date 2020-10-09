@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container-main">
   <h1>Edit Profile</h1>
-  <a href="{% url 'account' %}" class="account-btn" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
+  <a href="{% url 'account' %}" class="text-btn" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
   <div class="container-form" >
     <form id="account-save" action="." method="POST" class="form-signin form-grid"> 
       {% csrf_token %}
@@ -28,8 +28,8 @@
         <div class="popup-copy">
           <p><strong>PLEASE NOTE:</strong> Editing account information will make your account inactive, as a Road Star Tires staff member must validate the account.</p>
           <p>This means <em>you will be logged out and will not be able to place an order</em> until then. If it is urgent, please call us at +1-905-660-3209.</p>
-          <a href="#" class="account-btn" onClick="document.forms['account-save'].submit();"/><i class="fas fa-check-square"></i>Confirm</a>
-          <a href="#" class="account-btn" id="close" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
+          <a href="#" class="text-btn" onClick="document.forms['account-save'].submit();"/><i class="fas fa-check-square"></i>Confirm</a>
+          <a href="#" class="text-btn" id="close" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
         </div>
       </div>
     </form>

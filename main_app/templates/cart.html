@@ -5,7 +5,7 @@
 <div class="container-main">
 {% if cart.cartdetail_set.all.count %}
   <h1>Your Cart</h1>
-  <a class="account-btn shop-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
+  <a class="text-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
   {% for cart_detail, form in zipped_data %}
   
     <div class="container-order flex-end">
@@ -31,9 +31,9 @@
             <table>
               {{ form.as_p }}
             </table>
-            <p><a class="cart-icon-text-btn" href="#"/><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update"/></a></p>
+            <p><a class="text-btn cart-icon-text-btn" href="#"><i class="fas fa-arrow-circle-right"></i><input id="submit-btn" type="submit" name="submit" value="Update"/></a></p>
           </form>
-          <p><a class="cart-icon-text-btn" href="{% url 'remove_tire' cart_detail.id %}"><i class="fas fa-times"></i>Remove</a></p>
+          <p><a class="text-btn cart-icon-text-btn" href="{% url 'remove_tire' cart_detail.id %}"><i class="fas fa-times"></i>Remove</a></p>
         </div>
         <div class="cart-container-price">
           <p><span class="cart-label">Price</span></p>
@@ -69,7 +69,7 @@
   </div>
 {% else %}
   <h1>There are no items in your cart</h1>
-  <a class="account-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
+  <a class="text-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
 {% endif %}
 </div>
 {% endblock %}

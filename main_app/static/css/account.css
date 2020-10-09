@@ -8,21 +8,6 @@
   margin-bottom: 1rem;
 }
 
-.account-btn {
-  display: inline-block;
-  color: var(--link-color-dark);
-  font-weight: 600;
-  margin: .5rem .75rem 0 .2rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.account-btn:hover,
-.account-btn:focus {
-  color: var(--link-color-hover);
-  transition: all 0.2s ease;
-}
-
 /* LAYOUT */
 .account-details {
   display: flex;

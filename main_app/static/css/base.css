@@ -50,6 +50,7 @@ p {
 
 .footer-title {
   font-weight: bold;
+  letter-spacing: .5px;
 }
 
 .footer-year {
@@ -61,7 +62,7 @@ p {
   h2 {
     font-size: 1.5rem;
     margin:  .05rem 0 .05rem 0;
-  }
+  } 
 }
 
 /* LAYOUT */
@@ -100,6 +101,7 @@ main {
 footer a {
   text-decoration: none;
   color: linen;
+  transition: .2s ease;
 }
 
 footer a:hover {
@@ -108,13 +110,13 @@ footer a:hover {
 
 footer {
   text-align: center;
-  padding: 1em 0;
+  padding: 1.5em 0;
   background-color: rgb(22, 29, 88);
   color: lightgrey;
   margin-top: auto;
 }
 
-footer .account-btn {
+footer .text-btn {
   color: lightgrey;
 }
 
@@ -131,12 +133,13 @@ footer .account-btn {
   }
 }
 
-/* NAV BAR */
+/* Nav bar –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+
 header {
   position: fixed;
   z-index: 99;
   width: 100%;
-  padding: .25rem 0  .25rem 1rem;
+  padding: .25rem 0 .25rem 1rem;
   color: rgb(250, 250, 250);
   background: var(--navbar-bg-color);
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.07);
@@ -165,22 +168,26 @@ nav li {
   margin-left: 1em;
 }
 
-.nav-bar .account-btn {
-  margin-top: 0;
+.nav-bar .text-btn {
+  margin: 1.3rem 1rem 0 0;
 }
 
 .nav-brand-link {
   color:var(--link-color-hover);
   text-decoration: none;
+  margin-bottom: .5rem;
 }
 
 .nav-brand-image {
-  height: 20px;
+  height: 25px;
   margin-top: .75rem;
+  margin-left: 3rem;
 }
 
 .nav-brand-title {
-  font-size: .90rem;
+  font-size: .9rem;
+  letter-spacing: .5px;
+  text-transform: uppercase;
 }
 
 nav a {
@@ -193,28 +200,53 @@ nav a {
   letter-spacing: 2.1px;
 }
 
-/*cart icon when cart is full*/
+/* Cart icon (when cart has items) –––––––––––––––––––––––––––––––––––––––––– */
 
-.fa-alph {
-  font-size: 1.1em;
-  font-family: Inter, sans-serif; /* your font family here! */
-  font-weight: bold;
+.nav-cart-icon {
+  font-size: 1.2rem;
   color: var(--link-color-dark);
-  font-style: normal;   
-}
-.f-circle {
-  float: right;
-  text-align: center;
-  font-size: .5em;
-  font-family: Inter, sans-serif; /* your font family here! */
-  font-weight: 900;
-  display: block;
-  border: 2px solid var(--link-color-hover);
-  border-radius: 999px;
-  padding: 3px 5px;
+  margin-top: 1.2rem;
+  transition: all 0.2s ease;
 }
 
-/* Nav bar hamburger menu and functionality */
+.cart-badge {
+  color: var(--link-color-dark);
+  font-size: .75rem;
+  font-weight: 750;
+  background: var(--accent-color-bright);
+  padding: 1px 4px 1px 6px;
+  vertical-align: top;
+  border-radius: 100px;
+  position: absolute;
+  margin-left: -10px;
+  margin-top: 6px;
+  border: 2px solid var(--navbar-bg-color);
+  transition: all 0.2s ease;
+}
+
+/* Hover anywhere raises the badge */
+.cart-link:hover .cart-badge {
+  transform: translate(0, -3.6px);
+}
+
+/* Hover anywhere changes the cart icon color */
+.cart-link:hover .nav-cart-icon{
+  color: var(--link-color-hover);
+}
+
+@media (max-width: 900px){
+  .cart-badge {
+    position: absolute;
+    margin-left: -35px;
+  }
+
+  .nav-cart-icon {
+    margin-right: 25px;
+  }
+}
+
+/* Nav bar hamburger menu and functionality ––––––––––––––––––––––––––––––––– */
+
 .nav-toggle {
   position: absolute !important;
   top: -9999px !important;
@@ -302,10 +334,6 @@ nav a {
     justify-content: flex-end;
   }
 
-  nav li {
-    margin: 0 0 0 0;
-  }
-
   nav a {
     opacity: 1;
     transition: all 0.2s ease;
@@ -313,12 +341,10 @@ nav a {
 
   .nav-brand-image {
     height: 30px;
-    margin-top: .75rem;
   }
   
   .nav-brand-title {
     font-size: 1rem;
-    letter-spacing: .5px;
   }
 }
 
