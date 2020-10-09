@@ -20,6 +20,10 @@
   color: #008000
 }
 
+.in-stock span {
+  font-weight: bold;
+}
+
 #add-tire {
   text-align: start;
 }
