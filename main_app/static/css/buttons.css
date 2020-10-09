@@ -1,0 +1,15 @@
+/* Text Button –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.text-btn {
+  color: var(--link-color-dark);
+  font-weight: 600;
+  margin: .5rem 1.2rem .5rem 0;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.text-btn:hover,
+.text-btn:focus {
+  color: var(--link-color-hover);
+  transition: all 0.2s ease;
+}

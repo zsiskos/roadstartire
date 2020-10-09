@@ -18,6 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;750;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/buttons.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/contact.css' %}">
@@ -47,15 +48,15 @@
       <ul class=nav-bar>
         <!-- DO NOT INCLUDE IN PRODUCTION -->
         {% if user.is_authenticated %}
-        <li><a class="account-btn" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a></li>
+        <li><a class="text-btn" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a></li>
         {% endif %}
         <!-- DO NOT INCLUDE IN PRODUCTION, LEAVE IN FOR USE LATER -->
-        <li><a class="account-btn" id="nav-about" href={% url 'contact' %}></i>Contact Us</a></li>
+        <li><a class="text-btn" id="nav-about" href={% url 'contact' %}></i>Contact Us</a></li>
         {% if user.is_authenticated %}
-        <li><a class="account-btn" id="nav-logout" href="{% url 'account' %}">Account</a></li>
+        <li><a class="text-btn" id="nav-logout" href="{% url 'account' %}">Account</a></li>
         <!-- cart icon -->
         <li class="cart-nav-class">
-          <a class="account-btn" id="nav-cart-detail" href={% url 'cart_detail' %}>
+          <a class="text-btn" id="nav-cart-detail" href={% url 'cart_detail' %}>
             {% if cart and cart.get_item_count != 0 %}
             <div class="f-circle">
               <h6 class="fa-alph">
@@ -68,8 +69,8 @@
           </a>
         </li>
         {% else %}
-        <li><a class="account-btn" id="nav-login" href={% url 'login' %}></i>Log in</a></li>
-        <li><a class="account-btn" id="nav-signup" href={% url 'signup' %}></i>Sign Up</a></li>
+        <li><a class="text-btn" id="nav-login" href={% url 'login' %}></i>Log in</a></li>
+        <li><a class="text-btn" id="nav-signup" href={% url 'signup' %}></i>Sign Up</a></li>
         {% endif %}
       </ul>
     </nav>

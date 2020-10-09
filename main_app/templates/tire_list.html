@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load humanize %}
 {% load tire_list_templates_extra %}
 
 {% block content %}
@@ -32,15 +31,15 @@
     {% if page_obj.number %}
       <div class="form-grid-span sort-detail">
         {% if sort == 'width' %}
-          <a class="account-btn" href="?{% url_replace request 'sort' '-width' %}"><i class="fas fa-sort-down"></i>Width</a>
+          <a class="text-btn" href="?{% url_replace request 'sort' '-width' %}"><i class="fas fa-sort-down"></i>Width</a>
         {% elif sort != 'width' %}
-          <a class="account-btn" href="?{% url_replace request 'sort' 'width' %}"><i class="fas fa-sort-up"></i>Width</a>
+          <a class="text-btn" href="?{% url_replace request 'sort' 'width' %}"><i class="fas fa-sort-up"></i>Width</a>
         {% endif %}
 
         {% if sort == 'price' %}
-          <a class="account-btn" href="?{% url_replace request 'sort' '-price' %}"><i class="fas fa-sort-down"></i>Price</a>
+          <a class="text-btn" href="?{% url_replace request 'sort' '-price' %}"><i class="fas fa-sort-down"></i>Price</a>
         {% elif sort != 'price' %}
-          <a class="account-btn" href="?{% url_replace request 'sort' 'price' %}"><i class="fas fa-sort-up"></i>Price</a>
+          <a class="text-btn" href="?{% url_replace request 'sort' 'price' %}"><i class="fas fa-sort-up"></i>Price</a>
         {% endif %}
       </div>
       <div class="container-pagination">
@@ -116,7 +115,7 @@
           </div>
         </div>
         <div class="container-qty">
-          <h2 class="tire-list-price">${{ tire.relevant_price|intcomma }}</h2>
+          <h2 class="tire-list-price">${{ tire.relevant_price }}</h2>
           <div class="tire-quantity-input-div">
             <span class="cart-label">Quantity</span>
             <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>
