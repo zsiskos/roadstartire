@@ -24,7 +24,7 @@
       <tr>
         <td>{{ item.get_relevant_tire.name }}</td>
         <td>{{ item.quantity }}</td>
-        <td>${{ item.get_relevant_tire.price|intcomma }}</td>
+        <td>${{ item.get_relevant_tire.relevant_price|intcomma }}</td>
         <td>$ {{ item.get_subtotal|intcomma }}</td>
       </tr>
     {% endfor %}

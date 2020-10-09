@@ -36,7 +36,7 @@
     <div class="container-cart-info">
       <a class="tire-btn" href="{% url 'tire_detail' item.get_relevant_tire.pk %}"><p>{{ item.get_relevant_tire.name }} </p></a>
       <p class="qty-col">{{ item.quantity }}</p>
-      <p class='total-col'>${{ item.get_relevant_tire.price|intcomma }}</p>
+      <p class='total-col'>${{ item.get_relevant_tire.relevant_price|intcomma }}</p>
       <p class="total-col">${{ item.get_subtotal|intcomma }}</p>
     </div>
     {% endfor %}

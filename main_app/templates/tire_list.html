@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% load tire_list_templates_extra %}
 
 {% block content %}
@@ -115,7 +116,7 @@
           </div>
         </div>
         <div class="container-qty">
-          <h2 class="tire-list-price">${{ tire.price }}</h2>
+          <h2 class="tire-list-price">${{ tire.relevant_price|intcomma }}</h2>
           <div class="tire-quantity-input-div">
             <span class="cart-label">Quantity</span>
             <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>
