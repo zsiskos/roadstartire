@@ -24,7 +24,7 @@ https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#extending-the-exi
 class CustomUser(AbstractBaseUser, PermissionsMixin):
   COUNTRY_CHOICES = [
     ('CAN', 'Canada'),
-    ('USA', 'United States')
+    # ('USA', 'United States')
   ]
 
   PROVINCE_CHOICES = [
@@ -66,21 +66,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Apartment, suite, unit, building, floor, etc.
   """
 
+  # All fields are required except address_2 and gst_number
   email = CIEmailField(unique=True)
   first_name = models.CharField(max_length=30)
   last_name = models.CharField(max_length=30)
   is_active = models.BooleanField(default=False, help_text=is_active_help_text)
   is_staff = models.BooleanField(default=False, help_text=is_staff_help_text)
   date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Date Joined')
-  company_name = models.CharField(max_length=50, blank=True, verbose_name='Company')
-  business_phone = models.CharField(max_length=30, blank=True, verbose_name='Phone')
+  company_name = models.CharField(max_length=50, verbose_name='Company')
+  business_phone = models.CharField(max_length=30, verbose_name='Phone')
   country_iso = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default=COUNTRY_CHOICES[0][0], verbose_name='Country')
   province_iso = models.CharField(max_length=2, choices=PROVINCE_CHOICES, default=PROVINCE_CHOICES[8][0], verbose_name='Province')
-  city = models.CharField(max_length=30, blank=True, verbose_name='City')
+  city = models.CharField(max_length=30, verbose_name='City')
   address = models.CharField(max_length=30, verbose_name='Address', help_text=address_help_text)
   address_2 = models.CharField(max_length=30, blank=True, verbose_name='Address Line 2 (optional)', help_text=address_2_help_text)
-  postal_code = models.CharField(max_length=30, blank=True)
-  gst_number = models.CharField(validators=[MinLengthValidator(15)], max_length=15, blank=True, verbose_name='GST/HST Number')
+  postal_code = models.CharField(max_length=30)
+  gst_number = models.CharField(validators=[MinLengthValidator(15)], max_length=15, blank=True, verbose_name='GST/HST Number (optional)')
   discount_percent = models.DecimalField(
     max_digits=5,
     decimal_places=2,
