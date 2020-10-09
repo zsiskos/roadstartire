@@ -40,7 +40,7 @@
     <!-- Navbar brand -->
     <a class="nav-brand-link logo" href={% url 'home' %}>
       <img class="nav-brand-image" src="{% static 'images/road-star-logo.png' %}" alt="Road Star Tires logo">
-      <h3 class="nav-brand-title">ROADSTAR TIRE WHOLESALE</h3>
+      <h3 class="nav-brand-title">Roadstar Tire Wholesale</h3>
     </a>
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
     <nav>
@@ -55,17 +55,12 @@
         {% if user.is_authenticated %}
         <li><a class="text-btn" id="nav-logout" href="{% url 'account' %}">Account</a></li>
         <!-- cart icon -->
-        <li class="cart-nav-class">
-          <a class="text-btn" id="nav-cart-detail" href={% url 'cart_detail' %}>
+        <li>
+          <a href={% url 'cart_detail' %} class="cart-link">
+            <i class="fa fa-shopping-cart nav-cart-icon"></i>
             {% if cart and cart.get_item_count != 0 %}
-            <div class="f-circle">
-              <h6 class="fa-alph">
-                {{ cart.get_item_count }}
-              </h6>
-            </div>
+              <span class="cart-badge">{{ cart.get_item_count }}</span>
             {% endif %}
-            <i class="fas fa-shopping-cart">
-            </i>
           </a>
         </li>
         {% else %}
