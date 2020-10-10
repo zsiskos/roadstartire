@@ -21,13 +21,16 @@
     <div class="container-qty">
       <h2 class="tire-price">${{tire.relevant_price|intcomma}}</h2>
       <div class="stock">
-        {% if tire.product.current_quantity < 20 %}
+        {% if tire.product.current_quantity < 4 %}
         <p class="low-stock">
           Call for availability
         </p>
-        {% else %}
         <p class="in-stock">
-          <span>{{ tire.product.current_quantity }}</span> Available
+          <span>tire.product.current_quantity</span> Available
+        </p>
+        {% elif tire.product.current_quantity > 21 %}
+        <p class="in-stock">
+          <span>20+</span> Available
         </p>
         {% endif %}
       </div>
