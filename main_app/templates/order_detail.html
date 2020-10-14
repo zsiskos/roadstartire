@@ -11,10 +11,13 @@
     <a class="text-btn" href="{% url 'order_cancel' order.pk %}"><i class="fas fa-window-close"></i>Cancel Order</a>
   {% endif %}
   <div class="container-info order-detail-info">
+    <h4 class="order-detail-status">Status: {{ order.cart.get_status_display }}</h4>
     <h4 class="order-detail-ordered-at"><span>Ordered: </span>{{ order.cart.ordered_at|date:'F j, Y' }}</h4>
-    <h4>Status: {{ order.cart.get_status_display }}</h4>
+    {% if order.cart.status == order.cart.Status.FULFILLED %}
+      <h4 class="order-detail-ordered-at"><span>Shipped: </span>{{ order.cart.closed_at|date:'F j, Y' }}</h4>
+    {% endif %}
     <div class="shipping-info">
-      <h4>Shipped to:</h4>
+      <h4>Invoice to/Ship to:</h4>
       <p>Company Name: {{ order.company_name }}</p>
       <p>Address: {{ order.address }}</p>
       {% if order.address_2 %}
@@ -26,7 +29,7 @@
     </div>
 
     <div class="container-cart-headers">
-      <p class="cart-label">Items</p>
+      <p class="cart-label">Item</p>
       <p class="cart-label qty-col">Quantity</p>
       <p class="cart-label total-col">Price</p>
       <p class="cart-label total-col">Total</p>
@@ -53,7 +56,7 @@
       </p>
     {% endif %}
     <p>
-      <span class="cart-label">Tax ({{order.cart.tax_percent_applied.normalize}}%):</span>
+      <span class="cart-label">Tax ({{ order.cart.tax_percent_applied.normalize }}%):</span>
       ${{ order.cart.get_tax_amount|intcomma }}
     </p>
     <p>

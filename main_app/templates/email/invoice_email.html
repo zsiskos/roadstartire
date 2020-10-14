@@ -1,139 +1,107 @@
 {% load humanize %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Email</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;750;800;900&display=swap" rel="stylesheet">
-    <style>
-      body {
-        margin: 0;
-        font-family: Inter;
-      }
-      p {
-        margin: 0;
-      }
-      a {
-        text-decoration: none;
-        color: rgb(30, 38, 126);
-      }
-      .testing {
-        color: rgb(211, 121, 37);
-        font-size: 1rem; 
-        letter-spacing: .5px;
-        margin: 0;
-      }
-      h4 {
-        font-weight: 800;
-        margin: 0;
-      }
-      img {
-        height: 30px; 
-        margin-top: .75rem;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      .col-head {
-        font-weight: 800
-      }
-      hr {
-        width:100%;
-        text-align:left;
-      }
-    </style>
-  </head>
-  <body>  
-    <div class="container-main">
-      <p>Please find an email copy of your invoice below. We appreciate your business!</p>
-      <img src="cid:static/images/road-star-logo.png" alt="road star tire logo"/>
-      <h3 class="testing">ROADSTAR TIRE WHOLESALE</h3>
-      <p><a href="http://www.roadstartirewholesale.ca">www.RoadstarTireWholesale.ca</a></p>
-      <p>140 Doughton Rd, Concord, ON  L4K 1R3</p>
-      <p>(905) 660-3209</p>
-    <h1>Invoice # {{ order.pk }}</h1>
-      <h3>Ordered: {{ order.cart.ordered_at }}</h3>
-      <h3>Shipped: {{ order.cart.closed_at }}</h3>
-      <h4>Invoice to / Ship to:</h4>
-      <p>Company Name: {{ order.company_name }}</p>
-      <p>Address: {{ order.address }}</p>
-      {%  if order.address_2 %} 
-        <p>Address Line 2: {{ order.address_2 }}</p>
-      {% endif %}
-      <p>City: {{ order.city }}</p>
-      <p>Province: {{ order.province_iso }}</p>
-      <p>Postal Code: {{ order.postal_code }}</p>
-      <hr>
-      <table>
-        <tr>
-          <td class="col-head">Item</td>
-          <td class="col-head">Brand</td>
-          <td class="col-head">Type</td>
-          <td class="col-head">Pattern</td>
-          <td class="col-head">Load/Speed</td>
-          <td class="col-head">Price</td>
-          <td class="col-head">Quantity</td>
-          <td class="col-head">Amount</td>
-        </tr>
-        {% for item in cart_details %}
-          <tr>
-            <td>{{ item.get_relevant_tire.name }}</td>
-            <td>{{ item.get_relevant_tire.brand }}</td>
-            <td>{{ item.get_relevant_tire.tire_type }}</td>
-            <td>{{ item.get_relevant_tire.pattern }}</td>
-            <td>{{ item.get_relevant_tire.load_speed }}</td>
-            <td>${{ item.get_relevant_tire.relevant_price }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>$ {{ item.get_subtotal|intcomma }}</td>
-          </tr>
-        {% endfor %}
-        <tr>
-          <td><hr></td>
-          <td><hr></td>
-          <td><hr></td>
-          <td><hr></td>
-          <td><hr></td>
-          <td><hr></td>
-          <td><hr></td>
-          <td><hr></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>Sub-total:</td>
-          <td>${{ order.cart.get_subtotal|intcomma }}</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>Tax ({{order.cart.tax_percent_applied.normalize}}%):</td>
-          <td>${{ order.cart.get_tax_amount|intcomma }}</td>
-        </tr>
-        <tfoot>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>Total:</td>
-            <td>${{ order.cart.get_total|intcomma }}</td>
-          </tr>
-        </tfoot>
-      </table>
-    <p>GST/HST # {{ order.cart.gst_number }}</p>
-    <p>WARRANTY 60,0000 KM (as it was shown and agreed with customer)</p>
+  <div class="container-main">
+    <p style="margin: 0; color: #202124;">
+      Please find an email copy of your invoice below. We appreciate your business!
+    </p>
+    <div style="margin: 24px 0 0 0">
+      <img style="margin-left: 1.53rem; width: 200px;" src="cid:static/images/road-star-logo.png" alt="Roadstar Tire logo"/>
+      <h3 style="margin: 0; color: rgb(211, 121, 37); font-size: 1rem; letter-spacing: .5px;">
+        ROADSTAR TIRE WHOLESALE
+      </h3>
+      <a style="margin: 0; text-decoration: none;" href="http://www.roadstartirewholesale.ca">
+        www.roadstartirewholesale.ca
+      </a>
+      <div style="color: #202124;">
+        <p style="margin: 0;">140 Doughton Road Unit 2, Concord, ON, L4K 1R3</p>
+        <p style="margin: 0;">(905) 660-3209</p>
+      </div>
     </div>
-  </body>
-</html>
+    <h3 style="margin: 16px 0 0 0; color: #202124">Invoice # {{ order.pk }}</h3>
+    <div style="margin: 8px 0 0 0; color: #202124">
+      <h4 style="margin: 0;" class="ordered-label">Ordered: {{ order.cart.ordered_at|date:'F j, Y' }}</h3>
+      <h4 style="margin: 0;" class="shipped-label">Shipped: {{ order.cart.closed_at|date:'F j, Y' }}</h3>
+    </div>
+    <div style="margin: 16px 0 0 0; color: #202124;">
+      <h4 style="margin: 0;">Invoice to/Ship to:</h4>
+      <p style="margin: 0;">Company Name: {{ order.company_name }}</p>
+      <p style="margin: 0;">Address: {{ order.address }}</p>
+      {% if order.address_2 %} 
+        <p style="margin: 0;">Address Line 2: {{ order.address_2 }}</p>
+      {% endif %}
+      <p style="margin: 0;">City: {{ order.city }}</p>
+      <p style="margin: 0;">Province: {{ order.province_iso }}</p>
+      <p style="margin: 0;">Postal Code: {{ order.postal_code }}</p>
+    </div>
+    <table style="margin: 24px 0 0 0; color: #202124; border: 1px solid #202124;  border-collapse: collapse; width: 100%;">
+      <tr>
+        <td style="font-weight: 600; padding-left: 8px;">Item</td>
+        <td style="font-weight: 600; padding-left: 8px;">Brand</td>
+        <td style="font-weight: 600; padding-left: 8px;">Type</td>
+        <td style="font-weight: 600; padding-left: 8px;">Pattern</td>
+        <td style="font-weight: 600; padding-left: 8px;">Load/Speed</td>
+        <td style="font-weight: 600; padding-left: 8px;">Price</td>
+        <td style="font-weight: 600; padding-left: 8px;">Quantity</td>
+        <td style="font-weight: 600; padding-left: 8px; padding-right: 8px;">Amount</td>
+      </tr>
+      {% for item in cart_details %}
+        <tr>
+          <td style="padding-left: 8px;">{{ item.get_relevant_tire.name }}</td>
+          <td style="padding-left: 8px;">{{ item.get_relevant_tire.brand }}</td>
+          <td style="padding-left: 8px;">{{ item.get_relevant_tire.tire_type }}</td>
+          <td style="padding-left: 8px;">{{ item.get_relevant_tire.pattern }}</td>
+          <td style="padding-left: 8px;">{{ item.get_relevant_tire.load_speed }}</td>
+          <td style="padding-left: 8px;">${{ item.get_relevant_tire.relevant_price }}</td>
+          <td style="padding-left: 8px;">{{ item.quantity }}</td>
+          <td style="padding-left: 8px; padding-right: 8px;">${{ item.get_subtotal|intcomma }}</td>
+        </tr>
+      {% endfor %}
+      <tr style="border-top: 1px solid #202124">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: 600; padding-left: 8px;">Items ({{ order.cart.get_item_count }}):</td>
+        <td style="padding-left: 8px; padding-right: 8px;">${{ order.cart.get_subtotal|intcomma }}</td>
+      </tr>
+      {% if order.cart.discount_percent_applied %}
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style="font-weight: 600; padding-left: 8px;">Discount ({{ order.cart.discount_percent_applied.normalize }}%):</td>
+          <td style="padding-left: 8px; padding-right: 8px;">-${{ order.cart.get_discount_amount|intcomma }}</td>
+        </tr>
+      {% endif %}
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: 600; padding-left: 8px;">Tax ({{ order.cart.tax_percent_applied.normalize }}%):</td>
+        <td style="padding-left: 8px; padding-right: 8px;">${{ order.cart.get_tax_amount|intcomma }}</td>
+      </tr>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style="font-weight: 600; padding-left: 8px;">Total:</td>
+          <td style="padding-left: 8px; padding-right: 8px;">${{ order.cart.get_total|intcomma }}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <div style="margin: 8px 0 0 0; color: #202124">
+      <p style="margin: 0">GST/HST # {{ order.gst_number }}</p>
+      <p style="margin: 0">WARRANTY 60,0000 KM (as it was shown and agreed with customer)</p>
+    </div>
+  </div>
