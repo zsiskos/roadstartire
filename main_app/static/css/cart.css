@@ -34,15 +34,14 @@
 
 /* LAYOUT */
 .container-order {
+  background-color: var(--main-bg-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: .5rem 0;
   padding: .75em;
-  border-top: .08rem solid  var(--accent-color-shadow);
-  border-bottom: .08rem solid  var(--accent-color-shadow);
-  -webkit-box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
-  box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
+  -webkit-box-shadow: 0 2px 4px var(--accent-color-shadow), 0 8px 16px var(--accent-color-shadow);
+  box-shadow: 0 2px 4px var(--accent-color-shadow), 0 8px 16px var(--accent-color-shadow);
   border-radius: 8px;
 }
 

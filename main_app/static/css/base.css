@@ -1,9 +1,11 @@
 :root {
-  --navbar-bg-color: rgb(255, 255, 255);
-  --main-bg-color: rgb(255, 255, 255);
+  --main-bg-color: white;
+  --navbar-bg-color: white;
+  --navbar-shadow-color: rgb(0, 0, 0, 0.03);
   --accent-color-main: rgb(228, 228, 228);
   --accent-color-bright: rgb(250, 148, 53);
   --accent-color-shadow:  rgb(0, 0, 0, 0.1);
+  --accent-color-shadow-hover:  rgb(0, 0, 0, 0.2);
   --link-color-dark:  rgb(30, 38, 126);
   --link-color-hover: rgb(211, 121, 37);
   --main-text-dark: rgb(56, 56, 56);
@@ -11,6 +13,9 @@
   --form-focus-border: rgb(250, 148, 53);
   --form-focus-shadow: rgb(250, 148, 53, .5);
   --form-focus-bg: #ebebeb;
+  --status-red: #e44e44;
+  --status-green: #509553;
+  --status-blue: #1b66bb;
 }
 
 *, 
@@ -86,8 +91,6 @@ main {
   padding: 1em 1em;
   border-top: .10rem solid  var(--accent-color-shadow);
   border-bottom: .10rem solid var(--accent-color-shadow);
-  /* box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
-  border-radius: 8px; */
 }
 
 .container-qty {
@@ -142,7 +145,7 @@ header {
   padding: .25rem 0 .25rem 1rem;
   color: rgb(250, 250, 250);
   background: var(--navbar-bg-color);
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 4px var(--navbar-shadow-color), 0 8px 16px var(--navbar-shadow-color);
 }
 
 nav {
@@ -230,7 +233,7 @@ nav a {
 }
 
 /* Hover anywhere changes the cart icon color */
-.cart-link:hover .nav-cart-icon{
+.cart-link:hover .nav-cart-icon {
   color: var(--link-color-hover);
 }
 
@@ -270,7 +273,7 @@ nav a {
   position: absolute;
   top: 0;
   right: 0;
-  margin-right: 2rem;
+  margin-right: 1rem;
   height: 100%;
   display: flex;
   align-items: center;
