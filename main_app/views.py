@@ -42,7 +42,7 @@ def signup(req):
       #Info needed to send user email
       email = user.email
       subject = f"Thank you for registering with Road Star Tire Wholesale."
-      message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at 111-111-1111"
+      message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at (905) 660-3209"
       send_mail(
         subject, 
         message, 
