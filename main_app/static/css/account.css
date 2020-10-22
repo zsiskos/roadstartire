@@ -9,24 +9,19 @@
 }
 
 /* LAYOUT */
-.account-details {
+.profile-detail {
   display: flex;
-  align-items: center;
-  padding-right: 1em;
+  align-items: baseline;
 }
 
 .account-label {
-  width: 140px;
-  text-align: right;
-  float: left;
-  margin-right: 16px;
-  font-size: 1rem;
-  opacity: 0.7;
+  min-width: 1.5rem;
+  margin-right: .5rem;
+  opacity: 0.65;
 }
 
 /* Styles for the orders */
 .container-account-order {
-  background-color: var(--main-bg-color);
   display: grid;
   align-items: center;
   justify-items: start;
@@ -34,19 +29,27 @@
   grid-template-rows: 2.5em 16px minmax(70px, 1fr);
   margin-bottom: 1rem;
   padding: .75em;
-  box-shadow: 0 2px 4px var(--accent-color-shadow), 0 8px 16px var(--accent-color-shadow);
-  -webkit-box-shadow: 0 2px 4px var(--accent-color-shadow), 0 8px 16px var(--accent-color-shadow);
-  border-radius: 8px;
 }
 
 .separator {
-  border-top: 1px solid rgba(240, 240, 240, 0.5);
-  border-bottom: 1px solid rgb(240, 240, 240);
+  border-top: 1px solid rgba(0, 0, 0, .06);
+  border-bottom: 1px solid rgba(0, 0, 0, .06);
   height: 0px;
   border-radius: 8px;
   grid-column-start: 1;  
   grid-column-end: span 5;
   justify-self: stretch;
+}
+
+.profile-separator {
+  border-left: 1px solid rgba(0, 0, 0, .06);
+  border-right: 1px solid rgba(0, 0, 0, .06);
+  border-radius: 8px;
+  margin-right: 1rem;
+}
+
+#container-cart-items .separator {
+  margin: 0 1rem;
 }
 
 .order-btn {
@@ -86,7 +89,8 @@
   letter-spacing: 2.1px;
   margin-top: 1em;
   text-align: center;
-  transform:scale(1.02);
+  /* transform: scale(1.02); */
+  width: 100%;
 }
 
 .order-btn-filled:hover,
@@ -95,13 +99,13 @@
   transition: all 0.2s ease;
   /* box-shadow: 0px 2px 0px rgb(168, 100, 36); */
   outline: none;
-  transform: scale(1.02);
+  /* transform: scale(1.02); */
 }
 
 .order-btn-filled:focus {
 	border-color: var(--accent-color-bright);
   box-shadow: 0 0 10px rgb(235, 138, 47, .6);
-  transform:scale(1.02);
+  /* transform:scale(1.02); */
 }
 
 .container-num-status {
@@ -154,10 +158,31 @@
   flex-direction: column;
 }
 
+#account-page .container-info {
+  margin: none;
+  padding: 1rem;
+}
+
+#container-profile-separator-address {
+  display: flex;
+  flex: 0 0 50%;
+}
+
+#profile-gst-hst-num {
+  margin-top: .5rem;
+}
+
 /* WHEN SCREEN GETS SMALL */
-@media (max-width: 900px){
-  .account-label {
-    width: 100px;
+@media (max-width: 760px){
+  #container-profile-separator-address {
+    flex-direction: column;
+  }
+
+  .profile-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, .06);
+    border-bottom: 1px solid rgba(0, 0, 0, .06);
+    margin: 1em 0;
   }
 }
 
@@ -211,19 +236,19 @@
 
 /* ──────────────────────────────────────────────────────────────────────────────── */
 
-/* Entire acconunt order div is clickable */
+/* Entire account order div is clickable */
 
-div.container-account-order {
+.rounded-container-hover {
   position: relative;
-  transition: all 0.15s ease;
+  transition: all 0.125s linear;
 }
 
-div.container-account-order:hover {
+.rounded-container-hover:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .18), 0 8px 16px var(--accent-color-shadow-hover);
   transform: scale(1.004);
 }
 
-a.div-link {
+.div-link {
   position: absolute;
   width: 100%;
   height: 100%;
