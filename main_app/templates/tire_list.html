@@ -3,9 +3,8 @@
 {% load tire_list_templates_extra %}
 
 {% block content %}
-<div class="container-main">
+<div id="tire-list-page" class="container-main">
   <h1>Tires</h1>
-
   <form class="form-grid" method="get" action="{% url 'tire_list' %}">
     <div class="form-grid-span">
       <input name="width" id="id_q" type="text" class="form-control tire-size-input" placeholder="width"/>

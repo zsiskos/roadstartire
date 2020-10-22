@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-<div class="container-main">
+<div id="account-page" class="container-main">
   <h1>Account Information</h1>
   <a class="text-btn" href="{% url 'custom_user_edit' %}"><i class="fas fa-edit"></i>Edit Profile</a>
   <a class="text-btn" href="{% url 'password_change' %}"><i class="fas fa-key"></i>Change Password</a>
@@ -79,7 +79,7 @@
   <!-- ───────────────────────────────────────────────────────────────── -->
   {% if orders.count %}
     {% for order in page_obj %}
-        <div class="container-account-order">
+        <div class="container-account-order rounded-container">
           <div class="order-info">
             <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ order.cart.ordered_at|date:'F j, Y' }}</p>
           </div>

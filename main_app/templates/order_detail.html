@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-<div class="container-main">
+<div id="order-detail-page" class="container-main">
   <h1>Order # {{ order.pk }}</h1>
   {% if order.cart.status == order.cart.Status.FULFILLED %}
     <a href="{% url 'email_invoice' order.pk %}" class="text-btn"><i class="fas fa-envelope-open-text"></i>Email invoice</a>
@@ -30,39 +30,40 @@
 
     <div class="container-cart-headers">
       <p class="cart-label">Item</p>
-      <p class="cart-label qty-col">Quantity</p>
-      <p class="cart-label total-col">Price</p>
-      <p class="cart-label total-col">Total</p>
+      <p class="cart-label justify-self-start">Price</p>
+      <p class="cart-label justify-self-start">Quantity</p>
+      <p class="cart-label justify-self-end">Total</p>
     </div>
     
     {% for item in cart_details %}
     <div class="container-cart-info">
       <a class="tire-btn" href="{% url 'tire_detail' item.get_relevant_tire.pk %}"><p>{{ item.get_relevant_tire.name }} </p></a>
-      <p class="qty-col">{{ item.quantity }}</p>
-      <p class='total-col'>${{ item.get_relevant_tire.relevant_price|intcomma }}</p>
-      <p class="total-col">${{ item.get_subtotal|intcomma }}</p>
+      <p class="justify-self-start">${{ item.get_relevant_tire.relevant_price|intcomma }}</p>
+      <p class="justify-self-start">{{ item.quantity }}</p>
+      <p class="justify-self-end">${{ item.get_subtotal|intcomma }}</p>
     </div>
     {% endfor %}
   </div>
 
-  <div class="container-total">
-    <p><span class="cart-label">Items ({{order.cart.get_item_count}}):</span>
-      ${{ order.cart.get_subtotal|intcomma }}
-    </p>
+  <div class="container-total container-order-detail-total">
+    <div class = "container-total-row">
+      <span class="cart-label">Items ({{order.cart.get_item_count}})</span>
+      <span>${{ order.cart.get_subtotal|intcomma }}</span>
+    </div>
     {% if order.cart.discount_percent_applied %}
-      <p>
-        <span class="cart-label">Discount ({{order.cart.discount_percent_applied.normalize}}%):</span>
-        -${{ order.cart.get_discount_amount|intcomma }}
-      </p>
+      <div class="container-total-row">
+        <span class="cart-label">Discount ({{order.cart.discount_percent_applied.normalize}}%)</span>
+        <span>-${{ order.cart.get_discount_amount|intcomma }}</span>
+      </div>
     {% endif %}
-    <p>
-      <span class="cart-label">Tax ({{ order.cart.tax_percent_applied.normalize }}%):</span>
-      ${{ order.cart.get_tax_amount|intcomma }}
-    </p>
-    <p>
-      <span class="cart-label">Total:</span>
-      ${{ order.cart.get_total|intcomma }}
-    </p>
+    <div class="container-total-row">
+      <span class="cart-label">Tax ({{ order.cart.tax_percent_applied.normalize }}%)</span>
+      <span>${{ order.cart.get_tax_amount|intcomma }}</span>
+    </div>
+    <div id="order-detail-total-row" class="container-total-row">
+      <span class="cart-label">Total</span>
+      <span>${{ order.cart.get_total|intcomma }}</span>
+    </div>
   </div>
 </div>
 <!-- <script src="{% static 'js/order_detail.js' %}"></script> -->

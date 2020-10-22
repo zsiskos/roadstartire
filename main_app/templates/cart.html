@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-<div class="container-main">
+<div id="cart-page" class="container-main">
 {% if cart.cartdetail_set.all.count %}
   <h1>Your Cart</h1>
   <a class="text-btn" href="{% url 'tire_list' %}"><i class="fas fa-cart-plus"></i>Continue Shopping</a>
