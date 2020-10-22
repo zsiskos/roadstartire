@@ -18,21 +18,16 @@
     {% endif %}
     <div class="shipping-info">
       <h4>Invoice to/Ship to:</h4>
-      <p>Company Name: {{ order.company_name }}</p>
-      <p>Address: {{ order.address }}</p>
-      {% if order.address_2 %}
-        <p>Address Line 2: {{ order.address_2 }}</p>
-      {% endif %}
-      <p>City: {{ order.city }}</p>
-      <p>Province: {{ order.province_iso }}</p>
-      <p>Postal Code: {{ order.postal_code }}</p>
+      <p>{{ user.address }} {% if user.address_2 %} {{ user.address_2 }} {% endif %}</p>
+      <p>{{ user.city }} {{ user.province_iso }}  {{ user.postal_code }}</p>
+      <p>{{ user.get_country_iso_display }}</p>
     </div>
 
     <div class="container-cart-headers">
       <p class="cart-label">Item</p>
       <p class="cart-label justify-self-start">Price</p>
       <p class="cart-label justify-self-start">Quantity</p>
-      <p class="cart-label justify-self-end">Total</p>
+      <p class="cart-label justify-self-end">Amount</p>
     </div>
     
     {% for item in cart_details %}
@@ -45,7 +40,7 @@
     {% endfor %}
   </div>
 
-  <div class="container-total container-order-detail-total">
+  <div class="container-order-detail-total">
     <div class = "container-total-row">
       <span class="cart-label">Items ({{order.cart.get_item_count}})</span>
       <span>${{ order.cart.get_subtotal|intcomma }}</span>
