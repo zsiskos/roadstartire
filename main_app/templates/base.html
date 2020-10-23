@@ -46,7 +46,7 @@
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
     <nav>
       <!-- Navbar links -->
-      <ul class=nav-bar>
+      <ul>
         <!-- DO NOT INCLUDE IN PRODUCTION -->
         {% if user.is_authenticated %}
         <li><a class="text-btn" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a></li>
@@ -56,7 +56,7 @@
         {% if user.is_authenticated %}
         <li><a class="text-btn" id="nav-logout" href="{% url 'account' %}">Account</a></li>
         <!-- Cart icon -->
-        <li>
+        <li class="hide-on-small">
           <a href={% url 'cart_detail' %} class="cart-link">
             <i class="fa fa-shopping-cart nav-cart-icon"></i>
             {% if cart and cart.get_item_count != 0 %}
@@ -70,6 +70,13 @@
         {% endif %}
       </ul>
     </nav>
+    <!-- Cart icon (display when hamburger menu is present) -->
+    <a href={% url 'cart_detail' %} class="cart-link nav-cart-icon-small">
+      <i class="fa fa-shopping-cart nav-cart-icon"></i>
+      {% if cart and cart.get_item_count != 0 %}
+        <span class="cart-badge">{{ cart.get_item_count }}</span>
+      {% endif %}
+    </a>
     <label for="nav-toggle" class="nav-toggle-label">
       <span></span>
     </label>

@@ -3,9 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   margin-top: .5rem;
-  padding: 1em 1em;
-  border-top: .10rem solid  var(--accent-color-shadow);
-  border-bottom: .10rem solid var(--accent-color-shadow);
+  border-top: 2px solid rgba(0, 0, 0, .1);
 }
 
 .form-grid {
@@ -62,7 +60,7 @@
 
 .forgot-password {
   grid-column-start: 2;
-  font-weight: inherit;
+  font-weight: initial;
 }
 
 .container-errors {
@@ -99,5 +97,4 @@
     margin-top: 1rem;
     align-items: end;
   }
-
 }

@@ -62,7 +62,7 @@ def signup(req):
   return render(req, 'signup.html', {'form': form})
 
 def confirmation(req):
-  return render(req, 'confirmation.html')
+  return render(req, 'signup-confirmation.html')
 
 def signin(req):
   if req.user.is_authenticated:

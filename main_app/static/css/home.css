@@ -1,25 +1,17 @@
 /* TYPOGRAPHY */
 
 #hero-main .hero-title {
-  /*color: rgb(22, 29, 88);*/
-  font-size: 50px;
-  /*text-shadow: 0 0 2px rgba(255, 255, 255, 0.5), 0 0 2px rgba(255, 255, 255, 0.5);*/
+  font-size: 3.125rem;
 }
 
 .hero-intro-container {
   z-index: 5;
   width: 85%;
-  /*color: rgb(22, 29, 88);*/
-  /*text-shadow: 0 0 2px rgba(255, 255, 255, 0.3), 0 0 2px rgba(255, 255, 255, 0.3);*/
 }
 
 .hero-intro {
   z-index: 1;
-  font-size: 20px;
-}
-
-.hero-NA {
-  font-size: 20px;
+  font-size: 1.125rem;
 }
 
 /*HOME SLOGAN CONTAINER*/
@@ -32,19 +24,22 @@
 }
 
 #hero-quality .quality-tires {
-  padding-bottom: 40px;
-  font-size: 22px;
+  padding-bottom: 2.5rem;
+  font-size: 1.25rem;
 }
 
 #hero-quality .hero-title {
-  text-transform: none;
-  padding-top: 10px;
+  padding-top: .5rem;
 }
 
 /*contact us card*/
 .contact-us {
   color: var(--text-color-dark);
   text-decoration: none;
+}
+
+#hero-contact .hero-title {
+  padding: 1rem;
 }
 
 #hero-contact #contact-us {
@@ -66,7 +61,7 @@
 .container-home {
   height: 100%;
   width: 100%;
-  min-height: 200px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -77,7 +72,7 @@
 }
 
 #hero-main {
-  margin-top: -1.25rem;
+  margin-top: -.7rem;
   background: var(--accent-color-bright);
 }
 
@@ -85,11 +80,11 @@
 #hero-main::after {
   position: absolute;
   content: " ";
-  width: 150px;
-  height: 150px;
+  width: 9.375rem;
+  height: 9.375rem;
   bottom: -1em;
   background: var(--accent-color-bright);
-  border: 3px solid var(--accent-color-bright);
+  /* border: 100px solid var(--accent-color-bright); */
 }
 
 #hero-main::before {
@@ -103,7 +98,7 @@
 }
 
 #hero-quality {
-  height: 650px;
+  height: 40rem;
   background: linear-gradient(rgba(0, 0, 0, 0.35),rgba(0, 0, 0, 0.35)), url(../images/03_home_tire.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -113,9 +108,9 @@
 }
 
 #hero-contact {
-  background:var(--accent-color-bright);
+  background: var(--accent-color-bright);
   width: 100%;
-  height: 400px;
+  height: 25rem;
   color: var(--main-text-dark);
 }
 
@@ -127,7 +122,7 @@
   background-color: white;
   color: var(--text-color-dark);
   padding: 2em;
-  height: 400px;
+  height: 25rem;
   display: flex;
   flex-direction: row;
 }

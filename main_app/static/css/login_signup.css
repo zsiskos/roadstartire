@@ -37,6 +37,6 @@ a {
 
 @media screen and (min-width: 700px) {
   .container-right {
-    margin-top: 0rem;
+    margin-top: 1rem;
   }
 }

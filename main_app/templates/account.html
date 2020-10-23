@@ -72,7 +72,7 @@
           <div class="separator"></div>
           <div class="account-order-items">
             {% for item in order.cart.cartdetail_set.all %}
-              <div>{{ item.get_relevant_tire.name }} x {{ item.quantity }}</div>
+              <p>{{ item.get_relevant_tire.name }} x {{ item.quantity }}</p>
             {% endfor %}
           </div>
           <a class="order-btn div-link" href="{% url 'order_detail' order.pk %}">View Order</a>
