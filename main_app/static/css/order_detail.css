@@ -15,7 +15,7 @@
 
 #order-detail-total-row {
   background-color: rgba(0, 0, 0, .1);
-  font-weight: 700;
+  font-weight: bold;
   padding: .5rem 0;
   border-radius: 2px;
 }
