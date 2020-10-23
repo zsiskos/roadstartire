@@ -1,5 +1,5 @@
 :root {
-  --main-bg-color: white;
+  --main-bg-color: rgb(251, 253, 255);
   --navbar-bg-color: white;
   --navbar-shadow-color: rgb(0, 0, 0, 0.03);
   --accent-color-main: rgb(228, 228, 228);
@@ -16,6 +16,26 @@
   --status-red: #e44e44;
   --status-green: #509553;
   --status-blue: #1b66bb;
+  
+  --rounded-border-radius: 8px;
+}
+
+html {
+  font-size: 87.5%;
+}
+
+/* When screen gets larger than 850px */
+@media screen and (min-width: 850px) {
+  html {
+    font-size: 100%;
+  }
+}
+
+/* When screen gets < 400px */
+@media screen and (max-width: 400px){
+  html {
+    font-size: 75%;
+  }
 }
 
 *, 
@@ -50,7 +70,7 @@ p {
 }
 
 .fas {
-  margin-right: .25rem;
+  margin-right: .5rem;
 }
 
 .footer-title {
@@ -62,49 +82,51 @@ p {
   font-style: italic;
 }
 
-/* WHEN SCREEN GETS SMALL */
-@media (max-width: 900px){
-  h2 {
-    font-size: 1.5rem;
-    margin:  .05rem 0 .05rem 0;
-  } 
-}
-
 /* LAYOUT */
 main {
-  padding-top: 5.5rem;
+  padding-top: 5.3rem;
   min-height: calc(100vh - 130px);
 }
 
+/* The main container for page content */
 .container-main {
   margin: 0 auto;
-  width: 85%;
+  /* width: 85%; */
   max-width: 900px;
   min-width: 300px;
-  margin-bottom: 1rem;
+  padding: 1rem;
 }
 
+/* Flex container to hold general information */
 .container-info {
   display: flex;
   justify-content: space-between;
   margin-top: .5rem;
-  padding: 1em 1em;
-  border-top: .10rem solid  var(--accent-color-shadow);
-  border-bottom: .10rem solid var(--accent-color-shadow);
+  border-top: 2px solid rgba(0, 0, 0, .1);
+}
+
+/* Additional styling to add to a container */
+.rounded-container {
+  background: var(--navbar-bg-color);
+  border: none;
+  border-radius: var(--rounded-border-radius);
+  box-shadow: 0 2px 4px var(--accent-color-shadow), 0 8px 16px var(--accent-color-shadow);
+  -webkit-box-shadow: 0 2px 4px var(--accent-color-shadow), 0 8px 16px var(--accent-color-shadow);
 }
 
 .container-qty {
-  text-align: end;
+  /* text-align: end; */
 }
 
 .order-detail-info {
   flex-direction: column;
+  border-bottom: 2px solid rgb(0, 0, 0, .1);
 }
 
 footer a {
   text-decoration: none;
   color: linen;
-  transition: .2s ease;
+  transition: .15s ease;
 }
 
 footer a:hover {
@@ -114,6 +136,7 @@ footer a:hover {
 footer {
   text-align: center;
   padding: 1.5em 0;
+  background-color: var(--link-color-dark);
   background-color: rgb(22, 29, 88);
   color: lightgrey;
   margin-top: auto;
@@ -125,14 +148,8 @@ footer .text-btn {
 
 /* WHEN SCREEN GETS REALLY SMALL */
 @media screen and (max-width: 760px){
-  .container-info,
-  .container-links {
-    display: flex;
-    flex-direction: column;
-  }
-  
   .container-info {
-    padding: 1em 1em;
+    flex-direction: column;
   }
 }
 
@@ -143,9 +160,9 @@ header {
   z-index: 99;
   width: 100%;
   padding: .25rem 0 .25rem 1rem;
-  color: rgb(250, 250, 250);
   background: var(--navbar-bg-color);
   box-shadow: 0 2px 4px var(--navbar-shadow-color), 0 8px 16px var(--navbar-shadow-color);
+  display: flex;
 }
 
 nav {
@@ -157,7 +174,7 @@ nav {
   background: var(--navbar-bg-color);
   transform: scale(1,0);
   transform-origin: top;
-  transition: transform 400ms ease-in-out;
+  transition: transform 150ms ease-in-out;
 }
 
 nav ul {
@@ -168,11 +185,11 @@ nav ul {
 
 nav li {
   margin-bottom: 1em;
-  margin-left: 1em;
+  /* margin-left: 1em; */
 }
 
-.nav-bar .text-btn {
-  margin: 1.3rem 1rem 0 0;
+nav .text-btn {
+  margin: 1.3rem 2rem 0 0;
 }
 
 .nav-brand-link {
@@ -182,21 +199,21 @@ nav li {
 }
 
 .nav-brand-image {
-  height: 25px;
+  height: 2rem;
   margin-top: .75rem;
-  margin-left: 3rem;
+  margin-left: 2.9rem;
 }
 
 .nav-brand-title {
-  font-size: .9rem;
-  letter-spacing: .5px;
+  font-size: 1rem;
+  letter-spacing: .03125rem; /* .5px at 16px base font-size */
   text-transform: uppercase;
 }
 
 nav a {
   text-decoration: none;
   text-transform: uppercase;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 150ms ease-in-out;
   font-size: 0.9rem;
   transition: all 0.2s ease;
@@ -206,7 +223,7 @@ nav a {
 /* Cart icon (when cart has items) –––––––––––––––––––––––––––––––––––––––––– */
 
 .nav-cart-icon {
-  font-size: 1.2rem;
+  font-size: 20px; 
   color: var(--link-color-dark);
   margin-top: 1.2rem;
   transition: all 0.2s ease;
@@ -214,11 +231,15 @@ nav a {
 
 .cart-badge {
   color: var(--link-color-dark);
-  font-size: .75rem;
-  font-weight: 750;
-  background: var(--accent-color-bright);
-  padding: 1px 4px 1px 6px;
-  vertical-align: top;
+  background-color: var(--accent-color-bright);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0;
+  text-align: center;
+  min-width: 22px;
+  padding: 0px 4px;
+  height: 22px;
+  line-height: 18px;
   border-radius: 100px;
   position: absolute;
   margin-left: -10px;
@@ -229,7 +250,7 @@ nav a {
 
 /* Hover anywhere raises the badge */
 .cart-link:hover .cart-badge {
-  transform: translate(0, -3.6px);
+  transform: translate(0, -5.5px);
 }
 
 /* Hover anywhere changes the cart icon color */
@@ -237,18 +258,50 @@ nav a {
   color: var(--link-color-hover);
 }
 
-@media (max-width: 900px){
+@media (max-width: 850px) {
   .cart-badge {
-    position: absolute;
-    margin-left: -35px;
+    margin: 0;
+    top: 3px;
+    /* right: 16px; */
+    left: 14px;
   }
 
   .nav-cart-icon {
-    margin-right: 25px;
+    margin-right: 2rem;
+  }
+
+  nav .text-btn {
+    margin: 0 1rem 0 0;
+  }
+}
+
+/* WHEN SCREEN GETS REALLY SMALL */
+@media screen and (max-width: 400px){
+  .cart-badge {
+    top: 0px;
   }
 }
 
 /* Nav bar hamburger menu and functionality ––––––––––––––––––––––––––––––––– */
+
+.small-nav-container {
+  /* position: absolute; */
+  /* top: 0;
+  right: 0; */
+  /* margin-right: 1rem; */
+  /* height: 100%; */
+}
+
+.nav-cart-icon-small {
+  position: absolute;
+  top: .7rem; /* 10px */
+  right: 4rem;
+  /* right: 0 */
+  /* margin-top: 1rem; */
+  /* margin-right: 2rem; */
+  /* position: relative; */
+  /* background-color: lightgray; */
+}
 
 .nav-toggle {
   position: absolute !important;
@@ -262,6 +315,13 @@ nav a {
 
 .nav-toggle:checked ~ nav {
   transform: scale(1,1);
+  box-shadow: 0 2px 4px var(--navbar-shadow-color), 0 8px 16px var(--navbar-shadow-color);
+}
+
+@media screen and (min-width: 850px) {
+  .nav-toggle:checked ~ nav {
+    box-shadow: none;
+  }
 }
 
 .nav-toggle:checked ~ nav a {
@@ -304,11 +364,15 @@ nav a {
   top: 7px;
 }
 
+.hide-on-small {
+  display: none;
+}
+
 /* When screen gets larger than 850px */
 @media screen and (min-width: 850px) {
-  main {
+  /* main {
     padding-top: 5.96rem;
-  }
+  } */
 
   .nav-toggle-label {
     display: none;
@@ -316,12 +380,13 @@ nav a {
 
   header {
     display: grid;
-    grid-template-columns: 1fr auto minmax(600px, 3fr) 1fr;
+    grid-template-columns: 1fr minmax(max-content, 300px) minmax(auto, 600px) 1fr;
     padding-left: 0;
   }
 
   .logo {
     grid-column: 2 / span 1;
+    margin-left: 1em;
   }
 
   nav {
@@ -342,19 +407,31 @@ nav a {
     transition: all 0.2s ease;
   }
 
-  .nav-brand-image {
+  /* .nav-brand-image {
     height: 30px;
-  }
+  } */
   
-  .nav-brand-title {
+  /* .nav-brand-title {
     font-size: 1rem;
+  } */
+
+  nav {
+    padding-right: 1rem;
+  }
+
+  .nav-cart-icon-small {
+    display: none;
+  }
+
+  .hide-on-small {
+    display: inherit;
   }
 }
 
 /* tire-detail */
 #add-tire input {
-    width: 5rem;
-  }
+  width: 5rem;
+}
 
 #add-tire {
   margin-top: 1em;
