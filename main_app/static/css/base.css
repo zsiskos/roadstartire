@@ -183,13 +183,8 @@ nav ul {
   list-style: none;
 }
 
-nav li {
-  margin-bottom: 1em;
-  /* margin-left: 1em; */
-}
-
 nav .text-btn {
-  margin: 1.3rem 2rem 0 0;
+  margin: 1.3rem 0 1rem 2rem;
 }
 
 .nav-brand-link {
@@ -226,6 +221,7 @@ nav a {
   font-size: 20px; 
   color: var(--link-color-dark);
   margin-top: 1.2rem;
+  margin-left: 2rem;
   transition: all 0.2s ease;
 }
 
@@ -271,7 +267,7 @@ nav a {
   }
 
   nav .text-btn {
-    margin: 0 1rem 0 0;
+    margin: 1rem 1rem;
   }
 }
 
