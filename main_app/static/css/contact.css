@@ -1,15 +1,24 @@
+#contact-page .container-info {
+  padding: 1rem;
+}
+
 .container-contact {
   width: 50%;
   padding-right: .5em;
   display: flex;
   flex-direction: column;
-  height: 200px;
+  margin-bottom: auto;
   justify-content: space-between;
 }
 
-.hours-address {
+.container-contact-hours-address {
   display: flex;
   justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.container-contact-address {
+  flex-basis: 50%;
 }
 
 .container-map {
@@ -19,16 +28,24 @@
 .container-map iframe{
   left:0;
   top:0;
-  height: 350px;
-  width:100%;
-  position:relative;
-  overflow:hidden;
+  height: 22rem;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
-@media screen and (max-width: 730px) {
+@media screen and (max-width: 760px) {
   .container-map,
   .container-contact {
     width: 100%;
     padding-right: 0em;
+  }
+
+  .container-map {
+    margin-top: 1rem;
+  }
+
+  #contact-page .container-order {
+    flex-direction: column;
   }
 }
