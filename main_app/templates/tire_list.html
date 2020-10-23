@@ -22,8 +22,8 @@
   </form>
   {% if paginator.count == 0 %}
   <div class="no-search-results">
-    <h2>The search contains no results.</h2>
-    <p>Try searching for something else instead.</p>
+    <h2>Your search contained no results</h2>
+    <p>Please try another search</p>
   </div>
   {% else %}
   <div class="form-grid-span">
@@ -98,44 +98,50 @@
         </div>
       {% endif %}
     </div>
-
+    <!-- Tire –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
     {% for tire in page_obj %}
-      <div class="container-order">
+      <div class="container-order rounded-container">
+        <!-- Thumbnail and tire details -->
         <div class="list-tire-details">
           <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' class="thumbnail-image-small"/>
-          <div class="item-tire">
-            <a class="tire-btn" href="{% url 'tire_detail' tire.get_updated_tire.id %}">
-              <h2>{{ tire.name }}</h2>
-            </a>
+          <div>
+            <h3 class="line-clamp-2"><a class="tire-btn" href="{% url 'tire_detail' tire.get_updated_tire.id %}">{{ tire.name }}</a></h3>
             <p><span class="cart-label">Size:</span> {{tire.width}}/{{tire.aspect_ratio}}{{tire.rim_size}}</p>
             <p><span class="cart-label">Type:</span> {{tire.tire_type}}</p>
             <p><span class="cart-label">Pattern:</span> {{tire.pattern}}</p>
             <p><span class="cart-label">Load/Speed:</span> {{tire.load_speed}}</p>
           </div>
         </div>
+        <!-- Price and Quantity -->
         <div class="container-qty">
-          <h2 class="tire-list-price">${{ tire.relevant_price }}</h2>
-          <div class="tire-quantity-input-div">
-            <span class="cart-label">Quantity</span>
-            <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>
+          <div class="container-tire-list-price-qty">
+            <!-- Price -->
+            <h2 class="tire-list-price">${{ tire.relevant_price }}</h2>
+            <!-- Quantity and stock -->
+            <div>
+              <div class="tire-quantity-input-div">
+                <span class="cart-label">Quantity</span>
+                <input class="tire-quantity-input" type="number" value="1" min="1" name="quantity"/>
+              </div>
+              <div class="stock">
+                {% if tire.product.current_quantity < 20 %}
+                <p class="low-stock">
+                  Limited stock
+                </p>
+                {% else %}
+                <p class="in-stock">
+                  In stock
+                </p>
+                {% endif %}
+              </div>
+            </div>
           </div>
-          <div class="stock">
-            {% if tire.product.current_quantity < 20 %}
-            <p class="low-stock">
-              Limited stock
-            </p>
-            {% else %}
-            <p class="in-stock">
-              In stock
-            </p>
-            {% endif %}
-          </div>
+          <!-- Add to cart' button -->
           <button class="add-to-order order-btn-filled" data-id="{{ tire.id }}" data-csrf="{{ csrf_token }}">
             <div class="pre-text">
               <i class="fas fa-cart-plus"></i>
               Add to cart
             </div>
-  
             <div class="pre-text-done">
               <div class="post-text">
                 <i class="fas fa-check"></i>
@@ -146,7 +152,7 @@
         </div>
       </div>
     {% endfor %}
-
+    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
     {% if page_obj.number %}
       <div class="container-pagination">
         <!-- 'Previous' button -->
@@ -206,5 +212,4 @@
     {% endif %}
   {% endif %}
 </div>
-
 {% endblock %}

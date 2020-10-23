@@ -8,7 +8,7 @@
     <a href="{% url 'email_invoice' order.pk %}" class="text-btn"><i class="fas fa-envelope-open-text"></i>Email invoice</a>
   {% endif %}
   {% if order.cart.status == order.cart.Status.CURRENT or order.cart.status == order.cart.Status.IN_PROGRESS %}
-    <a class="text-btn" href="{% url 'order_cancel' order.pk %}"><i class="fas fa-window-close"></i>Cancel Order</a>
+    <a class="text-btn negative-btn" href="{% url 'order_cancel' order.pk %}"><i class="fas fa-times"></i>Cancel Order</a>
   {% endif %}
   <div class="container-info order-detail-info">
     <h4 class="order-detail-status">Status: {{ order.cart.get_status_display }}</h4>

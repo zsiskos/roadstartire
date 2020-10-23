@@ -3,7 +3,7 @@
 {% block content %}
 <div id="custom-user-edit-form-modal" class="container-main">
   <h1>Edit Profile</h1>
-  <a href="{% url 'account' %}" class="text-btn" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
+  <a href="{% url 'account' %}" class="text-btn negative-btn" alt="cancel button"><i class="fas fa-times"></i>Cancel</a>
   <div class="container-form" >
     <form id="account-save" action="." method="POST" class="form-signin form-grid"> 
       {% csrf_token %}
@@ -25,11 +25,12 @@
     {% endfor %}
       <a href="#" class="order-btn-filled" id="btn-save" alt="save button">Save</a>
       <div class="popup" id="popup-edit-confirm" style="display: none">
-        <div class="popup-copy">
-          <p><strong>PLEASE NOTE: </strong>Editing profile information will temporarily inactivate your account until a staff member validates your changes.</p>
+        <div class="popup-copy" style="border-radius: 8px; margin: 100px auto;">
+          <p><strong>PLEASE NOTE</strong></p>
+          <p>Editing profile information will temporarily inactivate your account until a staff member validates your changes.</p>
           <p>This means <em>you will be logged out and will not be able to place orders</em> until then. If it is urgent, please call us at (905)-660-3209.</p>
-          <a href="#" class="text-btn" onClick="document.forms['account-save'].submit();"/><i class="fas fa-check-square"></i>Confirm</a>
-          <a href="#" class="text-btn" id="close" alt="cancel button"><i class="fas fa-window-close"></i>Cancel</a>
+          <a href="#" class="text-btn negative-btn" id="close" alt="cancel button">Cancel</a>
+          <a href="#" class="text-btn" onClick="document.forms['account-save'].submit();">Continue</a>
         </div>
       </div>
     </form>
