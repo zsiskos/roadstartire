@@ -1,8 +1,8 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<div id="signup-confirmation-oage" class="container-main">
-  <h1 class="confirmation-text">Thank you for registering.</h1>
+<div id="signup-confirmation-page" class="container-main">
+  <h1 class="confirmation-text">Thank you for registering</h1>
   <p class="confirmation-text">Your account will need to be verified before you are able to log in and place orders.</p>
-  <p class="confirmation-text">A staff member has been notified and you will get an email when your account has been verified.</p>
-  <p>If this is urgent please contact us at (905) 660-3209.</p>
+  <p class="confirmation-text">A staff member has been notified and you will receive an email as soon as your account is verified.</p>
+  <p>If this is urgent please <a href="{% url 'contact' %}" class="text-btn" style="margin: 0; font-weight: initial;">contact us</a>.</p>
 </div>
 {% endblock %}
