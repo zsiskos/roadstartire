@@ -165,7 +165,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = email_key
 EMAIL_HOST_PASSWORD = password_key
 EMAIL_PORT = 587
-ADMINS = [('Mohsen', email_key)]
+ADMINS = [('Test', email_key)]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

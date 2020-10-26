@@ -239,7 +239,7 @@ def order_cancel(req, order_id):
   #Info needed to send user email
   email = req.user.email
   subject = f"Your order (# {order.pk}) was successfully cancelled"
-  message = f"If this email is in error or if you wish to change your order, please call +1-905-660-3209."
+  message = f"If this email is in error or if you wish to change your order, please call +1-123-456-7890."
   send_mail(
     subject, 
     message, 
