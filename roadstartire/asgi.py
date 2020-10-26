@@ -1,5 +1,5 @@
 """
-ASGI config for roadstartire project.
+ASGI config for Demo Tire Wholesaler project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

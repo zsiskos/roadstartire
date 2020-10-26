@@ -53,7 +53,7 @@ def signup(req):
       #Info needed to send admin email
       mail_admins(
         f"New signup: {user.company_name}",
-        f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) and verify this new user.",
+        f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (https://demo-tire-wholesale.herokuapp.com/admin/login/) and verify this new user.",
         fail_silently=False
       )
       return redirect('confirmation')
@@ -123,7 +123,7 @@ def custom_user_edit(req):
       )
       # INFO NEEDED FOR EMAIL
       subject = f"{user.company_name} edited their account"
-      message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) and re-verify their account."
+      message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (https://demo-tire-wholesale.herokuapp.com/admin/login/) and re-verify their account."
       mail_admins(
         subject, 
         message, 
@@ -210,7 +210,7 @@ def cart_order(req, cart_id):
   )
   # Info needed for email to admin
   subject = f"{req.user.company_name} placed Order #{cart.ordershipping.pk}"
-  message = f"This company - {cart.ordershipping.company_name}, {req.user.email} - placed an order. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) to view the details."
+  message = f"This company - {cart.ordershipping.company_name}, {req.user.email} - placed an order. Please log in to your admin account (https://demo-tire-wholesale.herokuapp.com/admin/login/) to view the details."
   mail_admins(
     subject, 
     message, 
@@ -250,7 +250,7 @@ def order_cancel(req, order_id):
   # Info needed for email to admin
   user = req.user
   subject = f"{user.company_name} cancelled order #{order.pk}"
-  message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (http://www.roadstartirewholesale.ca/admin/login/) to view the details."
+  message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (https://demo-tire-wholesale.herokuapp.com/admin/login/) to view the details."
   mail_admins(
     subject, 
     message, 
