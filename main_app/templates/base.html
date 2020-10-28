@@ -34,6 +34,7 @@
   <!-- moment.js – For converting UTC to local time -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" type="text/javascript"></script>
   <script src="{% static 'js/tire_list.js' %}"></script>
+  <script src="{% static 'js/contact.js' %}"></script>
   <title>Roadstar Tire</title>
 </head>
 <body>
@@ -52,7 +53,7 @@
         <li><a class="text-btn" id="nav-tires" href={% url 'tire_list' %}></i>Tires</a></li>
         {% endif %}
         <!-- DO NOT INCLUDE IN PRODUCTION, LEAVE IN FOR USE LATER -->
-        <li><a class="text-btn" id="nav-about" href={% url 'contact' %}></i>Contact Us</a></li>
+        <li><a class="text-btn" id="nav-about" href={% url 'contact' %}></i>Contact</a></li>
         {% if user.is_authenticated %}
         <li><a class="text-btn" id="nav-logout" href="{% url 'account' %}">Account</a></li>
         <!-- Cart icon -->
@@ -88,11 +89,11 @@
   </main>
   <footer>
     <p class="footer-title">ROADSTAR TIRE WHOLESALE &trade;&reg;</p>
-    <a href="mailto:info@roadstartirewholesale.ca<">info@roadstartirewholesale.ca</a> •
-    <a href="tel:905-550-3209<">(905) 660-3209</a>
+    <a href="mailto:info@roadstartirewholesale.ca">info@roadstartirewholesale.ca</a> •
+    <a href="tel:905-660-3209">(905) 660-3209</a>
     <p>
       <a href="https://goo.gl/maps/p4pX3oUvRJKKcn1UA">
-        140 Doughton Road Unit 2, Concord, ON, L4K 1R3
+        140 Doughton Road Unit 2, Concord, ON L4K 1R3
       </a>
     </p>
   </footer>

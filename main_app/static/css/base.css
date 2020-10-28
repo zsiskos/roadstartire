@@ -8,8 +8,8 @@
   --accent-color-shadow-hover:  rgb(0, 0, 0, 0.2);
   --link-color-dark:  rgb(30, 38, 126);
   --link-color-hover: rgb(211, 121, 37);
-  --main-text-dark: rgb(56, 56, 56);
   --main-text-dark:  #343d46;
+  --footer-text-color: rgb(245, 245, 245);
   --form-focus-border: rgb(250, 148, 53);
   --form-focus-shadow: rgb(250, 148, 53, .5);
   --form-focus-bg: #ebebeb;
@@ -125,7 +125,7 @@ main {
 
 footer a {
   text-decoration: none;
-  color: linen;
+  color: var(--footer-text-color);
   transition: .15s ease;
 }
 
@@ -138,12 +138,8 @@ footer {
   padding: 1.5em 0;
   background-color: var(--link-color-dark);
   background-color: rgb(22, 29, 88);
-  color: lightgrey;
+  color: var(--footer-text-color);
   margin-top: auto;
-}
-
-footer .text-btn {
-  color: lightgrey;
 }
 
 /* WHEN SCREEN GETS REALLY SMALL */
@@ -259,7 +255,7 @@ nav a {
     margin: 0;
     top: 3px;
     /* right: 16px; */
-    left: 14px;
+    left: 42px;
   }
 
   .nav-cart-icon {
@@ -275,6 +271,13 @@ nav a {
 @media screen and (max-width: 400px){
   .cart-badge {
     top: 0px;
+  }
+}
+
+/* WHEN SCREEN GETS REALLY REALLY SMALL */
+@media screen and (max-width: 285px){
+  .nav-brand-link {
+    visibility: hidden;
   }
 }
 
