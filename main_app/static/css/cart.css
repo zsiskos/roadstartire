@@ -86,10 +86,8 @@
 
 .container-cart-subtotal {
   margin-left: 1rem;
-}
-
-.container-cart-subtotal {
   text-align: end;
+  min-width: 8rem;
 }
 
 .shipping-info {

@@ -183,6 +183,16 @@ nav .text-btn {
   margin: 1.3rem 0 1rem 2rem;
 }
 
+nav .profile-separator {
+  height: 2rem;
+  margin: .8rem -1rem 0 .8rem;
+}
+
+nav .order-btn-filled {
+  margin: .4375rem 0 0 1.625rem;
+  width: max-content;
+}
+
 .nav-brand-link {
   color:var(--link-color-hover);
   text-decoration: none;
@@ -264,6 +274,18 @@ nav a {
 
   nav .text-btn {
     margin: 1rem 1rem;
+  }
+
+  nav .profile-separator {
+    display: none; 
+  }
+  
+  nav a {
+    font-size: 1rem;
+  }
+
+  nav .order-btn-filled {
+    margin: 1rem;
   }
 }
 
