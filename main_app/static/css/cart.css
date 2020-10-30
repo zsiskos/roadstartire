@@ -103,6 +103,11 @@
 #container-cart-address {
   margin-right: auto;
   /* padding: 1rem; */
+  flex: 1;
+}
+
+#container-cart-address-total .separator {
+  margin-right: 1rem;
 }
 
 .container-total {
@@ -110,7 +115,7 @@
   min-width: 40%;
   /* padding: 1rem; */
 
-  max-width: 50%;
+  /* max-width: 50%; */
 }
 
 .container-total-row {

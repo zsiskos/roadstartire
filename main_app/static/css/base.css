@@ -16,7 +16,7 @@
   --status-red: #e44e44;
   --status-green: #509553;
   --status-blue: #1b66bb;
-  
+  --separator-color: rgb(0, 0, 0, .06);
   --rounded-border-radius: 8px;
 }
 
@@ -183,7 +183,12 @@ nav .text-btn {
   margin: 1.3rem 0 1rem 2rem;
 }
 
-nav .profile-separator {
+.separator {
+  border: 1px solid var(--separator-color);
+  border-radius: 8px;
+}
+
+nav .separator {
   height: 2rem;
   margin: .8rem -1rem 0 .8rem;
 }
@@ -276,7 +281,7 @@ nav a {
     margin: 1rem 1rem;
   }
 
-  nav .profile-separator {
+  nav .separator {
     display: none; 
   }
   

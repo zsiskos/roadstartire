@@ -12,7 +12,7 @@
     <div class="container-order">
       <div class="container-cart-tire-info">
         <div class="tooltip">
-          <a class="text-btn remove-item-btn negative-btn" href="{% url 'remove_tire' cart_detail.id %}" title="Remove item"><i class="fas fa-times"></i></a>
+          <a class="text-btn remove-item-btn negative-btn" href="{% url 'remove_tire' cart_detail.id %}"><i class="fas fa-times"></i></a>
           <span class="tooltiptext rounded-container" data-basetext="Copy address">Remove item</span></span>
         </div>
         <img src='{{ cart_detail.get_relevant_tire.tread.image_set.first.url }}' alt='tire image' class="thumbnail-image-cart"/>
@@ -72,6 +72,7 @@
       <p>{{ user.city }} {{ user.province_iso }}  {{ user.postal_code }}</p>
       <p>{{ user.get_country_iso_display }}</p>
     </div>
+    <div class="separator"></div>
     <!-- Total -->
     <div class="container-total">
       <div class="container-total-row">
@@ -88,7 +89,6 @@
         <span class="cart-label">Tax ({{cart.tax_percent_applied.normalize}}%)</span>
         <span>${{ cart.get_tax_amount|intcomma }}</span>
       </div>
-      <div class="sep"></div>
       <div id="cart-total-row" class="container-total-row">
         <span class="cart-label">Total</span>
         <span>${{ cart.get_total|intcomma }}</span>

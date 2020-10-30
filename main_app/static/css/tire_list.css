@@ -114,9 +114,7 @@
   align-items: center;
 }
 
-.tire-search-separator-line {
-  border: 1px solid rgba(0, 0, 0, .06);
-  border-radius: 8px;
+#tire-search-separator .separator {
   flex: 1;
   width: 0;
 }

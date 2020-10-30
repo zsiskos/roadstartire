@@ -17,8 +17,6 @@
   margin: 0 1rem;
 }
 
-
-
 /* LAYOUT */
 .profile-detail {
   display: flex;
@@ -43,20 +41,18 @@
 }
 
 .separator {
-  border-top: 1px solid rgba(0, 0, 0, .06);
-  border-bottom: 1px solid rgba(0, 0, 0, .06);
-  height: 0px;
+  border: 1px solid var(--separator-color);
   border-radius: 8px;
+}
+
+#container-profile-separator-address .separator {
+  margin-right: 1rem;
+}
+
+.container-account-order .separator {
   grid-column-start: 1;  
   grid-column-end: span 5;
   justify-self: stretch;
-}
-
-.profile-separator {
-  border-left: 1px solid rgba(0, 0, 0, .06);
-  border-right: 1px solid rgba(0, 0, 0, .06);
-  border-radius: 8px;
-  margin-right: 1rem;
 }
 
 #container-cart-items .separator {
@@ -187,10 +183,7 @@
     flex-direction: column;
   }
 
-  .profile-separator {
-    border: none;
-    border-top: 1px solid rgba(0, 0, 0, .06);
-    border-bottom: 1px solid rgba(0, 0, 0, .06);
+  #container-profile-separator-address .separator {
     margin: 1em 0;
   }
 }
