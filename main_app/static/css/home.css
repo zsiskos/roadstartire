@@ -42,6 +42,7 @@
   border-top: 3rem solid var(--accent-color-bright);
   position: absolute;
   bottom: -2.8rem; /* Needs to be slightly smaller than the border-top to hide the 1px gap */
+  z-index: 1;
 } 
 
 /* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
