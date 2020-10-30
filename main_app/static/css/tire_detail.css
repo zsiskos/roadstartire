@@ -18,6 +18,10 @@
   color: var(--status-green)
 }
 
+.in-stock span {
+  font-weight: bold;
+}
+
 #add-tire {
   text-align: start;
   margin-top: 1.5rem;
