@@ -4,31 +4,48 @@
 
 {% block content %}
 <div id="tire-list-page" class="container-main">
-  <h1>Tires</h1>
-  <form class="form-grid" method="get" action="{% url 'tire_list' %}">
-    <div class="form-grid-span">
-      <input name="width" id="id_q" type="text" class="form-control tire-size-input" placeholder="width"/>
-      <input name="aspect_ratio" id="id_q" type="text" class="form-control tire-size-input" placeholder="aspect ratio"/>
-      <input name="rim_size" id="id_q" type="text" class="form-control tire-size-input" placeholder="rim size"/>
+  <h1>Shop Tires</h1>
+  <p>Browse through our huge selection of tires</p>
+  <div id="container-tire-search-forms" class="rounded-container">
+    <!-- Detailed search -->
+    <form id="tire-detailed-search" method="get" action="{% url 'tire_list' %}">
+      <div id="container-tire-size-inputs">
+        <input name="width" id="width-input" type="text" class="form-control" placeholder="Width"/>
+        <input name="aspect_ratio" id="aspect-ratio-input" type="text" class="form-control " placeholder="Aspect ratio"/>
+        <input name="rim_size" id="rim-size-input" type="text" class="form-control" placeholder="Rim size"/>
+      </div>
+      <div id="container-tire-brand-type-inputs">
+        <input name="brand" id="brand-input" type="text" class="form-control" placeholder="Brand" />
+        <input name="tire_type" id="type-input" type="text" class="form-control" placeholder="Type" />
+      </div>
+      <button class="order-btn-filled" type="submit">
+        <i class="fas fa-search"></i>
+        Detailed Search
+      </button>
+    </form>
+    <div id="tire-search-separator">
+      <div class="tire-search-separator-line"></div>
+      <h4 id="tire-search-separator-text">OR</h4>
+      <div class="tire-search-separator-line"></div>
     </div>
-    <input name="brand" id="id_q" type="text" class="form-control tire-detail-input" placeholder="brand" />
-    <input name="tire_type" id="id_q" type="text" class="form-control tire-detail-input tire_type-input" placeholder="type" />
-    <button class="order-btn-filled" type="submit" style="grid-column-start: 1;">Search</button>
-  </form>
-  <br>
-  <form class="form-grid" method="get" action="{% url 'tire_list' %}">
-    <input name="quick_search" id="id_q" type="text" class="form-control quick-search-input" placeholder="ex: 215/55R/17"/>
-    <button class="order-btn-filled" type="submit" style="grid-column-start: 1; grid-row-start: 2;">Quick Search</button>
-  </form>
+    <!-- Quick search -->
+    <form id="tire-quick-search" method="get" action="{% url 'tire_list' %}">
+      <input name="quick_search" id="id_q" type="text" class="form-control" placeholder="e.g. 215/55R/17"/>
+      <button class="order-btn-filled" type="submit">
+        <i class="fas fa-search"></i>
+        Quick Search
+      </button>
+    </form>
+  </div>
   {% if paginator.count == 0 %}
   <div class="no-search-results">
     <h2>Your search contained no results</h2>
     <p>Please try another search</p>
   </div>
   {% else %}
-  <div class="form-grid-span">
+  <div>
     {% if page_obj.number %}
-      <div class="form-grid-span sort-detail">
+      <div class="sort-detail">
         {% if sort == 'width' %}
           <a class="text-btn" href="?{% url_replace request 'sort' '-width' %}"><i class="fas fa-sort-down"></i>Width</a>
         {% elif sort != 'width' %}

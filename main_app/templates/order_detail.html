@@ -5,7 +5,10 @@
 <div id="order-detail-page" class="container-main">
   <h1>Order # {{ order.pk }}</h1>
   {% if order.cart.status == order.cart.Status.FULFILLED %}
-    <a href="{% url 'email_invoice' order.pk %}" class="text-btn"><i class="fas fa-envelope-open-text"></i>Email invoice</a>
+    <div class="tooltip">
+      <a href="{% url 'email_invoice' order.pk %}" class="text-btn"><i class="fas fa-envelope-open-text"></i>Email invoice</a>
+      <span class="tooltiptext">Send a copy of this invoice to your email</span>
+    </div>
   {% endif %}
   {% if order.cart.status == order.cart.Status.CURRENT or order.cart.status == order.cart.Status.IN_PROGRESS %}
     <a class="text-btn negative-btn" href="{% url 'order_cancel' order.pk %}"><i class="fas fa-times"></i>Cancel Order</a>
@@ -18,9 +21,10 @@
     {% endif %}
     <div class="shipping-info">
       <h4>Invoice to/Ship to:</h4>
-      <p>{{ user.address }} {% if user.address_2 %} {{ user.address_2 }} {% endif %}</p>
-      <p>{{ user.city }} {{ user.province_iso }}  {{ user.postal_code }}</p>
-      <p>{{ user.get_country_iso_display }}</p>
+      <p>{{ order.company_name }}</p>
+      <p>{{ order.address }} {% if order.address_2 %} {{ order.address_2 }} {% endif %}</p>
+      <p>{{ order.city }} {{ order.province_iso }}  {{ order.postal_code }}</p>
+      <p>{{ order.get_country_iso_display }}</p>
     </div>
 
     <div class="container-cart-headers">

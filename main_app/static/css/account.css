@@ -14,7 +14,7 @@
 }
 
 #edit-profile {
-  margin-left: 1rem;
+  margin: 0 1rem;
 }
 
 
@@ -64,31 +64,29 @@
 }
 
 .order-btn {
-  padding: 1.2em 1.5em;
+  padding: 1rem 1.33rem;
   border: 2px solid var(--main-text-dark);
-  color:var(--link-color-hover);
-  background: var(--main-bg-color);
+  background: transparent;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
   border-radius: 6px;
   transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 2.1px;
-  font-size: .7rem;
-  color: var(--main-text-dark)
+  font-size: .8rem;
+  color: var(--main-text-dark);
 }
 
 .order-btn:hover,
 .order-btn:focus {
-  background: rgba(250, 148, 53, 0.02);
-  color: var(--link-color-hover);
-  transition: all 0.2s ease;
-  border: 2px solid var(--link-color-hover);
+  background: var(--main-text-dark);
+  color: var(--main-bg-color);
 }
 
+/* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+
 .order-btn-filled {
-  padding: 1.2em 1.5em;
+  padding: 1rem 1.33rem;
   color:white;
   background: var(--accent-color-bright);
   text-decoration: none;

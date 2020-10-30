@@ -1,33 +1,33 @@
 #tire-detail-page .container-info {
   padding: 1rem 0;
+  align-items: center;
 }
 
 .tire-price {
   text-align: left;
-  margin-top: 1.5em;
-  margin-bottom: .4em;
   font-size: 2em;
-}
-
-#add-tire {
-  margin-top: 1.5em;
 }
 
 .low-stock {
   text-align: left;
-  color: #e44e44
+  color: var(--status-red)
 }
 
 .in-stock {
   text-align: left;
-  color: #008000
+  color: var(--status-green)
 }
 
 #add-tire {
   text-align: start;
+  margin-top: 1.5rem;
 }
 
-#add-tire .order-btn-filled {
+#add-tire input {
+  width: 5rem;
+}
+
+#tire-detail-page .order-btn-filled {
   /* color: linen; */
   /* display:inline-block; */
   /* justify-content:center; */
@@ -49,7 +49,7 @@
   width: 100%;
 }
 
-#add-tire .order-btn-filled:hover {
+#tire-detail-page .order-btn-filled:hover {
   /* transform: scale(1.03); */
   /* color: rgb(30, 38, 126); */
 }
@@ -122,11 +122,35 @@
 /* ──────────────────────────────────────────────────────────────────────────────── */
 
 /* WHEN SCREEN GETS SMALL */
-@media screen and (max-width:740px){
+@media screen and (max-width:760px){
   .tire-detail-thumbnail-image {
     height: 200px;
     width: 200px;
     transition: all .3s ease;
+  }
+
+  #tire-detail-page .container-info {
+    padding: 1rem 0;
+    align-items: initial;
+  }
+
+  #tire-detail-page .container-tire-list-price-qty {
+    margin-top: 1rem;
+  }
+
+  .tire-price {
+    align-self: center;
+  }
+
+
+  #add-tire {
+    margin: 0;
+  }
+
+  #tire-detail-page .container-tire-list-price-qty {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
   }
 }
 

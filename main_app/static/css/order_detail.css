@@ -1,11 +1,15 @@
-#order-detail-page .container-info {
-  padding: 1rem 0;
-  margin-bottom: 1rem;
-}
-
 #order-detail-page.container-main {
   display: flex;
   flex-direction: column;
+}
+
+#order-detail-page .tooltip {
+  align-self: flex-start; /* So that tooltip aligns better on hover */
+}
+
+#order-detail-page .container-info {
+  padding: 1rem 0;
+  margin-bottom: 1rem;
 }
 
 .container-order-detail-total {

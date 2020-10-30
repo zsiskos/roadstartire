@@ -1,64 +1,91 @@
 {% load humanize %}
-<div id="order-summary-email" class="container-main">
-<p>Thank you for placing your order. Your order will be reviewed and shipped shortly. Here is a summary of your order below:</p>
-<h1>Order # {{ cart.ordershipping.pk }}</h1>
-  <h3 style="font-weight: 800">Ordered: {{ cart.ordered_at }}</h3>
-  <h4 style="font-weight: 800">Ship to:</h4>
-  <p>Company Name: {{ cart.ordershipping.company_name }}</p>
-  <p>Address: {{ cart.ordershipping.address }}</p>
-  {% if cart.ordershipping.address_2 %}
-    <p>Address Line 2: {{ cart.ordershipping.address_2 }}</p>
+<div id="order-summary-email">
+<p style="margin: 0; color: #202124;">
+  Thank you for placing your order. Your order will be reviewed and shipped shortly. A summary of your order can be found below:
+</p>
+<!-- Order # -->
+<h3 style="margin: 16px 0 0 0; color: #202124">Order # {{ cart.ordershipping.pk }}</h3>
+<!-- Status and Ordered date -->
+<div style="margin: 8px 0 0 0; color: #202124">
+  <h4 style="margin: 0;">Status: {{ cart.get_status_display }}</h3>
+  <h4 style="margin: 0;">Ordered: {{ cart.ordered_at|date:'F j, Y' }}</h3>
+</div>
+<!-- Shipping details -->
+<div style="margin: 16px 0 0 0; color: #202124;">
+  <h4 style="margin: 0;">Invoice to/Ship to:</h4>
+  <p style="margin: 0;">{{ cart.ordershipping.company_name }}</p>
+  <p style="margin: 0;">{{ cart.ordershipping.address }} {% if cart.ordershipping.address_2 %} {{ cart.ordershipping.address_2 }} {% endif %}</p>
+  <p style="margin: 0;">{{ cart.ordershipping.city }} {{ cart.ordershipping.province_iso }}  {{ cart.ordershipping.postal_code }}</p>
+  <p style="margin: 0;">{{ cart.ordershipping.get_country_iso_display }}</p>
+  <p style="margin: 0;">Phone: {{ cart.ordershipping.business_phone }}</p>
+</div>
+<!-- Cart item table -->
+<table style="margin: 24px 0 0 0; color: #202124; border: 1px solid #202124;  border-collapse: collapse; width: 100%;">
+  <tr>
+    <td style="font-weight: 600; padding-left: 8px;">Item</td>
+    <td style="font-weight: 600; padding-left: 8px;">Brand</td>
+    <td style="font-weight: 600; padding-left: 8px;">Type</td>
+    <td style="font-weight: 600; padding-left: 8px;">Pattern</td>
+    <td style="font-weight: 600; padding-left: 8px;">Load/Speed</td>
+    <td style="font-weight: 600; padding-left: 8px;">Price</td>
+    <td style="font-weight: 600; padding-left: 8px;">Quantity</td>
+    <td style="font-weight: 600; padding-left: 8px; padding-right: 8px;">Amount</td>
+  </tr>
+  {% for item in cart_details %}
+    <tr>
+      <td style="padding-left: 8px;">{{ item.get_relevant_tire.name }}</td>
+      <td style="padding-left: 8px;">{{ item.get_relevant_tire.brand }}</td>
+      <td style="padding-left: 8px;">{{ item.get_relevant_tire.tire_type }}</td>
+      <td style="padding-left: 8px;">{{ item.get_relevant_tire.pattern }}</td>
+      <td style="padding-left: 8px;">{{ item.get_relevant_tire.load_speed }}</td>
+      <td style="padding-left: 8px;">${{ item.get_relevant_tire.relevant_price }}</td>
+      <td style="padding-left: 8px;">{{ item.quantity }}</td>
+      <td style="padding-left: 8px; padding-right: 8px;">${{ item.get_subtotal|intcomma }}</td>
+    </tr>
+  {% endfor %}
+  <tr style="border-top: 1px solid #202124">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="font-weight: 600; padding-left: 8px;">Items ({{ cart.get_item_count }}):</td>
+    <td style="padding-left: 8px; padding-right: 8px;">${{ cart.get_subtotal|intcomma }}</td>
+  </tr>
+  {% if cart.discount_percent_applied %}
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td style="font-weight: 600; padding-left: 8px;">Discount ({{ cart.discount_percent_applied.normalize }}%):</td>
+      <td style="padding-left: 8px; padding-right: 8px;">-${{ cart.get_discount_amount|intcomma }}</td>
+    </tr>
   {% endif %}
-  <p>City: {{ cart.ordershipping.city }}</p>
-  <p>Province: {{ cart.ordershipping.province_iso }}</p>
-  <p>Postal Code: {{ cart.ordershipping.postal_code }}</p>
-  <hr style="width:70%;text-align:left;margin-left:0">
-  <table style="border-collapse: collapse; width: 70%">
-    <tr>
-      <td style="font-weight: 800">Items</td>
-      <td style="font-weight: 800">Quantity</td>
-      <td style="font-weight: 800">Price</td>
-      <td style="font-weight: 800">Total</td>
-    </tr>
-    {% for item in cart_details %}
-      <tr>
-        <td>{{ item.get_relevant_tire.name }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>${{ item.get_relevant_tire.relevant_price|intcomma }}</td>
-        <td>$ {{ item.get_subtotal|intcomma }}</td>
-      </tr>
-    {% endfor %}
-    <tr>
-      <td><hr style="width:100%;text-align:left;margin-left:0"></td>
-      <td><hr style="width:100%;text-align:left;margin-left:0"></td>
-      <td><hr style="width:100%;text-align:left;margin-left:0"></td>
-      <td><hr style="width:100%;text-align:left;margin-left:0"></td>
-    </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="font-weight: 600; padding-left: 8px;">Tax ({{ cart.tax_percent_applied.normalize }}%):</td>
+    <td style="padding-left: 8px; padding-right: 8px;">${{ cart.get_tax_amount|intcomma }}</td>
+  </tr>
+  <tfoot>
     <tr>
       <td></td>
       <td></td>
-      <td>Items ({{ cart.get_item_count }}):</td>
-      <td>${{ cart.get_subtotal|intcomma }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td style="font-weight: 600; padding-left: 8px; background-color: rgba(0, 0, 0, .1);">Total:</td>
+      <td style="padding-left: 8px; padding-right: 8px; background-color: rgba(0, 0, 0, .1);">${{ cart.get_total|intcomma }}</td>
     </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td>Discount ({{ cart.discount_percent_applied.normalize }}%):</td>
-      <td>-${{ cart.get_discount_amount }}</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td>Tax ({{ cart.tax_percent_applied.normalize }}%):</td>
-      <td>${{ cart.get_tax_amount|intcomma }}</td>
-    </tr>
-    <tfoot>
-      <tr>
-        <td></td>
-        <td></td>
-        <td>Total:</td>
-        <td>${{ cart.get_total|intcomma }}</td>
-      </tr>
-    </tfoot>
-  </table>
+  </tfoot>
+</table>
 </div>

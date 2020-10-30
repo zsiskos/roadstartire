@@ -18,52 +18,43 @@
       </div>
     </div>
     <div class="container-qty">
-      <h2 class="tire-price">${{tire.relevant_price|intcomma}}</h2>
-      <div class="stock">
-        {% if tire.product.current_quantity < 20 %}
-        <p class="low-stock">
-          Limited stock
-        </p>
-        {% else %}
-        <p class="in-stock">
-          In stock
-        </p>
-        {% endif %}
+      <div class="container-tire-list-price-qty">
+        <h2 class="tire-price">${{tire.relevant_price|intcomma}}</h2>
+        <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+            <div class="stock">
+            {% if tire.product.current_quantity < 20 %}
+            <p class="low-stock">
+              Limited stock
+            </p>
+            {% else %}
+            <p class="in-stock">
+              In stock
+            </p>
+            {% endif %}
+          </div>
+        </form>
       </div>
-      <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <a href="#" class="order-btn-filled">
-          <div class="pre-text">
-            <i class="fas fa-cart-plus"></i>
-              Add to cart
+      <a href="#" class="order-btn-filled">
+        <div class="pre-text">
+          <i class="fas fa-cart-plus"></i>
+            Add to cart
+        </div>
+        <div class="pre-text-done">
+          <div class="post-text">
+            <i class="fas fa-check"></i>
+            Added
           </div>
-          <div class="pre-text-done">
-            <div class="post-text">
-              <i class="fas fa-check"></i>
-              Added
-            </div>
-          </div>
-        </a>
-      </form>
-      <br/>
-      <br/>
-      <!-- <p><span class="cart-label">Availability:</span> 
-        {% if tire.product.current_quantity < 20 %}
-          Low stock
-        {% else %}
-          In stock
-        {% endif %}
-      </p> -->
+        </div>
+      </a>
       </div>
     </div>
   </div>  
 </div>
-
 <script>
-  const button = document.querySelector('#add-tire').getElementsByClassName('order-btn-filled')[0];
+  const button = document.querySelector('.order-btn-filled');
   button.addEventListener('click', e => {
-    console.log('clicked')
     const done = e.target.querySelector('.pre-text-done');
     done.style.transform = "translate(0px)";
     setTimeout(()=>{

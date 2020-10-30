@@ -36,7 +36,7 @@
   class="container-home parallax-window"
   data-parallax="scroll"
   data-image-src="{% static 'images/03_home_tire.jpg' %}"
-  data-speed=".7"
+  data-speed=".65"
   data-bleed="10"
   data-android-fix="false">
   <div class="quality-tires">
@@ -50,12 +50,14 @@
     <h2 class="hero-title">For quotes, availability and customer support</h2>
     <a href="{% url 'contact' %}" class="order-btn" alt="Contact button">Contact us</a>
   </div>
-  <div class="container-home" id='hero-signup'>
-    <div>
-      <h2 class="hero-title">Create a free account and place your order today</h2>
-      <a href="{% url 'signup' %}" class="order-btn-filled" alt="Sign up button">Sign up</a>
+  {% if not user.is_authenticated %}
+    <div class="container-home" id='hero-signup'>
+      <div>
+        <h2 class="hero-title">Create a free account and place your order today</h2>
+        <a href="{% url 'signup' %}" class="order-btn-filled" alt="Sign up button">Sign up</a>
+      </div>
+      <img id="img-signup" src="{% static 'images/01_contact-us.png' %}"/>
     </div>
-    <img id="img-signup" src="{% static 'images/01_contact-us.png' %}"/>
-  </div>
+  {% endif %}
 </div>
 {% endblock %}

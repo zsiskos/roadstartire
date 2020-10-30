@@ -3,10 +3,10 @@ a {
   display: inline-block;
 }
 
-#signup-form li {
+/* #signup-form li {
   font-style: italic;
   font-size: .75rem;
-}
+} */
 
 #id_password2 ~ .helptext {
   display: none;

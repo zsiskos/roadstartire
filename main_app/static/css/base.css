@@ -1,5 +1,5 @@
 :root {
-  --main-bg-color: rgb(251, 253, 255);
+  --main-bg-color: rgb(249, 251, 253);
   --navbar-bg-color: white;
   --navbar-shadow-color: rgb(0, 0, 0, 0.03);
   --accent-color-main: rgb(228, 228, 228);
@@ -447,13 +447,4 @@ nav a {
   .hide-on-small {
     display: inherit;
   }
-}
-
-/* tire-detail */
-#add-tire input {
-  width: 5rem;
-}
-
-#add-tire {
-  margin-top: 1em;
 }

@@ -41,7 +41,7 @@ def signup(req):
       user = form.save() # Add the user to the database
       # Send email to user
       email = user.email
-      subject = f"Thank you for registering for Roadstar Tire Wholesale account"
+      subject = f"Thank you for registering for a Roadstar Tire Wholesale account"
       message = f"Hello {user.full_name} – Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order. Please allow us 24 business hours to do so. If this is urgent, please contact us at (905) 660-3209."
       send_mail(
         subject, 

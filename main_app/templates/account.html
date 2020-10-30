@@ -4,14 +4,16 @@
 {% block content %}
 <div id="account-page" class="container-main">
   <div>
-    <h1>Account Information</h1>
-    <a class="text-btn" href="{% url 'custom_user_edit' %}"><i class="fas fa-pen"></i></i>Edit Profile</a>
+    <h1>Your Account</h1>
     <a class="text-btn" href="{% url 'password_change' %}"><i class="fas fa-key"></i>Change Password</a>
     <a class="text-btn" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Log Out</a>
   </div>
   <div id="profile" class="container-info rounded-container">
-    <div class="container-account-section">
-      <h3>{{ user.full_name }}</h3>
+    <div id="profile-personal">
+      <div id="container-profile-name-edit">
+        <h3 id="profile-name">{{ user.full_name }}</h3>
+        <a id="edit-profile" class="text-btn" href="{% url 'custom_user_edit' %}"><i class="fas fa-pen"></i></i>Edit Profile</a>
+      </div>
       <div class="profile-detail">
         <p class="account-label"><i class="fas fa-building"></i><p>
         <p>{{ user.company_name }}</p>
@@ -20,7 +22,7 @@
         <p class="account-label"><i class="fas fa-envelope"></i></p>
         <p>{{ user.email }}</p>
       </div>  
-      <div class="profile-detail" >
+      <div class="profile-detail">
         <p class="account-label"><i class="fas fa-phone-alt"></i></p>
         <p>{{ user.business_phone }}</p>
       </div>
@@ -33,7 +35,7 @@
     </div>
     <div id="container-profile-separator-address">
       <div class="profile-separator"></div>
-      <div class="container-account-section">
+      <div id="profile-address">
         <h3>Your Address</h3>
         <p>{{ user.address }} {% if user.address_2 %} {{ user.address_2 }} {% endif %}</p>
         <p>{{ user.city }} {{ user.province_iso }}  {{ user.postal_code }}</p>
@@ -59,11 +61,11 @@
             <p class="order-label order-num">Order # {{ order.id }}</p>
             <p class="order-status"
               {% if order.cart.status == order.cart.Status.IN_PROGRESS %} 
-                style="color: #1b66bb"
+                style="color: var(--status-blue)"
               {% elif order.cart.status == order.cart.Status.CANCELLED  %}
-                style="color: #e44e44"
+                style="color: var(--status-red)"
               {% elif order.cart.status == order.cart.Status.FULFILLED  %}
-                style="color: #509553"
+                style="color: var(--status-green)"
               {% endif %}
             >{{ order.cart.get_status_display }}
             </p>

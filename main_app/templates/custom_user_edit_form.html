@@ -4,16 +4,12 @@
 <div id="custom-user-edit-form-modal" class="container-main">
   <h1>Edit Profile</h1>
   <a href="{% url 'account' %}" class="text-btn negative-btn" alt="cancel button"><i class="fas fa-times"></i>Cancel</a>
-  <div class="container-form" >
+  <div class="container-form">
     <form id="account-save" action="." method="POST" class="form-signin form-grid"> 
       {% csrf_token %}
       {% for field in form %}
-      <div class="fieldWrapper">
         {{ field.label_tag }}
-      </div>
-      <div>
         {{ field }}
-      </div>
       {% if field.errors %}
         <div class="form-grid-span">
           {{ field.errors }}

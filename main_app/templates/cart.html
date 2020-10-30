@@ -11,7 +11,10 @@
   <!-- Cart item ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <div class="container-order">
       <div class="container-cart-tire-info">
-        <a class="text-btn remove-item-btn negative-btn" href="{% url 'remove_tire' cart_detail.id %}"><i class="fas fa-times"></i></a>
+        <div class="tooltip">
+          <a class="text-btn remove-item-btn negative-btn" href="{% url 'remove_tire' cart_detail.id %}" title="Remove item"><i class="fas fa-times"></i></a>
+          <span class="tooltiptext rounded-container" data-basetext="Copy address">Remove item</span></span>
+        </div>
         <img src='{{ cart_detail.get_relevant_tire.tread.image_set.first.url }}' alt='tire image' class="thumbnail-image-cart"/>
         <!-- Item details -->
         <div>
@@ -64,6 +67,7 @@
     <!-- Address -->
     <div id="container-cart-address">
       <h4>Invoice to/Ship to</h4>
+      <p>{{ user.company_name }}</p>
       <p>{{ user.address }} {% if user.address_2 %} {{ user.address_2 }} {% endif %}</p>
       <p>{{ user.city }} {{ user.province_iso }}  {{ user.postal_code }}</p>
       <p>{{ user.get_country_iso_display }}</p>
