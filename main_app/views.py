@@ -59,7 +59,7 @@ def signup(req):
       return redirect('confirmation')
   else:
     form = CustomUserCreationForm()
-  return render(req, 'signup.html', {'form': form}) # redirect to signup page
+  return render(req, 'signup.html', {'form': form})
 
 def confirmation(req):
   return render(req, 'confirmation.html')
