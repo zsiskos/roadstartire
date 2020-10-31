@@ -1,34 +1,153 @@
-.container-contact {
-  width: 50%;
-  padding-right: .5em;
-  display: flex;
-  flex-direction: column;
-  height: 200px;
-  justify-content: space-between;
+#contact-page .text-btn {
+  margin: 0;
+  font-weight: initial;
 }
 
-.hours-address {
+#contact-page .account-label {
+  margin-left: .5rem;
+}
+
+.container-contact-map {
   display: flex;
-  justify-content: space-between;
+  padding: 1rem;
 }
 
 .container-map {
-  width: 50%;
+  width: 100%;
 }
 
 .container-map iframe{
-  left:0;
-  top:0;
-  height: 350px;
-  width:100%;
-  position:relative;
-  overflow:hidden;
+  height: 100%;
+  width: 100%;
 }
 
-@media screen and (max-width: 730px) {
-  .container-map,
+.container-contact {
+  margin-right: 1rem;
+  min-width: max-content;
+}
+
+.container-contact-details {
+  margin-top: .5rem;
+}
+
+.contact-detail {
+  display: flex;
+  align-items: baseline;
+  transition: all .1s ease;
+  margin: .5rem 0;
+  width: 100%;
+}
+
+.contact-detail .fa-copy,
+.contact-detail .contact-detail-action {
+  color: var(--link-color-dark);
+  opacity: 0;
+  transition: all .1s ease;
+  padding: 0 .5rem;
+  border-radius: 6px;
+  line-height: 1.8rem;
+  margin: 0;
+}
+
+.contact-detail:hover {
+  background-color: rgb(52, 61, 70, .1);
+  border-radius: 6px;
+}
+
+.contact-detail:hover .fa-copy,
+.contact-detail:hover .contact-detail-action {
+  opacity: .7;
+  transition: all .1s ease;
+  cursor: pointer;
+}
+
+.contact-detail .fa-copy:hover,
+.contact-detail .contact-detail-action:hover {
+  opacity: 1;
+  background-color: rgb(52, 61, 70, .2);
+}
+
+.container-contact-detail-buttons {
+  margin-left: 1rem;
+  align-self: center;
+}
+
+.copy-text {
+  flex: 1;
+}
+
+.container-contact-hours {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 1rem;
+}
+
+.bold-day {
+  font-weight: 600;
+}
+
+@media screen and (max-width: 760px) {
+  .contact-detail {
+    width: 75%;
+    min-width: max-content;
+  }
+
+  .container-contact-map {
+    flex-direction: column;
+  }
+
   .container-contact {
+    margin-right: 0;
+  }
+
+  .container-map {
+    margin-top: 1rem;
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .contact-detail {
     width: 100%;
-    padding-right: 0em;
+  }
+}
+
+/* Tooltip –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  opacity: 0;
+  min-width: max-content;
+  background-color: var(--main-text-dark);
+  color: white;
+  text-align: center;
+  border-radius: .25rem;
+  padding: .25rem;
+  font-size: .875rem;
+  box-shadow: 0 2px 4px var(--accent-color-shadow), 0 8px 16px var(--accent-color-shadow);
+  -webkit-box-shadow: 0 2px 4px var(--accent-color-shadow), 0 8px 16px var(--accent-color-shadow);
+  transition: all 0.15s ease;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media screen and (max-width: 400px) {
+  .tooltip .tooltiptext { 
+    left: initial;
+    right: 50%;
   }
 }

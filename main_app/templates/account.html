@@ -2,84 +2,58 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-<div class="container-main">
-  <h1>Account Information</h1>
-  <a class="text-btn" href="{% url 'custom_user_edit' %}"><i class="fas fa-edit"></i>Edit Profile</a>
-  <a class="text-btn" href="{% url 'password_change' %}"><i class="fas fa-key"></i>Change Password</a>
-  <a class="text-btn" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Log Out</a>
-  <div class="container-info">
-    <div class="container-account-section">
-      <div class="account-details">
-        <p class="account-label">Company:<p>
-        <p class="account-data">{{ user.company_name }}</p>
+<div id="account-page" class="container-main">
+  <div>
+    <h1>Your Account</h1>
+    <a class="text-btn" href="{% url 'password_change' %}"><i class="fas fa-key"></i>Change Password</a>
+    <a class="text-btn" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Log Out</a>
+  </div>
+  <div id="profile" class="container-info rounded-container">
+    <div id="profile-personal">
+      <div id="container-profile-name-edit">
+        <h3 id="profile-name">{{ user.full_name }}</h3>
+        <a id="edit-profile" class="text-btn" href="{% url 'custom_user_edit' %}"><i class="fas fa-pen"></i></i>Edit Profile</a>
       </div>
-      <div class="account-details" >
-        <p class="account-label">GST/HST #:</p>
-        <p class="account-data">{{ user.gst_number }}</p>
+      <div class="profile-detail">
+        <p class="account-label"><i class="fas fa-building"></i><p>
+        <p>{{ user.company_name }}</p>
       </div>
-      <div class="account-details" >
-        <p class="account-label">First Name:</p>
-        <p class="account-data"> {{ user.first_name }}</p>
-      </div>
-      <div class="account-details" >
-        <p class="account-label">Last Name:</p>
-        <p class="account-data"> {{ user.last_name }}</p>
-      </div>
-      <div class="account-details" >
-        <p class="account-label">Email: </p>
-        <p class="account-data">{{ user.email }}</p>
+      <div class="profile-detail" >
+        <p class="account-label"><i class="fas fa-envelope"></i></p>
+        <p>{{ user.email }}</p>
       </div>  
-      <div class="account-details" >
-        <p class="account-label">Business Phone: </p>
-        <p class="account-data">{{ user.business_phone }}</p>
+      <div class="profile-detail">
+        <p class="account-label"><i class="fas fa-phone-alt"></i></p>
+        <p>{{ user.business_phone }}</p>
       </div>
-    </div>
-    <div class="container-account-section">
-      <div class="account-details" >
-        <p class="account-label">Address: </p>
-        <p class="account-data">{{ user.address }}</p>
-      </div>
-      {% if user.address_2 %}
-        <div class="account-details">
-          <p class="account-label">Address Line 2: </p>
-          <p class="account-data">{{ user.address_2 }}</p>
+      {% if user.gst_number %}
+        <div id="profile-gst-hst-num" class="profile-detail">
+          <p class="account-label">GST/HST #</p>
+          <p>{{ user.gst_number }}</p>
         </div>
       {% endif %}
-      <div class="account-details" >
-        <p class="account-label">City:</p>
-        <p class="account-data"> {{ user.city }}</p>
-      </div>
-      <div class="account-details" >
-        <p class="account-label">Province: </p>
-        <p class="account-data">{{ user.province_iso }}</p>
-      </div>
-      <div class="account-details" >
-        <p class="account-label">Postal Code: </p>
-        <p class="account-data">{{ user.postal_code }}</p>
-      </div>
-      <div class="account-details" >
-        <p class="account-label">Country:
-        <p class="account-data"> {{ user.country_iso }}</p>
-      </div>
-      <div class="account-details" >
-        <p class="account-label">Date Joined:</p>
-        <p class="account-data" id="date-joined"> {{ user.date_joined|date:'F j, Y' }}</p>
+    </div>
+    <div id="container-profile-separator-address">
+      <div class="separator"></div>
+      <div id="profile-address">
+        <h3>Your Address</h3>
+        <p>{{ user.address }} {% if user.address_2 %} {{ user.address_2 }} {% endif %}</p>
+        <p>{{ user.city }} {{ user.province_iso }}  {{ user.postal_code }}</p>
+        <p>{{ user.get_country_iso_display }}</p>
       </div>
     </div>
   </div>
-</div>
-
-<div class="container-main">
-  <h2 class="title-account">Your Orders</h2>
-
-  <!-- ───────────────────────────────────────────────────────────────── -->
-  {% if orders.count %}
-    {% include "pagination.html" %}
-  {% endif %}
-  <!-- ───────────────────────────────────────────────────────────────── -->
-  {% if orders.count %}
-    {% for order in page_obj %}
-        <div class="container-account-order">
+  <!-- Orders –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div id="container-account-orders">
+    <h2 class="title-account">Your Orders</h2>
+    <!-- Pagination (top) –––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    {% if orders.count %}
+      {% include "pagination.html" %}
+    {% endif %}
+    {% if orders.count %}
+    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      {% for order in page_obj %}
+        <div class="container-account-order rounded-container rounded-container-hover">
           <div class="order-info">
             <p class="account-ordered-at"><span class="order-label">Ordered</span>{{ order.cart.ordered_at|date:'F j, Y' }}</p>
           </div>
@@ -87,11 +61,11 @@
             <p class="order-label order-num">Order # {{ order.id }}</p>
             <p class="order-status"
               {% if order.cart.status == order.cart.Status.IN_PROGRESS %} 
-                style="color: #1b66bb"
+                style="color: var(--status-blue)"
               {% elif order.cart.status == order.cart.Status.CANCELLED  %}
-                style="color: #e44e44"
+                style="color: var(--status-red)"
               {% elif order.cart.status == order.cart.Status.FULFILLED  %}
-                style="color: #509553"
+                style="color: var(--status-green)"
               {% endif %}
             >{{ order.cart.get_status_display }}
             </p>
@@ -100,7 +74,7 @@
           <div class="separator"></div>
           <div class="account-order-items">
             {% for item in order.cart.cartdetail_set.all %}
-              <div>{{ item.get_relevant_tire.name }} x {{ item.quantity }}</div>
+              <p>{{ item.get_relevant_tire.name }} x {{ item.quantity }}</p>
             {% endfor %}
           </div>
           <a class="order-btn div-link" href="{% url 'order_detail' order.pk %}">View Order</a>
@@ -109,11 +83,11 @@
     {% else %}
       <p>No orders to display</p>
     {% endif %}
-    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- Pagination (bottom) ––––––––––––––––––––––––––––––––––––––––––––––––––– -->
     {% if orders.count %}
       {% include "pagination.html" %}
     {% endif %}
-    <!-- ───────────────────────────────────────────────────────────────── -->
   </div>
-<!-- <script src="{% static 'js/account.js' %}"></script> -->
+  <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</div>
 {% endblock %}
