@@ -2,63 +2,66 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-<div class="container-main">
+<div id="order-detail-page" class="container-main">
   <h1>Order # {{ order.pk }}</h1>
   {% if order.cart.status == order.cart.Status.FULFILLED %}
-    <a href="{% url 'email_invoice' order.pk %}" class="text-btn"><i class="fas fa-envelope-open-text"></i>Email invoice</a>
+    <div class="tooltip">
+      <a href="{% url 'email_invoice' order.pk %}" class="text-btn"><i class="fas fa-envelope-open-text"></i>Email invoice</a>
+      <span class="tooltiptext">Send a copy of this invoice to your email</span>
+    </div>
   {% endif %}
   {% if order.cart.status == order.cart.Status.CURRENT or order.cart.status == order.cart.Status.IN_PROGRESS %}
-    <a class="text-btn" href="{% url 'order_cancel' order.pk %}"><i class="fas fa-window-close"></i>Cancel Order</a>
+    <a class="text-btn negative-btn" href="{% url 'order_cancel' order.pk %}"><i class="fas fa-times"></i>Cancel Order</a>
   {% endif %}
   <div class="container-info order-detail-info">
+    <h4 class="order-detail-status">Status: {{ order.cart.get_status_display }}</h4>
     <h4 class="order-detail-ordered-at"><span>Ordered: </span>{{ order.cart.ordered_at|date:'F j, Y' }}</h4>
-    <h4>Status: {{ order.cart.get_status_display }}</h4>
+    {% if order.cart.status == order.cart.Status.FULFILLED %}
+      <h4 class="order-detail-ordered-at"><span>Shipped: </span>{{ order.cart.closed_at|date:'F j, Y' }}</h4>
+    {% endif %}
     <div class="shipping-info">
-      <h4>Shipped to:</h4>
-      <p>Company Name: {{ order.company_name }}</p>
-      <p>Address: {{ order.address }}</p>
-      {% if order.address_2 %}
-        <p>Address Line 2: {{ order.address_2 }}</p>
-      {% endif %}
-      <p>City: {{ order.city }}</p>
-      <p>Province: {{ order.province_iso }}</p>
-      <p>Postal Code: {{ order.postal_code }}</p>
+      <h4>Invoice to/Ship to:</h4>
+      <p>{{ order.company_name }}</p>
+      <p>{{ order.address }} {% if order.address_2 %} {{ order.address_2 }} {% endif %}</p>
+      <p>{{ order.city }} {{ order.province_iso }}  {{ order.postal_code }}</p>
+      <p>{{ order.get_country_iso_display }}</p>
     </div>
 
     <div class="container-cart-headers">
-      <p class="cart-label">Items</p>
-      <p class="cart-label qty-col">Quantity</p>
-      <p class="cart-label total-col">Price</p>
-      <p class="cart-label total-col">Total</p>
+      <p class="cart-label">Item</p>
+      <p class="cart-label justify-self-start">Price</p>
+      <p class="cart-label justify-self-start">Quantity</p>
+      <p class="cart-label justify-self-end">Amount</p>
     </div>
     
     {% for item in cart_details %}
     <div class="container-cart-info">
-      <a class="tire-btn" href="{% url 'tire_detail' item.get_relevant_tire.pk %}"><p>{{ item.get_relevant_tire.name }} </p></a>
-      <p class="qty-col">{{ item.quantity }}</p>
-      <p class='total-col'>${{ item.get_relevant_tire.relevant_price|intcomma }}</p>
-      <p class="total-col">${{ item.get_subtotal|intcomma }}</p>
+      <p><a class="tire-btn" href="{% url 'tire_detail' item.get_relevant_tire.pk %}">{{ item.get_relevant_tire.name }}</a></p>
+      <p class="justify-self-start">${{ item.get_relevant_tire.relevant_price|intcomma }}</p>
+      <p class="justify-self-start">{{ item.quantity }}</p>
+      <p class="justify-self-end">${{ item.get_subtotal|intcomma }}</p>
     </div>
     {% endfor %}
   </div>
 
-  <div class="container-total">
-    <p><span class="cart-label">Items ({{order.cart.get_item_count}}):</span>
-      ${{ order.cart.get_subtotal|intcomma }}
+  <div class="container-order-detail-total">
+    <p class = "container-total-row">
+      <span class="cart-label">Items ({{order.cart.get_item_count}})</span>
+      <span>${{ order.cart.get_subtotal|intcomma }}</span>
     </p>
     {% if order.cart.discount_percent_applied %}
-      <p>
-        <span class="cart-label">Discount ({{order.cart.discount_percent_applied.normalize}}%):</span>
-        -${{ order.cart.get_discount_amount|intcomma }}
+      <p class="container-total-row">
+        <span class="cart-label">Discount ({{order.cart.discount_percent_applied.normalize}}%)</span>
+        <span>-${{ order.cart.get_discount_amount|intcomma }}</span>
       </p>
     {% endif %}
-    <p>
-      <span class="cart-label">Tax ({{order.cart.tax_percent_applied.normalize}}%):</span>
-      ${{ order.cart.get_tax_amount|intcomma }}
+    <p class="container-total-row">
+      <span class="cart-label">Tax ({{ order.cart.tax_percent_applied.normalize }}%)</span>
+      <span>${{ order.cart.get_tax_amount|intcomma }}</span>
     </p>
-    <p>
-      <span class="cart-label">Total:</span>
-      ${{ order.cart.get_total|intcomma }}
+    <p id="order-detail-total-row" class="container-total-row">
+      <span class="cart-label">Total</span>
+      <span>${{ order.cart.get_total|intcomma }}</span>
     </p>
   </div>
 </div>

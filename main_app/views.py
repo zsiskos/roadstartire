@@ -39,10 +39,10 @@ def signup(req):
     form = CustomUserCreationForm(req.POST)
     if form.is_valid():
       user = form.save() # Add the user to the database
-      #Info needed to send user email
+      # Send email to user
       email = user.email
-      subject = f"Thank you for registering with Road Star Tire Wholesale."
-      message = f"Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order, please allow us 24 business hours to do so. If this is urgent, please contact us during business hours at (905) 660-3209"
+      subject = f"Thank you for registering for a Roadstar Tire Wholesale account"
+      message = f"Hello {user.full_name} – Thank you for registering {user.company_name} for an account with us. Your account will need to be verified before you can log in and place an order. Please allow us 24 business hours to do so. If this is urgent, please contact us at (905) 660-3209."
       send_mail(
         subject, 
         message, 
@@ -50,10 +50,10 @@ def signup(req):
         [email], 
         fail_silently=False
       )
-      #Info needed to send admin email
+      # Send email to admin
       mail_admins(
-        f"New signup: {user.company_name}",
-        f"This user - {user.company_name}, {user.email} - needs to be verified. Please log in to your admin account (https://demo-tire-wholesale.herokuapp.com/admin/login/) and verify this new user.",
+        f"New user: {user.full_name} from {user.company_name}",
+        f"{user.full_name} from {user.company_name}, {user.email} – needs to be verified. Please log in to your admin account and verify this new user.\nhttps://www.demo-tire-wholesale.herokuapp.com/admin/users/customuser/{user.id}/change/",
         fail_silently=False
       )
       return redirect('confirmation')
@@ -62,7 +62,7 @@ def signup(req):
   return render(req, 'signup.html', {'form': form})
 
 def confirmation(req):
-  return render(req, 'confirmation.html')
+  return render(req, 'signup-confirmation.html')
 
 def signin(req):
   if req.user.is_authenticated:
@@ -91,7 +91,7 @@ def account(req):
     cart = None
   user = req.user
   orders = OrderShipping.objects.filter(cart__user_id=req.user.id).exclude(Q(cart__status=Cart.Status.ABANDONED) | Q(cart__status=Cart.Status.CURRENT)).order_by('-cart__ordered_at')
-  paginator = Paginator(orders, 5, 3) # x objects per page and y number of orphans
+  paginator = Paginator(orders, 10, 3) # x objects per page and y number of orphans
   page_number = req.GET.get('page')
   page_obj = paginator.get_page(page_number)
   return render(req, 'account.html', {'cart': cart, 'user': user, 'orders': orders, 'page_obj': page_obj}) 
@@ -110,10 +110,10 @@ def custom_user_edit(req):
       user_update = form.save(commit=False)
       user_update.is_active = False # turns user to inactive and kicks them out
       form.save() # saves all the info
-      #Info needed to send user email
+      # Send email to user
       email = req.user.email
-      subject = f"You have edited your Road Star Tire Wholesale account"
-      message = f"A Road Star Tire staff member will have to re-verify your account before you can log in again to place an order. If this is an error or urgent, please call +1-905-660-3209."
+      subject = f"Request to update your Roadstar Tire Wholesale profile received"
+      message = f"Hello {user.full_name} – This is an email confirmation to inform you that a request was made to edit your Roadstar Tire Wholesale profile details. Your account will be temporarily inactve until a staff member verifies the changes.\nIf this is an error or is urgent, please call (905)-660-3209."
       send_mail(
         subject, 
         message, 
@@ -121,9 +121,9 @@ def custom_user_edit(req):
         [email], 
         fail_silently=False
       )
-      # INFO NEEDED FOR EMAIL
-      subject = f"{user.company_name} edited their account"
-      message = f"This company - {user.company_name}, {user.email} - edited their account and will need to be re-verified. Please log in to your admin account (https://demo-tire-wholesale.herokuapp.com/admin/login/) and re-verify their account."
+      # Send email to admin
+      subject = f"{user.full_name} from {user.company_name} edited their profile"
+      message = f"{user.full_name} from {user.company_name} edited their profile. Please log in to your admin account and verify their account.\nhttps://https://demo-tire-wholesale.herokuapp.com/admin/users/customuser/{user.id}/change/"
       mail_admins(
         subject, 
         message, 
@@ -131,25 +131,6 @@ def custom_user_edit(req):
       )
       return redirect('account')
   return render(req, 'custom_user_edit_form.html', {'form': form, 'cart': cart})
-
-# THIS USES DJANGO PURE FORMS AND IS LEFT IN AS AN EXAMPLE
-# def custom_user_edit(request):
-#   form = CustomUserEditForm() #initiates form 
-#   if request.method == 'POST': # will only show validation errors on POST, not GET
-#     form = CustomUserEditForm(request.POST)
-#     if form.is_valid():
-#       user = CustomUser(**form.cleaned_data) # uses all form data to create a user
-#       user.id = request.user.id # makes sure info is tied to current user
-#       user.date_joined = request.user.date_joined
-#       user.discount_ratio = request.user.discount_ratio
-#       user.is_active = True # turns user to inactive
-#       user.is_staff = False
-#       user.is_superuser = True # ONLY KEEPING FOR TESTING PURPOSES
-#       user.save() # saves all the info
-#   context = {
-#     "form": form
-#   }
-#   return render(request, 'custom_user_edit_form.html', context)
 
 def contact(req):
   user_authenticated = req.user.is_authenticated
@@ -188,9 +169,9 @@ def cart_order(req, cart_id):
   cart.status = Cart.Status.IN_PROGRESS
   cart_details = cart.cartdetail_set.all()
   cart.save()
-  #Info needed to send user email
+  # Send email to user
   email = req.user.email
-  subject = f"Your order has been received - Order # {cart.ordershipping.pk}"
+  subject = f"Roadstar Tire Wholesale Order # {cart.ordershipping.id} Summary"
   message = f"Thank you for your business. Your order will be reviewed and shipped shortly. Here is a summary of your order below:"
   html_message = loader.render_to_string(
     'email/order_email.html',
@@ -208,9 +189,9 @@ def cart_order(req, cart_id):
     fail_silently=False,
     html_message=html_message
   )
-  # Info needed for email to admin
-  subject = f"{req.user.company_name} placed Order #{cart.ordershipping.pk}"
-  message = f"This company - {cart.ordershipping.company_name}, {req.user.email} - placed an order. Please log in to your admin account (https://demo-tire-wholesale.herokuapp.com/admin/login/) to view the details."
+  # Send email to admin
+  subject = f"{req.user.full_name} from {req.user.company_name} placed Order #{cart.ordershipping.id}"
+  message = f"{req.user.full_name} from {req.user.company_name}, {req.user.email} – placed an order. Please log in to your admin account to view the details.\nhttps://demo-tire-wholesale.herokuapp.com/admin/main_app/cart/{cart.id}/change/"
   mail_admins(
     subject, 
     message, 
@@ -226,7 +207,7 @@ def remove_tire(req, item_id):
 def order_detail(req, order_id):
   if (Cart.objects.filter(user=req.user, status=Cart.Status.CURRENT)).exists():
     cart = Cart.objects.get(user=req.user, status=Cart.Status.CURRENT)
-  else: 
+  else:
     cart = None
   order = OrderShipping.objects.get(id=order_id)
   cart_details = order.cart.cartdetail_set.all()
@@ -236,10 +217,10 @@ def order_cancel(req, order_id):
   order = OrderShipping.objects.get(pk=order_id)
   order.cart.status = Cart.Status.CANCELLED
   order.cart.save()
-  #Info needed to send user email
+  # Send email to user
   email = req.user.email
-  subject = f"Your order (# {order.pk}) was successfully cancelled"
-  message = f"If this email is in error or if you wish to change your order, please call +1-123-456-7890."
+  subject = f"Demo Tire Wholesale Order # {order.pk} was successfully cancelled"
+  message = f"This is an email confirmation to inform you that your Demo Tire Wholesale Order # {order.pk} was sucessfully cancelled."
   send_mail(
     subject, 
     message, 
@@ -247,10 +228,10 @@ def order_cancel(req, order_id):
     [email], 
     fail_silently=False
   )
-  # Info needed for email to admin
+  # Send email to admin
   user = req.user
-  subject = f"{user.company_name} cancelled order #{order.pk}"
-  message = f"This company - {user.company_name}, {user.email} - cancelled an order. Please log in to your admin account (https://demo-tire-wholesale.herokuapp.com/admin/login/) to view the details."
+  subject = f"{user.company_name} cancelled Order #{order.id}"
+  message = f"{user.full_name} from {user.company_name}, {user.email} – cancelled Order # {order.id}. Please log in to your admin account to view the details.\n(https://demo-tire-wholesale.herokuapp.com/admin/main_app/cart/{order.cart.id}/change/)"
   mail_admins(
     subject, 
     message, 
@@ -258,20 +239,21 @@ def order_cancel(req, order_id):
   )
   return redirect('order_detail', order.pk)
 
-# Uses a different email method so that images can be attached
+# NOTE: Uses a different email method so that images can be attached
 def email_invoice(req, order_id):
   order = OrderShipping.objects.get(id=order_id)
   cart_details = order.cart.cartdetail_set.all()
-  #Info needed to send user email
+  # Send email to user
   email = req.user.email
-  subject = f"ORDER INVOICE"
+  subject = f"Demo Tire Wholesale Order # {order.id} was shipped"
   message = f"Your order has been shipped and an invoice will be provided on delivery. Please log into your account to view details."
   html_message = loader.render_to_string(
     'email/invoice_email.html',
     { 'order': order,
       'user': req.user,
       'cart_details': cart_details
-    })
+    }
+  )
   msg = EmailMultiAlternatives(
     subject, 
     message, 

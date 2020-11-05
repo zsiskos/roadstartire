@@ -8,20 +8,25 @@
   margin-bottom: 1rem;
 }
 
-/* LAYOUT */
-.account-details {
+#container-profile-name-edit {
   display: flex;
-  align-items: center;
-  padding-right: 1em;
+  align-items: baseline;
+}
+
+#edit-profile {
+  margin: 0 1rem;
+}
+
+/* LAYOUT */
+.profile-detail {
+  display: flex;
+  align-items: baseline;
 }
 
 .account-label {
-  width: 140px;
-  text-align: right;
-  float: left;
-  margin-right: 16px;
-  font-size: 1rem;
-  opacity: 0.7;
+  min-width: 1.5rem;
+  margin-right: .5rem;
+  opacity: 0.65;
 }
 
 /* Styles for the orders */
@@ -33,49 +38,51 @@
   grid-template-rows: 2.5em 16px minmax(70px, 1fr);
   margin-bottom: 1rem;
   padding: .75em;
-  border-top: .08rem solid  var(--accent-color-shadow);
-  border-bottom: .08rem solid  var(--accent-color-shadow);
-  -webkit-box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
-  box-shadow: 0px 0px 10px 0px var(--accent-color-shadow);
-  border-radius: 8px;
 }
 
 .separator {
-  border-top: 1px solid rgba(240, 240, 240, 0.5);
-  border-bottom: 1px solid rgb(240, 240, 240);
-  height: 0px;
+  border: 1px solid var(--separator-color);
   border-radius: 8px;
+}
+
+#container-profile-separator-address .separator {
+  margin-right: 1rem;
+}
+
+.container-account-order .separator {
   grid-column-start: 1;  
   grid-column-end: span 5;
   justify-self: stretch;
 }
 
+#container-cart-items .separator {
+  margin: 0 1rem;
+}
+
 .order-btn {
-  padding: 1.2em 1.5em;
+  padding: 1rem 1.33rem;
   border: 2px solid var(--main-text-dark);
-  color:var(--link-color-hover);
-  background: var(--main-bg-color);
+  background: transparent;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
   border-radius: 6px;
   transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 2.1px;
-  font-size: .7rem;
-  color: var(--main-text-dark)
+  font-size: .8rem;
+  color: var(--main-text-dark);
 }
 
 .order-btn:hover,
 .order-btn:focus {
-  background: rgba(250, 148, 53, 0.02);
-  color: var(--link-color-hover);
-  transition: all 0.2s ease;
-  border: 2px solid var(--link-color-hover);
+  background: var(--main-text-dark);
+  color: var(--main-bg-color);
 }
 
+/* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+
 .order-btn-filled {
-  padding: 1.2em 1.5em;
+  padding: 1rem 1.33rem;
   color:white;
   background: var(--accent-color-bright);
   text-decoration: none;
@@ -87,7 +94,8 @@
   letter-spacing: 2.1px;
   margin-top: 1em;
   text-align: center;
-  transform:scale(1.02);
+  /* transform: scale(1.02); */
+  width: 100%;
 }
 
 .order-btn-filled:hover,
@@ -96,13 +104,13 @@
   transition: all 0.2s ease;
   /* box-shadow: 0px 2px 0px rgb(168, 100, 36); */
   outline: none;
-  transform: scale(1.02);
+  /* transform: scale(1.02); */
 }
 
 .order-btn-filled:focus {
 	border-color: var(--accent-color-bright);
   box-shadow: 0 0 10px rgb(235, 138, 47, .6);
-  transform:scale(1.02);
+  /* transform:scale(1.02); */
 }
 
 .container-num-status {
@@ -155,10 +163,28 @@
   flex-direction: column;
 }
 
+#account-page .container-info {
+  margin: none;
+  padding: 1rem;
+}
+
+#container-profile-separator-address {
+  display: flex;
+  flex: 0 0 50%;
+}
+
+#profile-gst-hst-num {
+  margin-top: .5rem;
+}
+
 /* WHEN SCREEN GETS SMALL */
-@media (max-width: 900px){
-  .account-label {
-    width: 100px;
+@media (max-width: 760px){
+  #container-profile-separator-address {
+    flex-direction: column;
+  }
+
+  #container-profile-separator-address .separator {
+    margin: 1em 0;
   }
 }
 
@@ -212,25 +238,25 @@
 
 /* ──────────────────────────────────────────────────────────────────────────────── */
 
-/* Entire acconunt order div is clickable */
+/* Entire account order div is clickable */
 
-div.container-account-order {
+.rounded-container-hover {
   position: relative;
-  transition: all 0.2s ease;
+  transition: all 0.125s linear;
 }
 
-div.container-account-order:hover {
-  box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, .36);
-  cursor: hand;
+.rounded-container-hover:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .18), 0 8px 16px var(--accent-color-shadow-hover);
+  transform: scale(1.004);
 }
 
-a.div-link {
+.div-link {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  text-decoration: none:
+  text-decoration: none;
   /* Makes sure the link doesn't get underlined */
   z-index: 10;
   /* raises anchor tag above everything else in div */

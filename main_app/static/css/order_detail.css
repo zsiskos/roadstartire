@@ -1,0 +1,32 @@
+#order-detail-page.container-main {
+  display: flex;
+  flex-direction: column;
+}
+
+#order-detail-page .tooltip {
+  align-self: flex-start; /* So that tooltip aligns better on hover */
+}
+
+#order-detail-page .container-info {
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+.container-order-detail-total {
+  margin: 0 0 0 auto;
+  width: 37.3%;
+}
+
+#order-detail-total-row {
+  background-color: rgba(0, 0, 0, .1);
+  font-weight: bold;
+  padding: .5rem 0;
+  border-radius: 2px;
+}
+
+@media screen and (max-width: 650px) {
+  .container-order-detail-total {
+    /* margin: 0 0 0 auto; */
+    width: 100%;
+  }
+}

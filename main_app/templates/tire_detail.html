@@ -2,12 +2,12 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-<div class="container-main">
+<div id="tire-detail-page" class="container-main">
   <h2>{{ tire.name }}</h2>
   <div class="container-info">
     <div class="container-item">
       <img src='{{ tire.tread.image_set.first.url }}' alt='tire image' class='tire-detail-thumbnail-image'/>
-      <div class="item-tire">
+      <div>
         <p><span class="cart-label">Brand:</span> {{ tire.brand }}</p>
         <p><span class="cart-label">size:</span> {{ tire.width }}/{{ tire.aspect_ratio }}/{{ tire.rim_size }}</p>
         <!-- <p><span class="cart-label">Width:</span> {{ tire.width }}</p> -->
@@ -19,56 +19,41 @@
       </div>
     </div>
     <div class="container-qty">
-      <h2 class="tire-price">${{tire.relevant_price|intcomma}}</h2>
-      <div class="stock">
-        {% if tire.product.current_quantity < 4 %}
-        <p class="low-stock">
-          Call for availability
-        </p>
-        {% elif tire.product.current_quantity > 19 %}
-        <p class="in-stock">
-          <span>20+</span> In stock
-        </p>
-        {% else %}
-        <p class="in-stock">
-          <span>{{ tire.product.current_quantity }}</span> In Stock
-        </p>
-        {% endif %}
+      <div class="container-tire-list-price-qty">
+        <h2 class="tire-price">${{tire.relevant_price|intcomma}}</h2>
+        <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+            <div class="stock">
+              {% if tire.product.current_quantity < 4 %}
+                <p class="low-stock">Call for availability</p>
+              {% elif tire.product.current_quantity > 19 %}
+                <p class="in-stock">20+ in stock</p>
+              {% else %}
+                <p class="in-stock">{{ tire.product.current_quantity }}</span>in stock </p>
+              {% endif %}
+          </div>
+        </form>
       </div>
-      <form id="add-tire" method="post" action="{% url 'tire_detail' tire.pk %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <a href="#" class="order-btn-filled">
-          <div class="pre-text">
-            <i class="fas fa-cart-plus"></i>
-              Add to cart
+      <a href="#" class="order-btn-filled">
+        <div class="pre-text">
+          <i class="fas fa-cart-plus"></i>
+            Add to cart
+        </div>
+        <div class="pre-text-done">
+          <div class="post-text">
+            <i class="fas fa-check"></i>
+            Added
           </div>
-          <div class="pre-text-done">
-            <div class="post-text">
-              <i class="fas fa-check"></i>
-              Added
-            </div>
-          </div>
-        </a>
-      </form>
-      <br/>
-      <br/>
-      <!-- <p><span class="cart-label">Availability:</span> 
-        {% if tire.product.current_quantity < 20 %}
-          Low stock
-        {% else %}
-          In stock
-        {% endif %}
-      </p> -->
+        </div>
+      </a>
       </div>
     </div>
   </div>  
 </div>
-
 <script>
-  const button = document.querySelector('#add-tire').getElementsByClassName('order-btn-filled')[0];
+  const button = document.querySelector('.order-btn-filled');
   button.addEventListener('click', e => {
-    console.log('clicked')
     const done = e.target.querySelector('.pre-text-done');
     done.style.transform = "translate(0px)";
     setTimeout(()=>{

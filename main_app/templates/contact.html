@@ -1,30 +1,144 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tz %}
+
 {% block content %}
-<div class="container-main">
-  <div class="container-order">
+<div id ="contact-page" class="container-main">
+  <div class="container-contact-map rounded-container">
     <div class="container-contact">
-      <div>
-        <h2>ONTARIO</h2>
-        <p>(123) 426-7890</p>
+      <h2>Concord</h2>
+      <div class="container-contact-details">
+        <!-- Address -->
+        <div class="contact-detail" data-copytext="140 Doughton Rd Unit 2, Concord, ON L4K 1R3">
+          <i class="fas fa-map-marker-alt account-label"></i>
+          <div class="copy-text">
+            <p>Ontario</p>
+          </div>
+          <div class="container-contact-detail-buttons">
+            <div class="tooltip">
+              <i class="far fa-copy contact-detail-action"></i>
+              <span class="tooltiptext rounded-container" data-basetext="Copy address">Copy address</span>
+            </div>
+          </div>
+        </div>
+        <!-- Primary Phone -->
+        <div class="contact-detail" data-copytext="(905) 660-3209">
+          <i class="fas fa-phone-alt account-label"></i>
+          <p class="copy-text">(905) 660-3209</p>
+          <div class="container-contact-detail-buttons">
+            <div class="tooltip">
+              <i class="far fa-copy"></i>
+              <span class="tooltiptext rounded-container" data-basetext="Copy phone number">Copy phone number</span>
+            </div>
+            <div class="tooltip">
+              <a href="tel:905-660-3209"><i class="fas fa-phone-alt contact-detail-action"></i></a>
+              <span class="tooltiptext">Call phone number</span>
+            </div>
+          </div>
+        </div>
+        <!-- Secondary Phone -->
+        <div class="contact-detail" data-copytext="(905) 660-2772">
+          <i class="fas fa-phone-alt account-label"></i>
+          <p class="copy-text">(905) 660-2772</p>
+          <div class="container-contact-detail-buttons">
+            <div class="tooltip">
+              <i class="far fa-copy"></i>
+              <span class="tooltiptext" data-basetext="Copy phone number">Copy phone number</span>
+            </div>
+            <div class="tooltip">
+              <a href="tel:905-660-2772"><i class="fas fa-phone-alt contact-detail-action"></i></a>
+              <span class="tooltiptext">Call phone number</span>
+            </div>
+          </div>
+        </div>
+        <!-- Email -->
+        <div class="contact-detail" href="mailto:info@roadstartirewholesale.ca" data-copytext="info@roadstartirewholesale.ca">
+          <i class="fas fa-envelope account-label"></i>
+          <p class="copy-text">info@roadstartirewholesale.ca</p>
+          <div class="container-contact-detail-buttons">
+            <div class="tooltip">
+              <i class="far fa-copy"></i>
+              <span class="tooltiptext" data-basetext="Copy email address">Copy phone number</span>
+            </div>
+            <div class="tooltip">
+              <a href="mailto:info@roadstartirewholesale.ca"><i class="fas fa-envelope contact-detail-action"></i></a>
+              <span class="tooltiptext">Send email</span>
+            </div>
+          </div>
+        </div>
+        <!-- Website -->
+        <div class="contact-detail" data-copytext="https://www.roadstartirewholesale.ca/">
+          <i class="fas fa-globe-americas account-label"></i>
+          <div class="copy-text">
+            <p>roadstartirewholesale.ca</p>
+          </div>
+          <div class="container-contact-detail-buttons">
+            <div class="tooltip">
+              <i class="far fa-copy contact-detail-action"></i>
+              <span class="tooltiptext rounded-container" data-basetext="Copy website">Copy website</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="hours-address">
-        <div class="">
-          <p><span class="order-label">Hours:</span></p> 
-          <p>9:30am - 7:30pm</p>
-          <p>7 days/wk</p>
+      <div class="separator"></div>
+      <div class="contact-detail" data-copytext="RoadstarTire  Wholesale Opening Hours: Monday 9:30am-7:30pm, Tuesday 9:30am-7:30pm, Wenesday 9:30am-7:30pm, Thursday 9:30am-7:30pm, Friday 9:30am-7:30pm, Saturday 9:30am-7:30pm, Sunday 9:30am-3:00pm">
+        <i class="fas fa-clock account-label"></i>
+        <div class="container-contact-hours copy-text">
+          {% timezone "America/Toronto" %}
+          {% now "l" as current_day %}
+            <p class="{% if current_day == 'Monday' %}bold-day{% endif %}">Monday</p>
+            <p class="{% if current_day == 'Monday' %}bold-day{% endif %}">9:30am-7:30pm</p>
+            <p class="{% if current_day == 'Tuesday' %}bold-day{% endif %}">Tuesday</p>
+            <p class="{% if current_day == 'Tuesday' %}bold-day{% endif %}">9:30am-7:30pm</p>
+            <p class="{% if current_day == 'Wednesday' %}bold-day{% endif %}">Wednesday</p>
+            <p class="{% if current_day == 'Wednesday' %}bold-day{% endif %}">9:30am-7:30pm</p>
+            <p class="{% if current_day == 'Thursday' %}bold-day{% endif %}">Thursday</p>
+            <p class="{% if current_day == 'Thursday' %}bold-day{% endif %}">9:30am-7:30pm</p>
+            <p class="{% if current_day == 'Friday' %}bold-day{% endif %}">Friday</p>
+            <p class="{% if current_day == 'Friday' %}bold-day{% endif %}">9:30am-7:30pm</p>
+            <p class="{% if current_day == 'Saturdayday' %}bold-day{% endif %}">Saturday</p>
+            <p class="{% if current_day == 'Saturday' %}bold-day{% endif %}">9:30am-7:30pm</p>
+            <p class="{% if current_day == 'Sunday' %}bold-day{% endif %}">Sunday</p>
+            <p class="{% if current_day == 'Sunday' %}bold-day{% endif %}">9:30am-3:00pm</p>
+          {% endtimezone %}
         </div>
-        <div class="">
-          <p><span class="order-label">Address:</span></p> 
-          <p>123 Place Street</p>
-          <p>Anywhere, ON</p> 
-          <p>M4K 1R2</p>
+        <div class="container-contact-detail-buttons">
+          <div class="tooltip">
+            <i class="far fa-copy" class="contact-detail-action"></i>
+            <span class="tooltiptext rounded-container" data-basetext="Copy open hours">Copy open hours</span>
+          </div>
         </div>
-      </div> 
+      </div>
     </div>
     <div class="container-map">
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10730926.797276929!2d-93.69395608095238!3d48.95624345724228!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cce05b25f5113af%3A0x70f8425629621e09!2sOntario!5e0!3m2!1sen!2sca!4v1603737848862!5m2!1sen!2sca" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
     </div>
   </div>
 </div>
+<script>
+  const copyToClipboard = str => {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  };
+
+  const contactDetails = Array.from(document.querySelectorAll('.fa-copy'));
+  contactDetails.forEach(detail => {
+    detail.addEventListener('click', e => {
+      copyToClipboard(detail.parentElement.parentElement.parentElement.dataset.copytext);
+      const tooltipEl = e.target.parentElement.lastElementChild;
+      tooltipEl.innerText='Copied to clipboard';
+    })
+    detail.addEventListener('mouseout', e => {
+      const tooltipEl = e.target.parentElement.lastElementChild;
+      tooltipEl.innerText=tooltipEl.dataset.basetext;
+    })
+  })
+</script>
 {% endblock %}
