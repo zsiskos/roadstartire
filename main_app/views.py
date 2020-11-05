@@ -53,7 +53,7 @@ def signup(req):
       # Send email to admin
       mail_admins(
         f"New user: {user.full_name} from {user.company_name}",
-        f"{user.full_name} from {user.company_name}, {user.email} – needs to be verified. Please log in to your admin account and verify this new user.\nhttps://www.demo-tire-wholesale.herokuapp.com/admin/users/customuser/{user.id}/change/",
+        f"{user.full_name} from {user.company_name}, {user.email} – needs to be verified. Please log in to your admin account and verify this new user.\nhttps://demo-tire-wholesale.herokuapp.com/admin/users/customuser/{user.id}/change/",
         fail_silently=False
       )
       return redirect('confirmation')
@@ -112,8 +112,8 @@ def custom_user_edit(req):
       form.save() # saves all the info
       # Send email to user
       email = req.user.email
-      subject = f"Request to update your Roadstar Tire Wholesale profile received"
-      message = f"Hello {user.full_name} – This is an email confirmation to inform you that a request was made to edit your Roadstar Tire Wholesale profile details. Your account will be temporarily inactve until a staff member verifies the changes.\nIf this is an error or is urgent, please call (905)-660-3209."
+      subject = f"Request to update your Demo Tire Wholesale profile received"
+      message = f"Hello {user.full_name} – This is an email confirmation to inform you that a request was made to edit your Demo Tire Wholesale profile details. Your account will be temporarily inactve until a staff member verifies the changes.\nIf this is an error or is urgent, please call (123) 456-7890."
       send_mail(
         subject, 
         message, 
@@ -171,7 +171,7 @@ def cart_order(req, cart_id):
   cart.save()
   # Send email to user
   email = req.user.email
-  subject = f"Roadstar Tire Wholesale Order # {cart.ordershipping.id} Summary"
+  subject = f"Demo Tire Wholesale Order # {cart.ordershipping.id} Summary"
   message = f"Thank you for your business. Your order will be reviewed and shipped shortly. Here is a summary of your order below:"
   html_message = loader.render_to_string(
     'email/order_email.html',
