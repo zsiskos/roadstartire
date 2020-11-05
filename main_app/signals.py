@@ -60,7 +60,7 @@ def send_order_fulfilled_email(sender, instance, *args, **kwargs):
     )
     msg.attach_alternative(html_message, "text/html")
     msg.mixed_subtype = 'related'
-    f = 'static/images/road-star-logo.png'
+    f = 'static/images/demo-tire-logo.png'
     fp = open(os.path.join(os.path.dirname(__file__), f), 'rb')
     msg_img = MIMEImage(fp.read())
     fp.close()
